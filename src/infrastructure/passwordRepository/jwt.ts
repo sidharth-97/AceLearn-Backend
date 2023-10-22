@@ -10,7 +10,6 @@ class jwtToken implements JWT{
         }
         throw new Error("JWT_KEY is not defined");
       }
-    
 }
 
 export default jwtToken
