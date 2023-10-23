@@ -20,6 +20,20 @@ class studentRepository implements studentRepositoryInterface{
          return null
      }
     }
+    async findAndUpdate(student: Student): Promise<any> {
+        if (student._id) {
+            const updatedStudent = await studentModel.findByIdAndUpdate(student._id, student, { new: true });
+            return updatedStudent
+        }
+    }
+    async findById(id: string): Promise<any> {
+        const student = await studentModel.findById(id)
+        if (student) {
+            return student
+        } else {
+            return null
+        }
+    }
 }
 
 export default studentRepository

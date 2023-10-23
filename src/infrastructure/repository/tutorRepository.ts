@@ -17,6 +17,20 @@ class TutorRepository implements TutorRepositoryInterface{
          await newTutor.save()
          return newTutor
     }
+    async findAndUpdate(tutor: Tutor): Promise<any> {
+        if (tutor._id) {
+            const updatedTutor = await TutorModel.findByIdAndUpdate(tutor._id, tutor, { new: true })
+            return updatedTutor
+        }
+    }
+   async findById(id: string): Promise<any> {
+       const tutor = await TutorModel.findById(id)
+       if (tutor) {
+           return tutor
+       } else {
+           return null
+       }
+    }
 }
 
 export default TutorRepository

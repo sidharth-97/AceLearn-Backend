@@ -13,7 +13,8 @@ const controller = new studentController(use_case)
 
 const studentRouter = express.Router()
 
-studentRouter.post("/api/student/signup", (req, res) => controller.signup(req, res))
-studentRouter.post("/api/student/login",(req,res)=>controller.login(req,res))
+studentRouter.post("/signup", (req, res) => controller.signup(req, res))
+studentRouter.post("/login", (req, res) => controller.login(req, res))
+studentRouter.post("/logout",(req,res)=>controller.logout(req,res))
 
 export default studentRouter

@@ -6,7 +6,8 @@ interface ITutor extends Document{
     password: string,
     mobileNo: string,
     subject: Array<string>,
-    fee:string
+    fee: string,
+    isBlocked:Boolean
 }
 
 const TutorSchema:Schema<ITutor> = new mongoose.Schema({
@@ -24,6 +25,9 @@ const TutorSchema:Schema<ITutor> = new mongoose.Schema({
     subject: {
         type: [String],
         required:true
+    },
+    isBlocked: {
+        type:Boolean
     }
 })
 

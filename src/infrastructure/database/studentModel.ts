@@ -5,7 +5,8 @@ interface IStudents extends Document{
     username: String
     email: String,
     mobile: String,
-    password:String
+    password: String,
+    isBlocked:Boolean
 }
 
 const studentSchema:Schema<IStudents> = new mongoose.Schema({
@@ -25,6 +26,10 @@ const studentSchema:Schema<IStudents> = new mongoose.Schema({
     password: {
         type: String,
         required:true
+    },
+    isBlocked: {
+        type: Boolean,
+        default: false
     }
 })
 

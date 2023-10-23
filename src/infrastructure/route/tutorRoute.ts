@@ -15,6 +15,7 @@ const controller=new TutorController(use_case)
 const tutorRouter = express.Router()
 
 tutorRouter.post("/signup", (req, res) => controller.signup(req, res))
-tutorRouter.post("/login",(req,res)=>controller.login(req,res))
+tutorRouter.post("/login", (req, res) => controller.login(req, res))
+tutorRouter.post("/logout",(req,res)=>controller.logout(req,res))
 
 export default tutorRouter

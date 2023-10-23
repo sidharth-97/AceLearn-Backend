@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import adminUseCase from "../useCases/adminUsecase";
+import { Error } from "mongoose";
 
 
 class adminController{
@@ -10,7 +11,7 @@ class adminController{
     async login(req: Request, res: Response) {
         try {
             const admin = await this.use_case.login(req.body)
-            res.cookie('jwt', admin.token, {
+            res.cookie('Adminjwt', admin.token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV !== 'development',
                 sameSite: 'strict',
@@ -21,6 +22,53 @@ class adminController{
             res.status(401).json(error)
         }
     }
+    async logout(req: Request, res: Response) {
+        try {
+            res.cookie('Adminjwt', "", {
+                httpOnly: true,
+                expires:new Date(0)
+            })
+            res.status(200).json("Admin Logged Out")
+        } catch (error) {
+            res.status(401).json(error)
+        }
+    }
+    
+    async findStudents(req: Request, res: Response) {
+        try {
+            const students = await this.use_case.findStudents()
+            res.status(students.status).json(students.data)
+        } catch (error) {
+            res.status(401).json(error)
+        }
+    }
+    
+    async findTutors(req: Request, res: Response) {
+        try {
+            const tutors = await this.use_case.findTutors()
+            res.status(tutors.status).json(tutors.data)
+        } catch (error) {
+            res.status(401).json(error)
+        }
+    }
+
+    async blockStudent(req: Request, res: Response) {
+        try {
+            const student = await this.use_case.blockStudent(req?.query.id)
+            res.status(student.status).json(student.data)
+        } catch (error) {
+            res.status(401).json(error)
+        }
+    }
+    async blockTutor(req: Request, res: Response) {
+        try {
+            const tutor = await this.use_case.blockTutor(req?.query.id)
+            res.status(tutor.status).json(tutor.data)
+        } catch (error) {
+            res.status(401).json(error)
+        }
+    }
+
 }
 
 export default adminController

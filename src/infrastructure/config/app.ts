@@ -11,7 +11,7 @@ export const createServer = () => {
         app.use(express.json())
         app.use(cors())
         app.use(cookieParser())
-        app.use(studentRouter)
+        app.use("/api/students",studentRouter)
         app.use("/api/tutors", tutorRouter)
         app.use("/api/admin", adminRoute)
         return app
