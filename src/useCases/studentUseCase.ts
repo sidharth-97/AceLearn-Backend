@@ -15,6 +15,7 @@ class StudentUseCase{
     }
 
     async signup(student: Student) {
+  console.log("here");
   
         const isExisting = await this.studentRepository.findByEmail(student.email)
         if (isExisting) {
@@ -23,16 +24,27 @@ class StudentUseCase{
                 data:"Student already exists"
             }
         } else {
-            const newPassword = await this.Encrypt.createHash(student.password)
-            const newStudent = { ...student, password: newPassword }
-            await this.studentRepository.save(newStudent)
+        //     const newPassword = await this.Encrypt.createHash(student.password)
+        //     const newStudent = { ...student, password: newPassword }
+        //     await this.studentRepository.save(newStudent)
             return {
                 status: 200,
-                data:newStudent
+                data:isExisting
             }
         }
         
     }
+
+    async signup2(student: Student) {
+        const newPassword = await this.Encrypt.createHash(student.password)
+        const newStudent = { ...student, password: newPassword }
+        await this.studentRepository.save(newStudent)
+        return {
+            status: 200,
+            data:newStudent
+        }
+    }
+
     async login(student: Student) {
         try {
             const studentLog = await this.studentRepository.findByEmail(student.email)
