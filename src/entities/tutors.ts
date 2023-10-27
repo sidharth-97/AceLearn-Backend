@@ -5,5 +5,5 @@ export default interface Tutor{
     mobileNo: string,
     subject: Array<string>,
     fee:string
-
+    bio:string
 }

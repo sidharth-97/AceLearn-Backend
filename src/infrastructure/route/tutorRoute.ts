@@ -19,6 +19,7 @@ const controller=new TutorController(use_case,generateOtp,sendMail)
 const tutorRouter = express.Router()
 
 tutorRouter.post("/signup", (req, res) => controller.signup(req, res))
+tutorRouter.post("/signupfinal",(req,res)=>controller.signupStep2(req,res))
 tutorRouter.post("/login", (req, res) => controller.login(req, res))
 tutorRouter.post("/logout",(req,res)=>controller.logout(req,res))
 

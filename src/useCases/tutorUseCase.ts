@@ -23,13 +23,29 @@ class TutorUseCase{
             }
 
         } else {
-            const newPassword = await this.encrypt.createHash(tutor.password)
-            const newTutor = { ...tutor, password: newPassword }
-            await this.repository.save(newTutor)
+            // const newPassword = await this.encrypt.createHash(tutor.password)
+            // const newTutor = { ...tutor, password: newPassword }
+            // await this.repository.save(newTutor)
             return {
                 status: 200,
-                data:newTutor
+                data:isExisting
             }
+        }
+    }
+
+    async signup2(tutor: Tutor) {
+        console.log("546"+tutor.password);
+        
+        const newPassword = await this.encrypt.createHash(tutor.password)
+        console.log(newPassword,"newpass");
+        
+        const newTutor = { ...tutor, password: newPassword }
+        console.log(newTutor,"newtutot");
+        
+        await this.repository.save(newTutor)
+        return {
+            status: 200,
+            data:newTutor
         }
     }
 

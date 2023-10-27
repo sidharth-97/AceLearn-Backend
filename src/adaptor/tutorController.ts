@@ -16,12 +16,12 @@ class TutorController{
     }
     async signup(req: Request, res: Response) {
         try {
-            const otp =await this.genOtp.generateOtp(5)
-            
+            const otp =await this.genOtp.generateOtp(4)
             this.sentMail.sendMail(req.body.username,req.body.email,otp)
             const tutor = await this.useCase.signup(req.body)
-                        // localStorage.setItem('studentData', JSON.stringify(req.body));
-
+            req.app.locals.Tutordata = req.body
+            req.app.locals.otp = otp
+            console.log(tutor);
         if (tutor) {
            res.status(tutor.status).json(tutor.data)
        } 
@@ -29,6 +29,28 @@ class TutorController{
         res.status(401).json(error)
        }
     }
+
+    async signupStep2(req: Request, res: Response) {
+        try {
+            console.log("hreee");
+            
+            if (req.body.otp != req.app.locals.otp) {
+                res.status(401).json("otp doesnt match")
+            } else {
+                const { subject,rate,bio } = req.body             
+                const tutor = { ...req.app.locals.Tutordata, subject,rate,bio }
+                const result = await this.useCase.signup2(tutor)
+                res.status(result.status).json(result.data)
+            }
+        } catch (error) {
+            console.log("errro");
+            
+            res.status(401).json(error)
+        }
+    }
+
+
+
     async login(req: Request, res: Response) {
         try {
             const tutor = await this.useCase.login(req.body)
