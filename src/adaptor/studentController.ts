@@ -22,7 +22,8 @@ class studentController{
              this.sentMail.sendMail(req.body.username,req.body.email,otp)
 
             const student = await this.studentUseCase.signup(req.body)
-            // localStorage.setItem('studentData', JSON.stringify(req.body));
+            
+            req.app.locals.otp = otp
             
             res.status(student.status).json(student.data)
         } catch (error) {
@@ -31,18 +32,18 @@ class studentController{
     }
 
     async signupStep2(req: Request, res: Response) {
-        try {
-            const studentData = localStorage.getItem('studentData');
-            if (!studentData) {
-              throw new Error('Student data not found in local storage');
+        try {  
+            console.log(req.body);            
+            
+            if (req.body.otp!=req.app.locals.otp) {
+             res.status(401).json("password doesnt match")
             }
         
-            const student = JSON.parse(studentData);
+            const student = req.body
         
             const result = await this.studentUseCase.signup2(student);
-        
-            // localStorage.removeItem('studentData');
-        
+               console.log("below");
+                
             res.status(result.status).json(result.data);
         } catch (error) {
             res.status(401).json(error)

@@ -36,6 +36,8 @@ class StudentUseCase{
     }
 
     async signup2(student: Student) {
+        console.log("here123");
+        
         const newPassword = await this.Encrypt.createHash(student.password)
         const newStudent = { ...student, password: newPassword }
         await this.studentRepository.save(newStudent)

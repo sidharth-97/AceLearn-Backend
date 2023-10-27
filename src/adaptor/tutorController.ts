@@ -1,16 +1,27 @@
 import { Request, Response } from "express"
 import TutorUseCase from "../useCases/tutorUseCase"
+import GenerateOTP from "../infrastructure/utils/GenerateOTP"
+import SentMail from "../infrastructure/utils/sendMail"
 
 
 
 class TutorController{
-    private useCase:TutorUseCase
-    constructor(useCase: TutorUseCase) {
-        this.useCase=useCase
+    private useCase: TutorUseCase
+    private genOtp: GenerateOTP
+    private sentMail:SentMail
+    constructor(useCase: TutorUseCase,genOtp: GenerateOTP,sentMail:SentMail) {
+        this.useCase = useCase
+        this.genOtp = genOtp
+        this.sentMail=sentMail
     }
     async signup(req: Request, res: Response) {
-       try {
-        const tutor = await this.useCase.signup(req.body)
+        try {
+            const otp =await this.genOtp.generateOtp(5)
+            
+            this.sentMail.sendMail(req.body.username,req.body.email,otp)
+            const tutor = await this.useCase.signup(req.body)
+                        // localStorage.setItem('studentData', JSON.stringify(req.body));
+
         if (tutor) {
            res.status(tutor.status).json(tutor.data)
        } 
