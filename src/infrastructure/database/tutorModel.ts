@@ -3,6 +3,7 @@ import mongoose, { Document, Schema,ObjectId } from "mongoose";
 interface ITutor extends Document{
     _id: ObjectId,
     email: string,
+    name:string,
     password: string,
     mobileNo: string,
     subject: Array<string>,
@@ -13,6 +14,10 @@ interface ITutor extends Document{
 
 const TutorSchema:Schema<ITutor> = new mongoose.Schema({
     email: {
+        type: String,
+        required:true
+    },
+    name: {
         type: String,
         required:true
     },

@@ -53,6 +53,8 @@ class studentController{
 
     async login(req: Request, res: Response) {
         try {
+            console.log("abcd");
+            
             const student = await this.studentUseCase.login(req.body)
             if (student) {
                 res.cookie('Studentjwt', student.token, {
@@ -76,6 +78,14 @@ class studentController{
                 expires:new Date(0)
             })
             res.status(200).json("Student Logged Out")
+        } catch (error) {
+            res.status(401).json(error)
+        }
+    }
+    async editProfile(req: Request, res: Response) {
+        try {
+            const student = await this.studentUseCase.editProfile(req.body)
+            res.status(student.status).json(student.data)
         } catch (error) {
             res.status(401).json(error)
         }

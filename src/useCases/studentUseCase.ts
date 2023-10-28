@@ -50,9 +50,11 @@ class StudentUseCase{
     async login(student: Student) {
         try {
             const studentLog = await this.studentRepository.findByEmail(student.email)
+            console.log(studentLog);
+            
         if (studentLog) {
             if (await this.Encrypt.compare(student.password, studentLog.password)) {
-                const token = this.JWTToken.createJWT(student.email)
+                const token = this.JWTToken.createJWT(student._id)
                 return {
                     status: 200,
                     data: studentLog,
@@ -60,7 +62,7 @@ class StudentUseCase{
                 }
             } else {
                 return {
-                    status: 200,
+                    status: 403,
                     data: {
                         data:"Wrong Password"
                     }
@@ -68,7 +70,7 @@ class StudentUseCase{
             }
         } else {
             return {
-                status: 200,
+                status: 403,
                 data:"Email Wrong"
             }
         }
@@ -76,6 +78,28 @@ class StudentUseCase{
             return {
                 status: 404,
                 data:error
+            }
+        }
+    }
+
+    async editProfile(student: Student) {
+        const Editstudent = await this.studentRepository.findByEmail(student.email)
+        if (Editstudent) {
+            Editstudent.username = student.username
+            Editstudent.mobile = student.mobile
+            if (student.password) {
+                Editstudent.password = await this.Encrypt.createHash(student.password)
+            }
+        
+            const updatedStudent = await Editstudent.save()
+            return {
+                status: 200,
+                data: updatedStudent
+            }
+        } else {
+            return {
+                status: 404,
+                data:"Student not found"
             }
         }
     }

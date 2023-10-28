@@ -73,6 +73,30 @@ class TutorUseCase{
         }
     }
 
+    async editprofile(tutor: Tutor) {
+        const EditTutor = await this.repository.findByEmail(tutor.email)
+        if (EditTutor) {
+            EditTutor.username = tutor.name
+            EditTutor.mobile = tutor.mobileNo
+            EditTutor.bio= tutor.bio
+            EditTutor.fee = tutor.fee
+            EditTutor.subject = tutor.subject
+            if (tutor.password) {
+                EditTutor.password=await this.encrypt.createHash(tutor.password)
+            }
+            const updatedTutor = await EditTutor.save()
+            return {
+                status: 200,
+                data:updatedTutor
+            }
+        } else {
+            return {
+                status: 404,
+                data:"Tutor not found"
+            }
+        }
+    }
+
 }
 
 export default TutorUseCase

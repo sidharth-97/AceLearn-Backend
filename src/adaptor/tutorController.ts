@@ -76,6 +76,15 @@ class TutorController{
             res.status(401).json(error)
         }
     }
+
+    async editProfile(req: Request, res: Response) {
+        try {
+            const tutor = await this.useCase.editprofile(req.body)
+            res.status(tutor.status).json(tutor.data)
+        } catch (error) {
+            console.log(error);     
+        }
+    }
 }
 
 export default TutorController
