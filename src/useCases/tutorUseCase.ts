@@ -97,6 +97,21 @@ class TutorUseCase{
         }
     }
 
+    async getTutorData(id: string) {
+        const tutor = await this.repository.findById(id)
+        if (tutor) {
+            return {
+                status: 200,
+                data:tutor
+            }
+        } else {
+            return {
+                status: 404,
+                data:"Tutor not found"
+            }
+        }
+   }
+
 }
 
 export default TutorUseCase

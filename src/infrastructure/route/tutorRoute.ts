@@ -22,6 +22,7 @@ tutorRouter.post("/signup", (req, res) => controller.signup(req, res))
 tutorRouter.post("/signupfinal",(req,res)=>controller.signupStep2(req,res))
 tutorRouter.post("/login", (req, res) => controller.login(req, res))
 tutorRouter.post("/logout", (req, res) => controller.logout(req, res))
-tutorRouter.post("/edit-profile",(req,res)=>controller.editProfile)
+tutorRouter.post("/edit-profile", (req, res) => controller.editProfile(req,res))
+tutorRouter.get('/tutor-details/:id',(req,res)=>controller.editProfile(req,res))
 
 export default tutorRouter

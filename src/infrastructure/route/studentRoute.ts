@@ -22,5 +22,6 @@ studentRouter.post("/signupfinal", (req, res) => controller.signupStep2(req, res
 studentRouter.post("/login", (req, res) => controller.login(req, res))
 studentRouter.post("/logout",(req,res)=>controller.logout(req,res))
 studentRouter.post("/edit-profile",(req,res)=>controller.editProfile(req,res))
+studentRouter.get('/student-details/:id',(req,res)=>controller.getStudentInfo(req,res))
 
 export default studentRouter

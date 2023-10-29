@@ -104,6 +104,21 @@ class StudentUseCase{
         }
     }
 
+    async getStudentData(id: string) {
+        const student = await this.studentRepository.findById(id)
+        if (student) {
+            return {
+                status: 200,
+                data:student
+            }
+        } else {
+            return {
+                status: 404,
+                data:student
+            }
+        }
+    }
+
 }
 
 export default StudentUseCase

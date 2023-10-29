@@ -91,6 +91,19 @@ class studentController{
         }
     }
 
+    async getStudentInfo(req: Request, res: Response) {
+        try {
+            const studentId = req.params.id
+            const result = await this.studentUseCase.getStudentData(studentId)
+            if (result) {
+                res.status(result.status).json(result.data)
+            }
+        } catch (error) {
+            res.status(401).json(error)            
+
+        }
+    }
+
 }
 
 export default studentController

@@ -82,7 +82,20 @@ class TutorController{
             const tutor = await this.useCase.editprofile(req.body)
             res.status(tutor.status).json(tutor.data)
         } catch (error) {
-            console.log(error);     
+            res.status(401).json(error)            
+        }
+    }
+
+    async getTutorInfo(req: Request, res: Response) {
+        try {
+            const tutorId = req.params.id
+            const result = await this.useCase.getTutorData(tutorId)
+            if (result) {
+                res.status(result.status).json(result.data)
+            }
+            
+        } catch (error) {
+            res.status(401).json(error)            
         }
     }
 }
