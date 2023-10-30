@@ -6,6 +6,7 @@ import express from "express";
 import jwtToken from "../passwordRepository/jwt";
 import GenerateOTP from "../utils/GenerateOTP";
 import SentMail from "../utils/sendMail";
+import { verifyToken } from "../middlewares/authMiddleware";
 
 const repository = new studentRepository()
 const encrypt = new Encrypt()
@@ -21,7 +22,7 @@ studentRouter.post("/signup", (req, res) => controller.signup(req, res))
 studentRouter.post("/signupfinal", (req, res) => controller.signupStep2(req, res))
 studentRouter.post("/login", (req, res) => controller.login(req, res))
 studentRouter.post("/logout",(req,res)=>controller.logout(req,res))
-studentRouter.post("/edit-profile",(req,res)=>controller.editProfile(req,res))
-studentRouter.get('/student-details/:id',(req,res)=>controller.getStudentInfo(req,res))
+studentRouter.post("/edit-profile",verifyToken,(req,res)=>controller.editProfile(req,res))
+studentRouter.get('/student-details/:id',verifyToken,(req,res)=>controller.getStudentInfo(req,res))
 
 export default studentRouter

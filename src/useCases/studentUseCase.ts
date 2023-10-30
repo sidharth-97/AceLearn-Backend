@@ -20,7 +20,7 @@ class StudentUseCase{
         const isExisting = await this.studentRepository.findByEmail(student.email)
         if (isExisting) {
             return {
-                status: 200,
+                status: 401,
                 data:"Student already exists"
             }
         } else {
@@ -39,7 +39,12 @@ class StudentUseCase{
         console.log("here123");
         
         const newPassword = await this.Encrypt.createHash(student.password)
-        const newStudent = { ...student, password: newPassword }
+        const newStudent = {
+            username: student.username,
+            email: student.email,
+            password: newPassword,
+            mobile:"464465"
+        };
         await this.studentRepository.save(newStudent)
         return {
             status: 200,
@@ -51,16 +56,22 @@ class StudentUseCase{
         try {
             const studentLog = await this.studentRepository.findByEmail(student.email)
             console.log(studentLog);
-            
+            if (studentLog.isBlocked) {
+                return {
+                    status: 403,
+                    data: "Blocked by admin"
+                }
+            }
         if (studentLog) {
             if (await this.Encrypt.compare(student.password, studentLog.password)) {
-                const token = this.JWTToken.createJWT(student._id)
+                const token = this.JWTToken.createJWT(student.email)
                 return {
                     status: 200,
                     data: studentLog,
                     token:token
                 }
-            } else {
+            } 
+            else {
                 return {
                     status: 403,
                     data: {

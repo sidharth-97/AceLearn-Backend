@@ -7,6 +7,7 @@ import TutorRepository from "../repository/tutorRepository";
 import express from "express";
 import GenerateOTP from "../utils/GenerateOTP";
 import SentMail from "../utils/sendMail";
+import { protectTutor } from "../middlewares/authMiddleware";
 
 const repository = new TutorRepository()
 const encrypt = new Encrypt()
@@ -22,7 +23,7 @@ tutorRouter.post("/signup", (req, res) => controller.signup(req, res))
 tutorRouter.post("/signupfinal",(req,res)=>controller.signupStep2(req,res))
 tutorRouter.post("/login", (req, res) => controller.login(req, res))
 tutorRouter.post("/logout", (req, res) => controller.logout(req, res))
-tutorRouter.post("/edit-profile", (req, res) => controller.editProfile(req,res))
-tutorRouter.get('/tutor-details/:id',(req,res)=>controller.editProfile(req,res))
+tutorRouter.post("/edit-profile", protectTutor,(req, res) => controller.editProfile(req,res))
+tutorRouter.get('/tutor-details/:id',protectTutor,(req,res)=>controller.editProfile(req,res))
 
 export default tutorRouter

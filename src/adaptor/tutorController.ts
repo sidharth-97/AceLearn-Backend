@@ -4,7 +4,6 @@ import GenerateOTP from "../infrastructure/utils/GenerateOTP"
 import SentMail from "../infrastructure/utils/sendMail"
 
 
-
 class TutorController{
     private useCase: TutorUseCase
     private genOtp: GenerateOTP

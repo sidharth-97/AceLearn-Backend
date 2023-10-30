@@ -17,7 +17,9 @@ class studentController{
 
     async signup(req: Request, res: Response) {
         try {
-            const otp =await this.genOtp.generateOtp(5)
+            const otp = await this.genOtp.generateOtp(4)
+            console.log(otp,"otp");
+            
             
              this.sentMail.sendMail(req.body.username,req.body.email,otp)
 
@@ -40,7 +42,6 @@ class studentController{
             }
         
             const student = req.body
-        
             const result = await this.studentUseCase.signup2(student);
                console.log("below");
                 

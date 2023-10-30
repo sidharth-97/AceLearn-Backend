@@ -5,12 +5,25 @@ import Student from "../../entities/students";
 
 class studentRepository implements studentRepositoryInterface{
 
-   async save(student: Student): Promise<any> {
-       const newStudent = new studentModel(student)
-       console.log(newStudent);
-       await newStudent.save()
-       return newStudent
+    async save(student: Student): Promise<any> {
+        try {
+            console.log(student);
+            
+            const newStudent = new studentModel(student);
+            console.log(newStudent, "newStudent");
+    
+            // Await the save operation and capture the result
+            const savedStudent = await newStudent.save();
+            
+            console.log("Student saved:", savedStudent);
+            return savedStudent;
+        } catch (error) {
+            console.error("Error saving student:", error);
+            // Handle the error accordingly, you might want to throw it or return a specific value to indicate failure.
+            throw error; // For example, rethrow the error to the caller
+        }
     }
+    
     
     async findByEmail(email: String): Promise<any> {
      const student = await studentModel.findOne({ email: email })

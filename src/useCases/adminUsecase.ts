@@ -38,7 +38,7 @@ class adminUseCase{
             }
         } else {
             return {
-                status: 200,
+                status: 401,
                 data:"Incorrect email"
             }
         }

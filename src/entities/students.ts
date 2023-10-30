@@ -1,7 +1,7 @@
 export default interface Student{
-    _id: string,
+    _id?: string,
     username: string
     email: string,
-    mobile: string,
+    mobile?: string,
     password:string
 }

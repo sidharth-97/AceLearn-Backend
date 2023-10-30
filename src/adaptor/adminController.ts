@@ -54,7 +54,9 @@ class adminController{
 
     async blockStudent(req: Request, res: Response) {
         try {
-            const student = await this.use_case.blockStudent(req?.query.id)
+            console.log(req,"reached");
+            
+            const student = await this.use_case.blockStudent(req?.params.id)
             res.status(student.status).json(student.data)
         } catch (error) {
             res.status(401).json(error)
@@ -62,7 +64,7 @@ class adminController{
     }
     async blockTutor(req: Request, res: Response) {
         try {
-            const tutor = await this.use_case.blockTutor(req?.query.id)
+            const tutor = await this.use_case.blockTutor(req?.params.id)
             res.status(tutor.status).json(tutor.data)
         } catch (error) {
             res.status(401).json(error)
