@@ -2,16 +2,20 @@ import { Request, Response } from "express"
 import TutorUseCase from "../useCases/tutorUseCase"
 import GenerateOTP from "../infrastructure/utils/GenerateOTP"
 import SentMail from "../infrastructure/utils/sendMail"
+import fs from 'fs'
+import CloudinaryUpload from "../infrastructure/utils/CloudinaryUpload"
 
 
 class TutorController{
     private useCase: TutorUseCase
     private genOtp: GenerateOTP
-    private sentMail:SentMail
-    constructor(useCase: TutorUseCase,genOtp: GenerateOTP,sentMail:SentMail) {
+    private sentMail: SentMail
+    private CloudinaryUpload:CloudinaryUpload
+    constructor(useCase: TutorUseCase,genOtp: GenerateOTP,sentMail:SentMail,CloudinaryUpload:CloudinaryUpload) {
         this.useCase = useCase
         this.genOtp = genOtp
-        this.sentMail=sentMail
+        this.sentMail = sentMail
+        this.CloudinaryUpload = CloudinaryUpload
     }
     async signup(req: Request, res: Response) {
         try {
@@ -78,7 +82,41 @@ class TutorController{
 
     async editProfile(req: Request, res: Response) {
         try {
-            const tutor = await this.useCase.editprofile(req.body)
+            console.log(req.body);
+            let url=''
+            if (req.file) {
+               
+                
+                const img = await this.CloudinaryUpload.upload(req.file.path, 'tutor-image');
+              
+                 url=img.secure_url
+            }
+            const data = {
+                email: req.body.email,
+                name:req.body.name,
+                password: req.body.password,
+                mobileNo: req.body.mobile,
+                subject: req.body.subject,
+                fee: req.body.fee,
+                bio: req.body.bio,
+                image:url,
+            }
+           
+            
+            console.log(data);
+            if (req?.file) {
+                fs.unlink(req.file.path, (err) => {
+                    if (err) {
+                        console.error('Error while unlinking:', err);
+                    } else {
+                        console.log('File has been deleted successfully');
+                    }
+                });
+            } else {
+                console.error("No file to delete");
+            }
+            
+            const tutor = await this.useCase.editprofile(data)
             res.status(tutor.status).json(tutor.data)
         } catch (error) {
             res.status(401).json(error)            
@@ -87,8 +125,11 @@ class TutorController{
 
     async getTutorInfo(req: Request, res: Response) {
         try {
+          
             const tutorId = req.params.id
             const result = await this.useCase.getTutorData(tutorId)
+            
+            
             if (result) {
                 res.status(result.status).json(result.data)
             }

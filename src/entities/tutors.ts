@@ -5,6 +5,7 @@ export default interface Tutor{
     password: string,
     mobileNo: string,
     subject: Array<string>,
-    fee:string
+    fee: string
+    image:string
     bio:string
 }

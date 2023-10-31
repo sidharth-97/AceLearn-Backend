@@ -9,11 +9,9 @@ class studentController{
     private sentMail:SentMail
     constructor(studentUseCase: StudentUseCase,genOtp:GenerateOTP,sentMail:SentMail) {
         this.studentUseCase = studentUseCase,
-            this.genOtp = genOtp
+        this.genOtp = genOtp
         this.sentMail=sentMail
     }
-
-
 
     async signup(req: Request, res: Response) {
         try {
@@ -85,6 +83,10 @@ class studentController{
     }
     async editProfile(req: Request, res: Response) {
         try {
+            const data = req.body
+            if (req.file) {
+                
+            }
             const student = await this.studentUseCase.editProfile(req.body)
             res.status(student.status).json(student.data)
         } catch (error) {
@@ -101,7 +103,6 @@ class studentController{
             }
         } catch (error) {
             res.status(401).json(error)            
-
         }
     }
 

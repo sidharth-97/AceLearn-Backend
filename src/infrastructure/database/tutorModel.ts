@@ -8,7 +8,8 @@ interface ITutor extends Document{
     mobileNo: string,
     subject: Array<string>,
     fee: string,
-    bio:string,
+    bio: string,
+    image:string,
     isBlocked:Boolean
 }
 
@@ -37,7 +38,10 @@ const TutorSchema:Schema<ITutor> = new mongoose.Schema({
     },
     bio:{
         type:String 
-     },
+    },
+    image: {
+        type:String
+    },
     isBlocked: {
         type:Boolean
     }

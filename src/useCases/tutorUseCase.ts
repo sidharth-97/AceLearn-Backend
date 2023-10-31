@@ -76,11 +76,13 @@ class TutorUseCase{
     async editprofile(tutor: Tutor) {
         const EditTutor = await this.repository.findByEmail(tutor.email)
         if (EditTutor) {
-            EditTutor.username = tutor.name
-            EditTutor.mobile = tutor.mobileNo
+            EditTutor.name = tutor.name
+            EditTutor.mobileNo = tutor.mobileNo
             EditTutor.bio= tutor.bio
             EditTutor.fee = tutor.fee
             EditTutor.subject = tutor.subject
+            EditTutor.image = tutor.image
+            
             if (tutor.password) {
                 EditTutor.password=await this.encrypt.createHash(tutor.password)
             }
