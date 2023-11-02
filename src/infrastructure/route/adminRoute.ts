@@ -22,6 +22,7 @@ adminRoute.post("/login", (req, res) => controller.login(req, res))
 adminRoute.post("/logout", (req, res) => controller.logout(req, res))
 adminRoute.get("/students", (req, res) => controller.findStudents(req, res))
 adminRoute.get("/tutors", (req, res) => controller.findTutors(req, res))
+
 adminRoute.post("/block-student/:id", (req, res) => controller.blockStudent(req, res))
 adminRoute.post("/block-tutor/:id",(req,res)=>controller.blockTutor(req,res))
 

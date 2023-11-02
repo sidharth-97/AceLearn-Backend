@@ -23,9 +23,6 @@ class TutorUseCase{
             }
 
         } else {
-            // const newPassword = await this.encrypt.createHash(tutor.password)
-            // const newTutor = { ...tutor, password: newPassword }
-            // await this.repository.save(newTutor)
             return {
                 status: 200,
                 data:isExisting
@@ -86,7 +83,7 @@ class TutorUseCase{
             if (tutor.password) {
                 EditTutor.password=await this.encrypt.createHash(tutor.password)
             }
-            const updatedTutor = await EditTutor.save()
+            const updatedTutor = await this.repository.save( EditTutor)
             return {
                 status: 200,
                 data:updatedTutor
@@ -112,7 +109,21 @@ class TutorUseCase{
                 data:"Tutor not found"
             }
         }
-   }
+    }
+    async getAllTutor() {
+        const Tutor = await this.repository.findAll()
+        if (Tutor) {
+            return {
+                status: 200,
+                data:Tutor
+            }
+        } else {
+            return {
+                status: 404,
+                data:"No Tutors found"
+            }
+        }
+    }
 
 }
 

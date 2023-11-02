@@ -31,6 +31,14 @@ class TutorRepository implements TutorRepositoryInterface{
            return null
        }
     }
+    async findAll(): Promise<any> {
+        const AllTutor = await TutorModel.find()
+        if (AllTutor) {
+            return AllTutor
+        } else {
+            return null
+        }
+    }
 }
 
 export default TutorRepository

@@ -22,6 +22,8 @@ console.log(token,"here it is");
     if (user.isBlocked) {
       return res.status(401).json({ message: 'No Access' });
     }
+    console.log("final");
+    
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Invalid token' });
@@ -35,7 +37,8 @@ export const protectTutor = (req: Request, res: Response, next: NextFunction)=>{
   }
   try {
     const decoded: any = jwt.verify(token, "thisisthesecretkey");
-      (req as any).user = decoded
+    (req as any).user = decoded
+    
     next()
   } catch (error) {
     return res.status(401).json({message:"Invalid Token"})

@@ -28,6 +28,8 @@ tutorRouter.post("/signupfinal",(req,res)=>controller.signupStep2(req,res))
 tutorRouter.post("/login", (req, res) => controller.login(req, res))
 tutorRouter.post("/logout", (req, res) => controller.logout(req, res))
 tutorRouter.get("/tutor-details/:id",(req, res) => controller.getTutorInfo(req,res))
-tutorRouter.post('/edit-profile',ImageUpload.single('image'),(req,res)=>controller.editProfile(req,res))
+tutorRouter.post('/edit-profile', protectTutor, ImageUpload.single('image'), (req, res) => controller.editProfile(req, res))
+
+tutorRouter.get("/alltutors",(req,res)=>controller.getAllTutors(req,res))
 
 export default tutorRouter
