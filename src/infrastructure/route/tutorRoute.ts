@@ -10,6 +10,9 @@ import SentMail from "../utils/sendMail";
 import { protectTutor } from "../middlewares/authMiddleware";
 import { ImageUpload } from "../config/multer";
 import CloudinaryUpload from "../utils/CloudinaryUpload";
+import scheduleController from "../../adaptor/scheduleController";
+import ScheduleUsecase from "../../useCases/sheduleUsecase";
+import ScheduleRepository from "../repository/scheduleRepository";
 
 
 const repository = new TutorRepository()
@@ -19,7 +22,10 @@ const generateOtp = new GenerateOTP()
 const sendMail = new SentMail()
 const Cloudinary=new CloudinaryUpload()
 const use_case = new TutorUseCase(repository, jwt, encrypt)
-const controller=new TutorController(use_case,generateOtp,sendMail,Cloudinary)
+const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary)
+const scheduleRepository=new ScheduleRepository()
+const sheduleUsecase=new ScheduleUsecase(scheduleRepository)
+const schedulecontrol=new scheduleController(sheduleUsecase)
 
 const tutorRouter = express.Router()
 
@@ -29,7 +35,9 @@ tutorRouter.post("/login", (req, res) => controller.login(req, res))
 tutorRouter.post("/logout", (req, res) => controller.logout(req, res))
 tutorRouter.get("/tutor-details/:id",(req, res) => controller.getTutorInfo(req,res))
 tutorRouter.post('/edit-profile', protectTutor, ImageUpload.single('image'), (req, res) => controller.editProfile(req, res))
-
-tutorRouter.get("/alltutors",(req,res)=>controller.getAllTutors(req,res))
+//for common
+tutorRouter.get("/alltutors", (req, res) => controller.getAllTutors(req, res))
+//for schedule
+tutorRouter.post('/scheduledate',(req,res)=>schedulecontrol.scheduleTime(req,res))
 
 export default tutorRouter

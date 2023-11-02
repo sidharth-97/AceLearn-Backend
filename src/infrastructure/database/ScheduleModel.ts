@@ -1,6 +1,6 @@
-import mongoose, { Schema, ObjectId } from "mongoose";
+import mongoose, { Schema, ObjectId, Document } from "mongoose";
 
-interface Schedule {
+interface Schedule extends Document {
     tutor: ObjectId; 
     timing: {
         date: Date;
@@ -19,6 +19,6 @@ const ScheduleSchema = new Schema({
     }]
 });
 
-const ScheduleModel = mongoose.model('Schedule', ScheduleSchema);
+const ScheduleModel = mongoose.model<Schedule>('Schedule', ScheduleSchema);
 
 export { Schedule, ScheduleModel };
