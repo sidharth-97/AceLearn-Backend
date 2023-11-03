@@ -34,6 +34,41 @@ class ScheduleUsecase{
         
     }
 
+    async changeSchedule(data:{
+        tutor: string,
+        timing: {
+            date: Date,
+            newDate:Date
+        }
+    }) {
+        
+        const schedule = await this.ScheduleRepo.findById(data.tutor)
+        console.log(schedule,"schedule");
+        
+        if (schedule) {
+            
+            const indexToUpdate = schedule.timing.findIndex((time:{date:Date,newDate:Date}) => {
+                const timeDateTimestamp = new Date(time.date).getTime();
+                const dataDateTimestamp = new Date(data.timing.date).getTime();
+                return timeDateTimestamp === dataDateTimestamp;
+            });
+
+            if (indexToUpdate !== -1) {
+                schedule.timing[indexToUpdate].date = new Date(data.timing.newDate);
+
+                await this.ScheduleRepo.save(schedule)
+                return {
+                    status: 200,
+                    data:schedule
+                }
+            } else {
+                // Date doesn't exist, add a new entry to the schedule
+                // Your existing code for adding a new schedule here
+            }
+
+        
+        }
+    } 
 }
 
 export default ScheduleUsecase

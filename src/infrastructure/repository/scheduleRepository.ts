@@ -69,7 +69,23 @@ class ScheduleRepository implements ScheduleInterface {
     }
 
     async findById(id: string): Promise<any> {
+        const schedule = await ScheduleModel.findOne({ tutor: id })
+        if (schedule) {
+            return schedule
+        } else {
+            return null
+        }
     }
+ async save(schedule: Object): Promise<any> {
+    try {
+        const newSchedule = new ScheduleModel(schedule)
+        await newSchedule.save()
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
 }
 
 export default ScheduleRepository;
