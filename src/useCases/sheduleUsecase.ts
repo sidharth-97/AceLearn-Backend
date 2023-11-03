@@ -69,6 +69,47 @@ class ScheduleUsecase{
         
         }
     } 
+
+    async BookTutor(data:schedule){
+        const schedule = await this.ScheduleRepo.findById(data.tutor)  
+        console.log(schedule);
+        
+        if (schedule) {
+            const indexToUpdate = schedule.timing.findIndex((time:{date:Date,newDate:Date}) => {
+                const timeDateTimestamp = new Date(time.date).getTime();
+                const dataDateTimestamp = new Date(data.timing.date).getTime();
+                return timeDateTimestamp === dataDateTimestamp;
+            });
+
+            if (indexToUpdate !== -1) {
+                schedule.timing[indexToUpdate].student = data.timing.student;
+
+                await this.ScheduleRepo.save(schedule)
+                return {
+                    status: 200,
+                    data:schedule
+                }
+            } else {
+                // Date doesn't exist, add a new entry to the schedule
+                // Your existing code for adding a new schedule here
+            }
+        }
+    }
+
+    async findSchedule(id:string){
+        const schedule = await this.ScheduleRepo.findSchedule(id)
+        if (schedule) {
+            return {
+                status: 200,
+                data:schedule
+            }
+        } else {
+            return {
+                status: 401,
+                data:"Not found"
+            }
+        }
+    }
 }
 
 export default ScheduleUsecase

@@ -84,7 +84,16 @@ class ScheduleRepository implements ScheduleInterface {
         console.log(error);
         
     }
-}
+    }
+     async findSchedule(id: String): Promise<any> {
+        try {
+            const schedule = await ScheduleModel.find({ tutor: id })
+            return schedule
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
 
 }
 

@@ -39,6 +39,8 @@ tutorRouter.post('/edit-profile', protectTutor, ImageUpload.single('image'), (re
 tutorRouter.get("/alltutors", (req, res) => controller.getAllTutors(req, res))
 //for schedule
 tutorRouter.post('/scheduledate', (req, res) => schedulecontrol.scheduleTime(req, res))
-tutorRouter.post('/changeSchedule', (req, res) => schedulecontrol.changeSchedule(req,res))
+tutorRouter.post('/changeSchedule', (req, res) => schedulecontrol.changeSchedule(req, res))
+tutorRouter.post('/booktutor', (req, res) => schedulecontrol.BookTutor(req, res))
+tutorRouter.get('/tutorschedule/:id',(req,res)=>schedulecontrol.TutorSchedule(req,res))
 
 export default tutorRouter
