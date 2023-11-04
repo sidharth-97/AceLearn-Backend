@@ -40,15 +40,22 @@ class ScheduleRepository implements ScheduleInterface {
                   console.log(data.timing.student);
                   
                   // Push the new timing object into the 'timing' array
-                  if (isValidObjectId(data.timing.student)) {
-                    schedule.timing.push({
-                        date: data.timing.date,
-                        student:data.timing.student
-                    });
-                } else {
+               
+                schedule.timing.push({
+                    date: data.timing.date,
+                    student: data.timing.student
+                })
+                
                     // Handle the case where the provided student is not a valid ObjectId
-                }
+                
+                try {
+                   console.log(schedule,"schedule inside save");
+                   
                 await schedule.save();
+               } catch (error) {
+                console.log(error);
+                
+               }
                 return schedule
             }
         } else {

@@ -72,7 +72,6 @@ class ScheduleUsecase{
 
     async BookTutor(data:schedule){
         const schedule = await this.ScheduleRepo.findById(data.tutor)  
-        console.log(schedule);
         
         if (schedule) {
             const indexToUpdate = schedule.timing.findIndex((time:{date:Date,newDate:Date}) => {
@@ -80,18 +79,29 @@ class ScheduleUsecase{
                 const dataDateTimestamp = new Date(data.timing.date).getTime();
                 return timeDateTimestamp === dataDateTimestamp;
             });
+console.log(indexToUpdate,"this is the index to update");
 
             if (indexToUpdate !== -1) {
-                schedule.timing[indexToUpdate].student = data.timing.student;
-
-                await this.ScheduleRepo.save(schedule)
+                if (!schedule.timing[indexToUpdate].student) {
+               
+                       schedule.timing[indexToUpdate].student = data.timing.student;
+    
+                    await this.ScheduleRepo.save(schedule)
+                  
+                } else {
+                  console.log("booked");
+                    return {
+                        status: 401,
+                        data:"Already Booked"
+                    }
+                 
+                }
                 return {
                     status: 200,
                     data:schedule
                 }
             } else {
-                // Date doesn't exist, add a new entry to the schedule
-                // Your existing code for adding a new schedule here
+              
             }
         }
     }
