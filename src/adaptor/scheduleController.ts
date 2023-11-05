@@ -45,6 +45,10 @@ class scheduleController{
             res.status(401).json("Failed to fetch data")
         }
     }
+    async bookThroughPost(req: Request, res: Response) {
+        const schedule = await this.scheduleUsecase.BookThroughPost(req.body)
+        res.status(schedule.status).json(schedule.data)
+    }
 
 }
 

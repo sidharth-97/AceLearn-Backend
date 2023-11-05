@@ -120,6 +120,28 @@ console.log(indexToUpdate,"this is the index to update");
             }
         }
     }
+
+    async BookThroughPost(data: any) {
+        const schedule = await this.ScheduleRepo.findById(data.tutor)
+        if (schedule) {
+            schedule.timing.push({
+                date: data.timing.date,
+                student:data.timing.student
+            })
+
+            await this.ScheduleRepo.save(schedule)
+            return {
+                status: 200,
+                data:schedule
+            }
+        } else {
+            return {
+                status: 404,
+                data:"Booking Failed"
+            }
+        }
+
+    }
 }
 
 export default ScheduleUsecase

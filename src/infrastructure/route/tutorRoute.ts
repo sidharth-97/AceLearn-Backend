@@ -25,6 +25,7 @@ const sendMail = new SentMail()
 const Cloudinary=new CloudinaryUpload()
 const use_case = new TutorUseCase(repository, jwt, encrypt)
 const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary)
+
 const scheduleRepository=new ScheduleRepository()
 const sheduleUsecase=new ScheduleUsecase(scheduleRepository)
 const schedulecontrol = new scheduleController(sheduleUsecase)
