@@ -23,6 +23,21 @@ class JobUseCase{
         }
     }
 
+    async getJobDetails(id: string) {
+        const job = await this.jobrepository.findByStdId(id)
+        if (job) {
+            return {
+                status: 200,
+                data:job
+            }
+        } else {
+            return {
+                status: 404,
+                data:"Not found"
+            }
+        }
+    }
+
 }
 
 export default JobUseCase

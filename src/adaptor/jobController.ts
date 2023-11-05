@@ -11,6 +11,11 @@ class JobController{
         const job = await this.jobUseCase.addJob(req.body)
         res.status(job.status).json(job.data)
     }
+
+    async getJobDetails(req: Request, res: Response) {
+        const job = await this.jobUseCase.getJobDetails(req.params.id)
+        res.status(job.status).json(job.data)
+    }
 }
 
 export default JobController
