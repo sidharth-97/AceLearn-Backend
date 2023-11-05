@@ -29,7 +29,10 @@ const JobSchema = new Schema<Job>(
     },
     requests: [
       {
-        tutor: Schema.Types.ObjectId,
+        tutor: {
+            type: Schema.Types.ObjectId,
+            ref: "Tutor", // Reference the Tutor model
+          },
         fee: String,
         date: Date,
       },

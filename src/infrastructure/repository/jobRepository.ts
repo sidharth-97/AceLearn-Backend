@@ -18,7 +18,9 @@ interface Job{
 class JobRepository implements jobRepositoryInterface{
      async findByStdId(id: string): Promise<any> {
         
-         let job = await JobModel.findOne({ student: id })
+         let job = await JobModel.findOne({ student: id }).populate("requests.tutor")
+         console.log(job,"here it is ");
+         
          if (job) {
              return job
          } else {
@@ -29,6 +31,19 @@ class JobRepository implements jobRepositoryInterface{
         try {
             const newJob = new JobModel(job)
             await newJob.save()
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+    async findAll(): Promise<any> {
+        try {
+            const job = await JobModel.find()
+            if (job) {
+                return job
+            } else {
+                return null
+            }
         } catch (error) {
             console.log(error);
             

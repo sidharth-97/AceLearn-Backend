@@ -33,6 +33,6 @@ studentRouter.post("/edit-profile",verifyToken,(req,res)=>controller.editProfile
 studentRouter.get('/student-details/:id', verifyToken, (req, res) => controller.getStudentInfo(req, res))
 
 studentRouter.post("/addJob", (req, res) => Jobcontroller.addJob(req, res))
-studentRouter.get('/student-job-request/:id',(req,res)=>Jobcontroller.getJobDetails(req,res))
+studentRouter.get('/student-job-request/:id', (req, res) => Jobcontroller.getJobDetails(req, res))
 
 export default studentRouter

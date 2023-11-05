@@ -16,6 +16,14 @@ class JobController{
         const job = await this.jobUseCase.getJobDetails(req.params.id)
         res.status(job.status).json(job.data)
     }
+    async getAllJobs(req: Request, res: Response) {
+        const job = await this.jobUseCase.getAllJob()
+        res.status(job.status).json(job.data)
+    }
+    async applyJobs(req: Request, res: Response) {
+        const job = await this.jobUseCase.applyJob(req.body)
+        res.status(job.status).json(job.data)
+    }
 }
 
 export default JobController

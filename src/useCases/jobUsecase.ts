@@ -37,6 +37,38 @@ class JobUseCase{
             }
         }
     }
+    async getAllJob() {
+        const job = await this.jobrepository.findAll()
+        if (job) {
+            return {
+                status: 200,
+                data:job
+            }
+        }else {
+            return {
+                status: 404,
+                data:"Not found"
+            }
+        }
+    }
+    async applyJob(data: {
+        id:string
+        tutor: string,
+        fee: string,
+        date: Date,
+      }) {
+        const job = await this.jobrepository.findByStdId(data.id)
+        job.requests.push({
+            tutor: data.tutor,
+            fee: data.fee,
+            date:data.date
+        })
+        await this.jobrepository.save(job)
+        return {
+            status: 200,
+            data:job
+        }
+    }
 
 }
 

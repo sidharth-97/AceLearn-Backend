@@ -13,7 +13,9 @@ import CloudinaryUpload from "../utils/CloudinaryUpload";
 import scheduleController from "../../adaptor/scheduleController";
 import ScheduleUsecase from "../../useCases/sheduleUsecase";
 import ScheduleRepository from "../repository/scheduleRepository";
-
+import JobRepository from "../repository/jobRepository";
+import JobController from "../../adaptor/jobController";
+import JobUseCase from "../../useCases/jobUsecase";
 
 const repository = new TutorRepository()
 const encrypt = new Encrypt()
@@ -25,7 +27,11 @@ const use_case = new TutorUseCase(repository, jwt, encrypt)
 const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary)
 const scheduleRepository=new ScheduleRepository()
 const sheduleUsecase=new ScheduleUsecase(scheduleRepository)
-const schedulecontrol=new scheduleController(sheduleUsecase)
+const schedulecontrol = new scheduleController(sheduleUsecase)
+
+const jobRepository = new JobRepository()
+const jobUseCase = new JobUseCase(jobRepository)
+const Jobcontroller=new JobController(jobUseCase)
 
 const tutorRouter = express.Router()
 
@@ -42,5 +48,8 @@ tutorRouter.post('/scheduledate', (req, res) => schedulecontrol.scheduleTime(req
 tutorRouter.post('/changeSchedule', (req, res) => schedulecontrol.changeSchedule(req, res))
 tutorRouter.post('/booktutor', (req, res) => schedulecontrol.BookTutor(req, res))
 tutorRouter.get('/tutorschedule/:id',(req,res)=>schedulecontrol.TutorSchedule(req,res))
+//for job posting
+tutorRouter.get('/getallposting', (req, res) => Jobcontroller.getAllJobs(req, res))
+tutorRouter.post('/applytutorjob',(req,res)=>Jobcontroller.applyJobs(req,res))
 
 export default tutorRouter
