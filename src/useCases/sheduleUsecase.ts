@@ -34,41 +34,38 @@ class ScheduleUsecase{
         
     }
 
-    async changeSchedule(data:{
-        tutor: string,
+    async changeSchedule(data: {
+        tutor: string;
         timing: {
-            date: Date,
-            newDate:Date
-        }
+            date: Date;
+            newDate: Date;
+        };
     }) {
-        
-        const schedule = await this.ScheduleRepo.findById(data.tutor)
-        console.log(schedule,"schedule");
-        
+        const schedule = await this.ScheduleRepo.findById(data.tutor);
+    
         if (schedule) {
-            
-            const indexToUpdate = schedule.timing.findIndex((time:{date:Date,newDate:Date}) => {
+            const updatedTiming = schedule.timing.filter((time: { date: Date, newDate: Date }) => {
                 const timeDateTimestamp = new Date(time.date).getTime();
                 const dataDateTimestamp = new Date(data.timing.date).getTime();
-                return timeDateTimestamp === dataDateTimestamp;
+                return timeDateTimestamp !== dataDateTimestamp;
             });
-
-            if (indexToUpdate !== -1) {
-                schedule.timing[indexToUpdate].date = new Date(data.timing.newDate);
-
-                await this.ScheduleRepo.save(schedule)
+    
+            if (updatedTiming.length !== schedule.timing.length) {
+                // Item was removed, update the schedule with the new timing array
+                schedule.timing = updatedTiming;
+    
+                await this.ScheduleRepo.save(schedule);
                 return {
                     status: 200,
-                    data:schedule
-                }
+                    data: schedule
+                };
             } else {
-                // Date doesn't exist, add a new entry to the schedule
-                // Your existing code for adding a new schedule here
+                // Date doesn't exist, no changes in the array
+                // Your logic or response for this scenario here
             }
-
-        
         }
-    } 
+    }
+    
 
     async BookTutor(data:schedule){
         const schedule = await this.ScheduleRepo.findById(data.tutor)  

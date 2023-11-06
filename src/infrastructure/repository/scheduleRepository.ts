@@ -24,11 +24,12 @@ class ScheduleRepository implements ScheduleInterface {
         
             const dateExists = schedule.timing.filter((time) => {
                 // Convert both dates to timestamps for accurate comparison
-                const timeDateTimestamp = time.date.getTime();
-                const dataDateTimestamp = new Date(data.timing.date).getTime();
-            
-                // Compare the timestamps
-                return timeDateTimestamp === dataDateTimestamp;
+                if (time.date && time.date instanceof Date) {
+                    const timeDateTimestamp = time.date.getTime();
+                    const dataDateTimestamp = new Date(data.timing.date).getTime();
+                    return timeDateTimestamp === dataDateTimestamp;
+                }
+                return false; 
             });
                         console.log(dateExists);
 
