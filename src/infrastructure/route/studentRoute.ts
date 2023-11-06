@@ -43,6 +43,6 @@ studentRouter.post("/addJob", (req, res) => Jobcontroller.addJob(req, res))
 studentRouter.get('/student-job-request/:id', (req, res) => Jobcontroller.getJobDetails(req, res))
 //time scheduling
 studentRouter.post('/book-tutor-by-post',(req,res)=>schedulecontroller.bookThroughPost(req,res))
-
+studentRouter.get('/getStudentSchedule/:id',(req,res)=>schedulecontroller.findStudentSchedule(req,res))
 
 export default studentRouter

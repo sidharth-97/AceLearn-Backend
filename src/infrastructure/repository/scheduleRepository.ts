@@ -1,7 +1,6 @@
+import mongoose from "mongoose";
 import ScheduleInterface from "../../useCases/interface/scheduleRepositoryInterface";
 import { Schedule, ScheduleModel } from "../database/ScheduleModel";
-import { ObjectId } from "mongoose";
-import { Types, isValidObjectId } from "mongoose";
 
 
 interface schedule{
@@ -102,8 +101,57 @@ class ScheduleRepository implements ScheduleInterface {
             
         }
     }
+    async findAll(id:string): Promise<any> {
+        try {
+            console.log(id);
+            const stdId = new mongoose.Types.ObjectId(id);
 
-}
+            const schedules = await ScheduleModel.aggregate([
+                {
+                    $unwind: '$timing'
+                },
+                {
+                    $match: {
+                        'timing.student': stdId
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'tutors', // The name of the Tutor collection
+                        let: { tutorId: '$tutor' },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: { $eq: ['$_id', '$$tutorId'] }
+                                }
+                            },
+                            {
+                                $project: {
+                                    password: 0 // Excluding the password field in the tutorDetails array
+                                    // You can include fields that you need by setting them to 1
+                                }
+                            }
+                        ],
+                        as: 'tutorDetails'
+                    }
+                },
+                {
+                    $project: {
+                        password: 0 // Excluding the password field in the ScheduleModel
+                        // You can include fields that you need by setting them to 1
+                    }
+                }
+            ]);
+            
+            console.log(schedules);
+            return schedules;
+        } catch (error) {
+            console.log(error);
+            // Handle error or throw it further for handling at a higher level
+            throw error;
+        }    
+
+}}
 
 export default ScheduleRepository;
   

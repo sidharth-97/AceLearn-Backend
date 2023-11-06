@@ -49,6 +49,12 @@ class scheduleController{
         const schedule = await this.scheduleUsecase.BookThroughPost(req.body)
         res.status(schedule.status).json(schedule.data)
     }
+    async findStudentSchedule(req: Request, res: Response) {
+        console.log("here");
+        
+        const schedule = await this.scheduleUsecase.findStudentSchedule(req.params.id)
+        res.status(schedule.status).json(schedule.data)
+    }
 
 }
 
