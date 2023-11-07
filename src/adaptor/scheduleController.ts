@@ -27,6 +27,8 @@ class scheduleController{
     }
     
     async BookTutor(req: Request, res: Response) {
+        console.log("book tutor");
+        
         const schedule = await this.scheduleUsecase.BookTutor(req.body)
         if (schedule) {
             res.status(schedule.status).json(schedule.data)

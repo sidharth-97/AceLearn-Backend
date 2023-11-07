@@ -16,7 +16,7 @@ class ScheduleUsecase {
 
   async scheduleTime(data: schedule) {
     const schedule = await this.ScheduleRepo.pushDate(data);
-    console.log(schedule, "reached usecase");
+
 
     if (schedule) {
       return {
@@ -67,6 +67,7 @@ class ScheduleUsecase {
 
   async BookTutor(data: schedule) {
     const schedule = await this.ScheduleRepo.findById(data.tutor);
+console.log(data);
 
     if (schedule) {
       const indexToUpdate = schedule.timing.findIndex(
