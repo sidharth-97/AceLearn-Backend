@@ -71,6 +71,8 @@ class TutorUseCase{
     }
 
     async editprofile(tutor: Tutor) {
+        console.log(tutor,"tutuor");
+        
         const EditTutor = await this.repository.findByEmail(tutor.email)
         if (EditTutor) {
             EditTutor.name = tutor.name

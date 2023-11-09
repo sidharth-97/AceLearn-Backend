@@ -82,6 +82,8 @@ class TutorController{
 
     async editProfile(req: Request, res: Response) {
         try {
+            console.log("edit tutor");
+            
             console.log(req.body);
             let url=''
             if (req.file) {

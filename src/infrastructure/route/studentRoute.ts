@@ -13,6 +13,7 @@ import JobController from "../../adaptor/jobController";
 import ScheduleRepository from "../repository/scheduleRepository";
 import ScheduleUsecase from "../../useCases/sheduleUsecase";
 import scheduleController from "../../adaptor/scheduleController";
+import PaymentRepository from "../repository/paymentRepository";
 
 const repository = new studentRepository()
 const encrypt = new Encrypt()
@@ -27,7 +28,8 @@ const jobUseCase = new JobUseCase(jobRepository)
 const Jobcontroller = new JobController(jobUseCase)
 
 const scheduleRepository = new ScheduleRepository()
-const sheduleUsecase = new ScheduleUsecase(scheduleRepository)
+const paymentRepository=new PaymentRepository()
+const sheduleUsecase = new ScheduleUsecase(scheduleRepository,paymentRepository)
 const schedulecontroller=new scheduleController(sheduleUsecase)
 
 const studentRouter = express.Router()
@@ -43,6 +45,9 @@ studentRouter.post("/addJob", (req, res) => Jobcontroller.addJob(req, res))
 studentRouter.get('/student-job-request/:id', (req, res) => Jobcontroller.getJobDetails(req, res))
 //time scheduling
 studentRouter.post('/book-tutor-by-post',(req,res)=>schedulecontroller.bookThroughPost(req,res))
-studentRouter.get('/getStudentSchedule/:id',(req,res)=>schedulecontroller.findStudentSchedule(req,res))
+studentRouter.get('/getStudentSchedule/:id', (req, res) => schedulecontroller.findStudentSchedule(req, res))
+//payment
+studentRouter.post('/payment', (req, res) => schedulecontroller.payment(req, res))
+studentRouter.post('/webhook',(req,res)=>schedulecontroller.webhook(req,res))
 
 export default studentRouter

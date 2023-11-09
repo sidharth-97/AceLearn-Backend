@@ -1,3 +1,4 @@
+import PaymentRepository from "../infrastructure/repository/paymentRepository";
 import ScheduleRepository from "../infrastructure/repository/scheduleRepository";
 
 interface schedule {
@@ -10,8 +11,10 @@ interface schedule {
 
 class ScheduleUsecase {
   private ScheduleRepo: ScheduleRepository;
-  constructor(ScheduleRepo: ScheduleRepository) {
+  private PaymentRepo:PaymentRepository
+  constructor(ScheduleRepo: ScheduleRepository, PaymentRepo:PaymentRepository) {
     this.ScheduleRepo = ScheduleRepo;
+    this.PaymentRepo=PaymentRepo
   }
 
   async scheduleTime(data: schedule) {
@@ -65,40 +68,63 @@ class ScheduleUsecase {
     }
   }
 
-  async BookTutor(data: schedule) {
+  async Payment(data:any) {
+    const payment = await this.PaymentRepo.ConfirmPayment(data)
+    if (payment) {
+      return {
+        status: 200,
+        data:payment
+    }
+  }
+  }
+
+  async BookTutor(data:any) {
+    const paymentSuccess = await this.PaymentRepo.PaymentSuccess(data)
+    if (!paymentSuccess) {
+      console.log("faaaaaaaaaaaaaaaileeeeeeeeee");
+      
+      return {
+        status: 401,
+        data:"Payment failed"
+      }
+    }
+    console.log("boooking succedddddddddddddd");
+    
     const schedule = await this.ScheduleRepo.findById(data.tutor);
-console.log(data);
-
+  
     if (schedule) {
-      const indexToUpdate = schedule.timing.findIndex(
-        (time: { date: Date; newDate: Date }) => {
+      const datesToBook = Array.isArray(data.timing.date) ? data.timing.date : [data.timing.date];
+  
+      let updated = false;
+  
+      for (const dateToBook of datesToBook) {
+        const dataDateTimestamp = new Date(dateToBook).getTime();
+        const indexToUpdate = schedule.timing.findIndex((time: { date: Date }) => {
           const timeDateTimestamp = new Date(time.date).getTime();
-          const dataDateTimestamp = new Date(data.timing.date).getTime();
           return timeDateTimestamp === dataDateTimestamp;
-        }
-      );
-      console.log(indexToUpdate, "this is the index to update");
-
-      if (indexToUpdate !== -1) {
-        if (!schedule.timing[indexToUpdate].student) {
+        });
+  
+        if (indexToUpdate !== -1) {
           schedule.timing[indexToUpdate].student = data.timing.student;
-
-          await this.ScheduleRepo.save(schedule);
-        } else {
-          console.log("booked");
-          return {
-            status: 401,
-            data: "Already Booked",
-          };
+          updated = true;
         }
+      }
+  
+      if (updated) {
+        await this.ScheduleRepo.save(schedule);
         return {
           status: 200,
           data: schedule,
         };
       } else {
+        return {
+          status: 401,
+          data: "Already Booked or Date not found",
+        };
       }
     }
   }
+  
 
   async findSchedule(id: string) {
     const schedule = await this.ScheduleRepo.findSchedule(id);

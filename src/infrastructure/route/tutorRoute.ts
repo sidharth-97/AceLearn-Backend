@@ -16,6 +16,7 @@ import ScheduleRepository from "../repository/scheduleRepository";
 import JobRepository from "../repository/jobRepository";
 import JobController from "../../adaptor/jobController";
 import JobUseCase from "../../useCases/jobUsecase";
+import PaymentRepository from "../repository/paymentRepository";
 
 const repository = new TutorRepository()
 const encrypt = new Encrypt()
@@ -26,8 +27,9 @@ const Cloudinary=new CloudinaryUpload()
 const use_case = new TutorUseCase(repository, jwt, encrypt)
 const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary)
 
-const scheduleRepository=new ScheduleRepository()
-const sheduleUsecase=new ScheduleUsecase(scheduleRepository)
+const scheduleRepository = new ScheduleRepository()
+const paymentRepository=new PaymentRepository()
+const sheduleUsecase=new ScheduleUsecase(scheduleRepository,paymentRepository)
 const schedulecontrol = new scheduleController(sheduleUsecase)
 
 const jobRepository = new JobRepository()
@@ -47,7 +49,7 @@ tutorRouter.get("/alltutors", (req, res) => controller.getAllTutors(req, res))
 //for schedule
 tutorRouter.post('/scheduledate', (req, res) => schedulecontrol.scheduleTime(req, res))
 tutorRouter.post('/changeSchedule', (req, res) => schedulecontrol.changeSchedule(req, res))
-tutorRouter.post('/booktutor', (req, res) => schedulecontrol.BookTutor(req, res))
+// tutorRouter.post('/booktutor', (req, res) => schedulecontrol.BookTutor(req, res))
 tutorRouter.get('/tutorschedule/:id',(req,res)=>schedulecontrol.TutorSchedule(req,res))
 //for job posting
 tutorRouter.get('/getallposting', (req, res) => Jobcontroller.getAllJobs(req, res))
