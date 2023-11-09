@@ -78,22 +78,24 @@ class ScheduleUsecase {
   }
   }
 
-  async BookTutor(data:any) {
+  async BookTutor(data:any,localData:any) {
     const paymentSuccess = await this.PaymentRepo.PaymentSuccess(data)
     if (!paymentSuccess) {
       console.log("faaaaaaaaaaaaaaaileeeeeeeeee");
       
       return {
         status: 401,
-        data:"Payment failed"
+        data: "Payment failed"
       }
+    } else {
+      console.log(paymentSuccess, "this is the resutl of redix");
     }
     console.log("boooking succedddddddddddddd");
     
-    const schedule = await this.ScheduleRepo.findById(data.tutor);
+    const schedule = await this.ScheduleRepo.findById(localData.tutor);
   
     if (schedule) {
-      const datesToBook = Array.isArray(data.timing.date) ? data.timing.date : [data.timing.date];
+      const datesToBook = Array.isArray(localData.timing.date) ? localData.timing.date : [localData.timing.date];
   
       let updated = false;
   
@@ -105,7 +107,7 @@ class ScheduleUsecase {
         });
   
         if (indexToUpdate !== -1) {
-          schedule.timing[indexToUpdate].student = data.timing.student;
+          schedule.timing[indexToUpdate].student = localData.timing.student;
           updated = true;
         }
       }
