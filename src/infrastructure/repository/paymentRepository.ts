@@ -25,8 +25,8 @@ class PaymentRepository {
         },
       ],
       mode: "payment",
-      success_url: "http://localhost:4242/success",
-      cancel_url: "http://localhost:4242/cancel",
+      success_url: "http://localhost:5173/success",
+      cancel_url: "http://localhost:5173/failed",
     });
 
     return session;
