@@ -7,6 +7,8 @@ import adminRoute from '../route/adminRoute'
 import passport from 'passport'
 import bodyParser from 'body-parser';
 import session from 'express-session'
+import http from 'http'
+import initializeSocket from './socketServer'
 
 
 export const createServer = () => {
@@ -26,8 +28,10 @@ export const createServer = () => {
         app.use(cookieParser())
         app.use("/api/students",studentRouter)
         app.use("/api/tutors", tutorRouter)
-        app.use("/api/admin", adminRoute)
-        return app
+      app.use("/api/admin", adminRoute)
+      const server = http.createServer(app)
+      initializeSocket(server)
+        return server
     } catch (error) {
         console.log(error);
     }
