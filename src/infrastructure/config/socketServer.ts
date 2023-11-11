@@ -8,6 +8,17 @@ function initializeSocket(server:any) {
     }
         
     )
+    io.on("connection", (socket) => {
+        console.log("Socket connected", socket.id);
+        
+        socket.on("room:join", (data) => {
+            const { tutor, room } = data;
+            io.to(room).emit("user:joined", { tutor, id: socket.id });
+            socket.join(room);
+            io.to(socket.id).emit("room:join", data);
+          });
+
+    })
 
 }
 

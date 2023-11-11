@@ -50,7 +50,6 @@ class scheduleController {
 
   async TutorSchedule(req: Request, res: Response) {
     const schedule = await this.scheduleUsecase.findSchedule(req.params.id);
-    console.log(schedule, "here");
 
     if (schedule) {
       res.status(schedule.status).json(schedule.data);
