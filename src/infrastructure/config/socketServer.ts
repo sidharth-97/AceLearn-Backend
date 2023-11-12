@@ -45,6 +45,17 @@ function initializeSocket(server:any) {
               })
         })
 
+        socket.on('startScreenShare', ({ to }) => {
+            console.log(`User ${socket.id} started screen share for ${to}`);
+            io.to(to).emit('startScreenShare', { from: socket.id });
+          });
+        
+          // Handle user stopping screen share
+          socket.on('stopScreenShare', ({ to }) => {
+            console.log(`User ${socket.id} stopped screen share for ${to}`);
+            io.to(to).emit('stopScreenShare', { from: socket.id });
+          });
+
     })
 
 }
