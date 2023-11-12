@@ -93,6 +93,7 @@ class ScheduleUsecase {
     console.log("boooking succedddddddddddddd");
     
     const schedule = await this.ScheduleRepo.findById(localData.tutor);
+  console.log(schedule);
   
     if (schedule) {
       const datesToBook = Array.isArray(localData.timing.date) ? localData.timing.date : [localData.timing.date];
@@ -111,6 +112,7 @@ class ScheduleUsecase {
           updated = true;
         }
       }
+  console.log(updated);
   
       if (updated) {
         await this.ScheduleRepo.save(schedule);

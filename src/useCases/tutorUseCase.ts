@@ -58,13 +58,13 @@ class TutorUseCase{
                 }
             } else {
                 return {
-                    status: 200,
+                    status: 401,
                     data:"Password not match"
                 }
             }
         } else {
             return {
-                status: 200,
+                status: 401,
                 data:"Wrong email"
             }
         }

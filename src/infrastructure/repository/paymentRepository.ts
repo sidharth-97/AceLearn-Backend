@@ -17,9 +17,9 @@ class PaymentRepository {
           price_data: {
             currency: "inr",
             product_data: {
-              name: "T-shirt",
+              name: "Fee",
             },
-            unit_amount: 2000,
+            unit_amount: data.fees*100,
           },
           quantity: 1,
         },

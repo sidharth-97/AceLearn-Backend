@@ -71,6 +71,8 @@ class scheduleController {
   }
   async payment(req: Request, res: Response) {
     req.app.locals.schedule = req.body;
+    console.log("payment route");
+    
     const payment = await this.scheduleUsecase.Payment(req.body);
     res.status(200).json(payment?.data);
   }
