@@ -70,6 +70,16 @@ class adminController{
             res.status(401).json(error)
         }
     }
+    async addSubject(req: Request, res: Response) {
+        try {
+            console.log(req.body);
+
+            const subject = await this.use_case.addSubject(req.body)
+            res.status(subject.status).json(subject.data)
+        } catch (error) {
+            res.status(401).json(error)
+        }
+    }
 
 }
 

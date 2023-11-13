@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import studentRepository from '../repository/studentRepository';
+import TutorRepository from '../repository/tutorRepository';
 
 export const verifyToken = async(req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.Studentjwt
@@ -20,7 +21,7 @@ console.log(token,"here it is");
     const user =await repository.findByEmail(email);
     console.log(user);
     if (user.isBlocked) {
-      return res.status(401).json({ message: 'No Access' });
+      return res.status(401).json({ message: 'Admin blocked' });
     }
     console.log("final");
     
@@ -30,7 +31,7 @@ console.log(token,"here it is");
   }
 };
 
-export const protectTutor = (req: Request, res: Response, next: NextFunction)=>{
+export const protectTutor = async(req: Request, res: Response, next: NextFunction)=>{
   const token = req.cookies.Tutorjwt
   if (!token) {
     return res.status(401).json({message:"AccessDenied"})
@@ -39,6 +40,13 @@ export const protectTutor = (req: Request, res: Response, next: NextFunction)=>{
     const decoded: any = jwt.verify(token, "thisisthesecretkey");
     (req as any).user = decoded
     
+    const email: string = (req as any)?.user?.id;
+    const repository = new TutorRepository()
+    const tutor=await repository.findByEmail(email)
+    console.log(tutor);
+    if (tutor.isBlocked) {
+  return res.status(401).json({message:"Blocked by Admin"})
+    } 
     next()
   } catch (error) {
     return res.status(401).json({message:"Invalid Token"})

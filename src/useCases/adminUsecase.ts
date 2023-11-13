@@ -107,6 +107,25 @@ class adminUseCase{
             }
         }
     }
+
+    async addSubject(data: {subject: string ,class:string}) {
+        const newsubject = await this.adminRepository.findSubject()
+       
+            const Data = await this.adminRepository.saveSubject(newsubject,data)
+            if (Data) {
+                return {
+                    status: 200,
+                    data:Data
+            }
+            } else {
+                return {
+                    status: 401,
+                    data:"Something went wrong"
+                }
+            
+          
+        }
+    }
 }
 
 export default adminUseCase

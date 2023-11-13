@@ -2,6 +2,7 @@ import adminRepositoryInterface from "../../useCases/interface/adminRepositoryIn
 import AdminModel from "../database/adminModel";
 import { studentModel } from "../database/studentModel";
 import { TutorModel } from "../database/tutorModel";
+import AcademicInfoModel from "../database/AcademicInfoModel";
 
 
 class adminRepository implements adminRepositoryInterface{
@@ -51,6 +52,36 @@ class adminRepository implements adminRepositoryInterface{
             return null
         }
     }
+    async findSubject() {
+        const newsubject = await AcademicInfoModel.findOne()
+        if (newsubject) {
+            return newsubject
+        } else {
+            return null
+        }
+    }
+
+    async saveSubject(doc: any, data: any) {
+        try {
+            if (!doc) {
+                // If the document doesn't exist, create a new one
+                doc = new AcademicInfoModel();
+            }
+    
+            if (data.subject) {
+                doc.subject.push(data.subject);
+            } else {
+                doc.class.push(data.class);
+            }
+    
+            const news = await doc.save();
+            return news;
+        } catch (error) {
+            console.error(error);
+            throw error; // Re-throw the error to handle it in the calling function
+        }
+    }
+    
 }
 
 export default adminRepository

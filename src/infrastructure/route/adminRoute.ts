@@ -24,7 +24,8 @@ adminRoute.get("/students", (req, res) => controller.findStudents(req, res))
 adminRoute.get("/tutors", (req, res) => controller.findTutors(req, res))
 
 adminRoute.post("/block-student/:id", (req, res) => controller.blockStudent(req, res))
-adminRoute.post("/block-tutor/:id",(req,res)=>controller.blockTutor(req,res))
+adminRoute.post("/block-tutor/:id", (req, res) => controller.blockTutor(req, res))
+adminRoute.post("/add-subject",(req,res)=>controller.addSubject(req,res))
 
 
 export default adminRoute
