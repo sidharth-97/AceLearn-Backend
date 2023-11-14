@@ -2,15 +2,18 @@ import { Request, Response } from "express";
 import StudentUseCase from "../useCases/studentUseCase";
 import GenerateOTP from "../infrastructure/utils/GenerateOTP";
 import SentMail from "../infrastructure/utils/sendMail";
+import CloudinaryUpload from "../infrastructure/utils/CloudinaryUpload";
 
 class studentController{
     private studentUseCase: StudentUseCase
     private genOtp: GenerateOTP
-    private sentMail:SentMail
-    constructor(studentUseCase: StudentUseCase,genOtp:GenerateOTP,sentMail:SentMail) {
+    private sentMail: SentMail
+    private CloudinaryUpload:CloudinaryUpload
+    constructor(studentUseCase: StudentUseCase,genOtp:GenerateOTP,sentMail:SentMail,CloudinaryUpload:CloudinaryUpload) {
         this.studentUseCase = studentUseCase,
         this.genOtp = genOtp
-        this.sentMail=sentMail
+        this.sentMail = sentMail
+        this.CloudinaryUpload=CloudinaryUpload
     }
 
     async signup(req: Request, res: Response) {
@@ -19,7 +22,10 @@ class studentController{
             console.log(otp,"otp");
             
             
-             this.sentMail.sendMail(req.body.username,req.body.email,otp)
+            this.sentMail.sendMail(req.body.username, req.body.email, otp)
+            
+            
+           
 
             const student = await this.studentUseCase.signup(req.body)
             
@@ -33,14 +39,26 @@ class studentController{
 
     async signupStep2(req: Request, res: Response) {
         try {  
-            console.log(req.body);            
+            console.log(req.body); 
+            let url = ""
+            if (req.file) {
+                const img=await this.CloudinaryUpload.upload(req.file.path,'student-image')
+                url = img.secure_url
+            }
+            const data = {
+                email: req.body.email,
+                username:req.body.username,
+                password: req.body.password,
+                mobile: req.body.mobile,
+                image: url,
+            }
+            console.log(data,"data form signup form 2");
             
             if (req.body.otp!=req.app.locals.otp) {
              res.status(401).json("password doesnt match")
             }
         
-            const student = req.body
-            const result = await this.studentUseCase.signup2(student);
+            const result = await this.studentUseCase.signup2(data);
                console.log("below");
                 
             res.status(result.status).json(result.data);

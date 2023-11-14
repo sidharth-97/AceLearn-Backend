@@ -5,6 +5,7 @@ import Encrypt from "../passwordRepository/hashpassword";
 import express from "express";
 import jwtToken from "../passwordRepository/jwt";
 import GenerateOTP from "../utils/GenerateOTP";
+import { ImageUpload } from "../config/multer";
 import SentMail from "../utils/sendMail";
 import { verifyToken } from "../middlewares/authMiddleware";
 import JobRepository from "../repository/jobRepository";
@@ -14,14 +15,16 @@ import ScheduleRepository from "../repository/scheduleRepository";
 import ScheduleUsecase from "../../useCases/sheduleUsecase";
 import scheduleController from "../../adaptor/scheduleController";
 import PaymentRepository from "../repository/paymentRepository";
+import CloudinaryUpload from "../utils/CloudinaryUpload";
 
 const repository = new studentRepository()
 const encrypt = new Encrypt()
 const jwt = new jwtToken()
 const generateOtp=new GenerateOTP()
 const use_case = new StudentUseCase(encrypt, repository, jwt)
-const sentMail=new SentMail
-const controller = new studentController(use_case, generateOtp, sentMail)
+const sentMail = new SentMail
+const Cloudinary=new CloudinaryUpload()
+const controller = new studentController(use_case, generateOtp, sentMail,Cloudinary)
 
 const jobRepository = new JobRepository()
 const jobUseCase = new JobUseCase(jobRepository)
@@ -35,7 +38,7 @@ const schedulecontroller=new scheduleController(sheduleUsecase)
 const studentRouter = express.Router()
 
 studentRouter.post("/signup", (req, res) => controller.signup(req, res))
-studentRouter.post("/signupfinal", (req, res) => controller.signupStep2(req, res))
+studentRouter.post("/signupfinal", ImageUpload.single('image'),(req, res) => controller.signupStep2(req, res))
 studentRouter.post("/login", (req, res) => controller.login(req, res))
 studentRouter.post("/logout",(req,res)=>controller.logout(req,res))
 studentRouter.post("/edit-profile",verifyToken,(req,res)=>controller.editProfile(req,res))

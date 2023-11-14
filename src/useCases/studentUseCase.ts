@@ -29,7 +29,7 @@ class StudentUseCase{
         //     await this.studentRepository.save(newStudent)
             return {
                 status: 200,
-                data:isExisting
+                data:student
             }
         }
         
@@ -43,7 +43,7 @@ class StudentUseCase{
             username: student.username,
             email: student.email,
             password: newPassword,
-            mobile:"464465"
+            mobile:student.mobile
         };
         await this.studentRepository.save(newStudent)
         return {

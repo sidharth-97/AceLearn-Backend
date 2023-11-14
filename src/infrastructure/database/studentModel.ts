@@ -6,6 +6,7 @@ interface IStudents extends Document{
     email: String,
     mobile: String,
     password: String,
+    image:String
     isBlocked:Boolean
 }
 
@@ -29,6 +30,9 @@ const studentSchema:Schema<IStudents> = new mongoose.Schema({
     isBlocked: {
         type: Boolean,
         default: false
+    },
+    image: {
+        type:String
     }
 })
 
