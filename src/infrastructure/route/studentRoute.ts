@@ -41,7 +41,7 @@ studentRouter.post("/signup", (req, res) => controller.signup(req, res))
 studentRouter.post("/signupfinal", ImageUpload.single('image'),(req, res) => controller.signupStep2(req, res))
 studentRouter.post("/login", (req, res) => controller.login(req, res))
 studentRouter.post("/logout",(req,res)=>controller.logout(req,res))
-studentRouter.post("/edit-profile",verifyToken,(req,res)=>controller.editProfile(req,res))
+studentRouter.post("/edit-profile",verifyToken, ImageUpload.single('image'),(req,res)=>controller.editProfile(req,res))
 studentRouter.get('/student-details/:id', verifyToken, (req, res) => controller.getStudentInfo(req, res))
 //job posting
 studentRouter.post("/addJob", (req, res) => Jobcontroller.addJob(req, res))
