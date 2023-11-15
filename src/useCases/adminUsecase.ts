@@ -126,6 +126,39 @@ class adminUseCase{
           
         }
     }
+    async findSubject() {
+        const subject = await this.adminRepository.findSubject()
+        console.log(subject);
+        
+        if (subject){
+            return {
+                status: 200,
+                data:subject
+            }
+        } else {
+            return {
+                status: 404,
+                data:"Not found"
+            }
+            
+        }
+    }
+
+    async deleteSubject(data:any) {
+        const subject = await this.adminRepository.findSubject()
+        const updateddata = await this.adminRepository.deleteSubject(subject,data)
+        if (updateddata) {
+            return {
+                status: 200,
+                data:"Updated successfull"
+            }
+        } else {
+            return {
+                status: 401,
+                data:"Something went wrong"
+            }
+        }
+    }
 }
 
 export default adminUseCase

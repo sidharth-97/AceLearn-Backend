@@ -53,6 +53,7 @@ class adminRepository implements adminRepositoryInterface{
         }
     }
     async findSubject() {
+        
         const newsubject = await AcademicInfoModel.findOne()
         if (newsubject) {
             return newsubject
@@ -80,6 +81,22 @@ class adminRepository implements adminRepositoryInterface{
             console.error(error);
             throw error; // Re-throw the error to handle it in the calling function
         }
+    }
+
+    async deleteSubject(doc: any, data: any) {
+        console.log(doc, "doc");
+        console.log(data, "data");
+    
+        if (data.subject) {
+            doc.subject = doc.subject.filter((subject: string) => subject !== data.subject);
+        } else {
+            doc.class = doc.class.filter((classItem: string) => classItem !== data.class);
+        }
+    
+        const updated = await doc.save();
+        console.log(updated, "updated");
+    
+        return updated;
     }
     
 }

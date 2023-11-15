@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import adminUseCase from "../useCases/adminUsecase";
-import { Error } from "mongoose";
 
 
 class adminController{
@@ -70,12 +69,30 @@ class adminController{
             res.status(401).json(error)
         }
     }
-    async addSubject(req: Request, res: Response) {
+    async addAcademicInfo(req: Request, res: Response) {
         try {
             console.log(req.body);
 
             const subject = await this.use_case.addSubject(req.body)
             res.status(subject.status).json(subject.data)
+        } catch (error) {
+            res.status(401).json(error)
+        }
+    }
+    async AcademicInfo(req: Request, res: Response) {
+        try {
+            const subject = await this.use_case.findSubject()
+            res.status(subject.status).json(subject.data)
+        } catch (error) {
+            res.status(401).json(error)
+        }
+    }
+    async modifyAcademicInfo(req: Request, res: Response) {
+        try {
+            console.log(req.body,"admin controller");
+            
+            const updated = await this.use_case.deleteSubject(req.body)
+            res.status(updated.status).json(updated.data)
         } catch (error) {
             res.status(401).json(error)
         }
