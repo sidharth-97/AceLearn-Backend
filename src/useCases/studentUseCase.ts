@@ -46,6 +46,7 @@ class StudentUseCase {
       email: student.email,
       password: newPassword,
       mobile: student.mobile,
+      image:student.image
     };
     await this.studentRepository.save(newStudent);
     return {
@@ -127,7 +128,7 @@ class StudentUseCase {
           student.newPassword
         );
       }
-      if (student.url) [(Editstudent.image = student.url)];
+      if (student.image) [(Editstudent.image = student.image)];
       const updatedStudent = await Editstudent.save();
 
       return {

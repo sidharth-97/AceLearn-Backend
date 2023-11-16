@@ -133,6 +133,8 @@ class studentController {
         mobile: req.body.mobile,
         image: url,
       };
+      console.log(formdata,"form data in controller");
+      
       const student = await this.studentUseCase.editProfile(formdata);
       if (req?.file) {
         fs.unlink(req.file.path, (err) => {

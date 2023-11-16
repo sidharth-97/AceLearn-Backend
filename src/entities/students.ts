@@ -3,5 +3,6 @@ export default interface Student{
     username: string
     email: string,
     mobile?: string,
-    password:string
+    password: string,
+    image:string
 }

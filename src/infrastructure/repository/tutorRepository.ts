@@ -23,8 +23,8 @@ class TutorRepository implements TutorRepositoryInterface{
             return updatedTutor
         }
     }
-   async findById(id: string): Promise<any> {
-       const tutor = await TutorModel.findById(id)
+   async findById(id: string): Promise<any>{
+       const tutor = await TutorModel.findById(id).populate("review.student")
        console.log(tutor,"got tutor");
        
        if (tutor) {
