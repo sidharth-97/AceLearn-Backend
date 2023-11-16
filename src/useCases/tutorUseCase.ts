@@ -131,13 +131,19 @@ class TutorUseCase{
         
         const tutor= await this.repository.findById(data.id)
         if (tutor) {
-            await this.repository.addReview(tutor,data)
+            await this.repository.addReview(tutor, data)
+            return {
+                status: 200,
+                data:"Review Added"
+            }
         }
         return {
             status: 200,
-            data:"Review Added"}
+            data: "Review Not Added"
+        }
 
     }
+    
     async getTutorReview(id:string) {
         const tutor = await this.repository.findById(id)
         if (tutor) {
@@ -149,6 +155,33 @@ class TutorUseCase{
             return {
                 status: 404,
                 data:"Not found"
+            }
+        }
+    }
+
+    async oldReview(data: { tutor: string, student: string }) {
+        const decoded = this.jwt.verifyJWT(data.student)
+        console.log(decoded,"this is the decoded data");
+        
+        const tutor = await this.repository.findById(data.tutor)
+        if (tutor) {
+            const oldReview = await this.repository.oldReview(tutor, decoded.id)
+            if (oldReview) {
+                return {
+                    status: 200,
+                    data:oldReview
+                }
+            } else {
+                return {
+                    status: 200,
+                    data:"Not found"
+                }
+                
+            }
+        } else {
+            return {
+                status: 404,
+                data:"Tutor not found"
             }
         }
     }

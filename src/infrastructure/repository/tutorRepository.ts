@@ -67,7 +67,18 @@ class TutorRepository implements TutorRepositoryInterface{
         return tutor;
       }
       
-      
+    async oldReview(tutor: any, student: string) {
+        console.log(tutor, "1");
+        console.log(student,"2");
+        
+        
+        const existingIndex = tutor.review.findIndex((item: any) => item.student == student )
+        if (existingIndex == -1) {
+            return null
+        } else {
+            return tutor.review[existingIndex]
+        }
+      }
     
 }
 

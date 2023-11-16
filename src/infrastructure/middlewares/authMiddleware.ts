@@ -16,9 +16,9 @@ console.log(token,"here it is");
 
     (req as any).user = decoded;
     console.log(req?.user, "thhis is the request");
-    const email: string = (req as any)?.user?.id; 
+    const id: string = (req as any)?.user?.id; 
     const repository = new studentRepository();
-    const user =await repository.findByEmail(email);
+    const user =await repository.findById(id);
     console.log(user);
     if (user.isBlocked) {
       return res.status(401).json({ message: 'Admin blocked' });

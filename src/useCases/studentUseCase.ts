@@ -68,7 +68,7 @@ class StudentUseCase {
       }
       if (studentLog) {
         if (await this.Encrypt.compare(student.password, studentLog.password)) {
-          const token = this.JWTToken.createJWT(student.email);
+          const token = this.JWTToken.createJWT(studentLog._id);
           return {
             status: 200,
             data: studentLog,
