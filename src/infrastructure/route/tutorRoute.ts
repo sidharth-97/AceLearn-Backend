@@ -53,6 +53,9 @@ tutorRouter.post('/changeSchedule', (req, res) => schedulecontrol.changeSchedule
 tutorRouter.get('/tutorschedule/:id',(req,res)=>schedulecontrol.TutorSchedule(req,res))
 //for job posting
 tutorRouter.get('/getallposting', (req, res) => Jobcontroller.getAllJobs(req, res))
-tutorRouter.post('/applytutorjob',(req,res)=>Jobcontroller.applyJobs(req,res))
+tutorRouter.post('/applytutorjob', (req, res) => Jobcontroller.applyJobs(req, res))
+//review
+tutorRouter.post("/add-review",(req,res)=>controller.addReview(req,res))
+tutorRouter.get("/get-review/:id",(req,res)=>controller.getTutorReview(req,res))
 
 export default tutorRouter

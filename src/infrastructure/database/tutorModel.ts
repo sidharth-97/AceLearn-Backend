@@ -1,3 +1,4 @@
+
 import mongoose, { Document, Schema,ObjectId } from "mongoose";
 
 interface ITutor extends Document{
@@ -10,7 +11,9 @@ interface ITutor extends Document{
     fee: string,
     bio: string,
     image:string,
-    isBlocked:Boolean
+    isBlocked: Boolean,
+    wallet: number,
+    review:object
 }
 
 const TutorSchema:Schema<ITutor> = new mongoose.Schema({
@@ -44,7 +47,24 @@ const TutorSchema:Schema<ITutor> = new mongoose.Schema({
     },
     isBlocked: {
         type:Boolean
-    }
+    },
+    wallet: {
+        type:Number
+    },
+    review: [
+        {
+            student: {
+                type:mongoose.Types.ObjectId,
+                ref:"Student"
+            },
+            rating:{
+                type:Number
+            },
+            description: {
+                type:String
+            }
+        }
+    ]
 })
 
 const TutorModel = mongoose.model<ITutor>("Tutor", TutorSchema)

@@ -126,6 +126,32 @@ class TutorUseCase{
             }
         }
     }
+    async addReview(data: any) {
+        console.log(data,"this is form usecase");
+        
+        const tutor= await this.repository.findById(data.id)
+        if (tutor) {
+            await this.repository.addReview(tutor,data)
+        }
+        return {
+            status: 200,
+            data:"Review Added"}
+
+    }
+    async getTutorReview(id:string) {
+        const tutor = await this.repository.findById(id)
+        if (tutor) {
+            return {
+                status: 200,
+                data:tutor.review
+            }
+        } else {
+            return {
+                status: 404,
+                data:"Not found"
+            }
+        }
+    }
 
 }
 

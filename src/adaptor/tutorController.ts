@@ -151,6 +151,24 @@ class TutorController{
             res.status(404).json(error)
         }
     }
+    async addReview(req: Request, res: Response) {
+        try {
+            console.log(req.body,"this is from controller");
+            
+            const review = await this.useCase.addReview(req.body)
+            res.status(review.status).json(review.data)
+        } catch (error) {
+            res.status(404).json(error)
+        }
+    }
+    async getTutorReview(req: Request, res: Response) {
+        try {
+            const reviews = await this.useCase.getTutorReview(req.params.id)
+            res.status(reviews.status).json(reviews.status)
+        } catch (error) {
+            res.status(404).json(error)
+        }
+    }
 }
 
 export default TutorController

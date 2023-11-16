@@ -25,6 +25,8 @@ class TutorRepository implements TutorRepositoryInterface{
     }
    async findById(id: string): Promise<any> {
        const tutor = await TutorModel.findById(id)
+       console.log(tutor,"got tutor");
+       
        if (tutor) {
            return tutor
        } else {
@@ -39,6 +41,34 @@ class TutorRepository implements TutorRepositoryInterface{
             return null
         }
     }
+    async addReview(tutor: any, data: any) {
+        const newReview = {
+          student: data.student,
+          rating: data.rating,
+          description: data.description,
+        };
+      
+        console.log(newReview, "new review");
+      
+        const existingIndex = tutor.review.findIndex(
+          (item: any) => item.student == data.student
+        );
+      
+        console.log(existingIndex, "existing index");
+      
+        if (existingIndex === -1) {
+          tutor.review.push(newReview);
+        } else {
+          tutor.review[existingIndex] = { ...tutor.review[existingIndex], ...newReview };
+        }
+      
+        await tutor.save();
+          
+        return tutor;
+      }
+      
+      
+    
 }
 
 export default TutorRepository
