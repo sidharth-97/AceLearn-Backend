@@ -109,10 +109,10 @@ class ScheduleUsecase {
   
         if (indexToUpdate !== -1) {
           schedule.timing[indexToUpdate].student = localData.timing.student;
-          updated = true;
+          schedule.timing[indexToUpdate].fee=localData.timing.fee
+          updated = true; 
         }
       }
-  console.log(updated);
   
       if (updated) {
         await this.ScheduleRepo.save(schedule);
@@ -174,7 +174,22 @@ class ScheduleUsecase {
             data:schedule
         }
         
+  }
+
+  async getTutorfee(tutor: string, id: string) {
+    const schedule = await this.ScheduleRepo.findById(tutor)
+    console.log(schedule,"schedule");
+    
+    const object = schedule.timing.find((item: any) => item._id == id)
+    console.log(object,"object");
+    
+    if (object) {
+      return object.fee
+    } else {
+      return null
     }
+  }
+  
 }
 
 export default ScheduleUsecase;

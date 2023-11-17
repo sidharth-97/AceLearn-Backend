@@ -25,7 +25,8 @@ const generateOtp = new GenerateOTP()
 const sendMail = new SentMail()
 const Cloudinary=new CloudinaryUpload()
 const use_case = new TutorUseCase(repository, jwt, encrypt)
-const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary)
+
+
 
 const scheduleRepository = new ScheduleRepository()
 const paymentRepository=new PaymentRepository()
@@ -35,6 +36,7 @@ const schedulecontrol = new scheduleController(sheduleUsecase)
 const jobRepository = new JobRepository()
 const jobUseCase = new JobUseCase(jobRepository)
 const Jobcontroller=new JobController(jobUseCase)
+const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary, sheduleUsecase)
 
 const tutorRouter = express.Router()
 
@@ -44,6 +46,7 @@ tutorRouter.post("/login", (req, res) => controller.login(req, res))
 tutorRouter.post("/logout", (req, res) => controller.logout(req, res))
 tutorRouter.get("/tutor-details/:id",(req, res) => controller.getTutorInfo(req,res))
 tutorRouter.post('/edit-profile', protectTutor, ImageUpload.single('image'), (req, res) => controller.editProfile(req, res))
+tutorRouter.put("/tutor-payment",(req,res)=>controller.addTutorPayment(req,res))
 //for common
 tutorRouter.get("/alltutors", (req, res) => controller.getAllTutors(req, res))
 //for schedule

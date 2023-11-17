@@ -14,6 +14,7 @@ const ScheduleSchema = new Schema({
         ref: "Tutor"
     },
     timing: [{
+        fee:Number,
         date: Date,
         student: Schema.Types.ObjectId
     }]

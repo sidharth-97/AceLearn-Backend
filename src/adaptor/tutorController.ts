@@ -4,18 +4,21 @@ import GenerateOTP from "../infrastructure/utils/GenerateOTP"
 import SentMail from "../infrastructure/utils/sendMail"
 import fs from 'fs'
 import CloudinaryUpload from "../infrastructure/utils/CloudinaryUpload"
+import ScheduleUsecase from "../useCases/sheduleUsecase"
 
 
 class TutorController{
     private useCase: TutorUseCase
     private genOtp: GenerateOTP
     private sentMail: SentMail
-    private CloudinaryUpload:CloudinaryUpload
-    constructor(useCase: TutorUseCase,genOtp: GenerateOTP,sentMail:SentMail,CloudinaryUpload:CloudinaryUpload) {
+    private CloudinaryUpload: CloudinaryUpload
+    private scheduleUsecase:ScheduleUsecase
+    constructor(useCase: TutorUseCase,genOtp: GenerateOTP,sentMail:SentMail,CloudinaryUpload:CloudinaryUpload,scheduleUsecase:ScheduleUsecase) {
         this.useCase = useCase
         this.genOtp = genOtp
         this.sentMail = sentMail
         this.CloudinaryUpload = CloudinaryUpload
+        this.scheduleUsecase=scheduleUsecase
     }
     async signup(req: Request, res: Response) {
         try {
@@ -177,6 +180,19 @@ class TutorController{
             const tutor=req.params.id
             const response = await this.useCase.oldReview({tutor:tutor,student:token})
             res.status(response?.status).json(response?.data)
+        } catch (error) {
+            res.status(404).json(error)
+        }
+    }
+    async addTutorPayment(req: Request, res: Response) {
+        try {
+            console.log(req.body,"req.body");
+            
+            const fees = await this.scheduleUsecase.getTutorfee(req.body.tutor, req.body.id)
+            console.log(fees,"fees");
+            
+            const tutor = await this.useCase.PayTutor(req.body.tutor, fees)
+            res.status(tutor.status).json(tutor.data)
         } catch (error) {
             res.status(404).json(error)
         }

@@ -7,7 +7,8 @@ interface IStudents extends Document{
     mobile: String,
     password: String,
     image:String
-    isBlocked:Boolean
+    isBlocked: Boolean
+    wallet:Number
 }
 
 const studentSchema:Schema<IStudents> = new mongoose.Schema({
@@ -33,6 +34,10 @@ const studentSchema:Schema<IStudents> = new mongoose.Schema({
     },
     image: {
         type:String
+    },
+    wallet: {
+        type: Number,
+        default:0
     }
 })
 

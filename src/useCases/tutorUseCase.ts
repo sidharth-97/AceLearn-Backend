@@ -186,6 +186,22 @@ class TutorUseCase{
         }
     }
 
+    async PayTutor(tutor: string,fee:number) {
+        const tutordata = await this.repository.findById(tutor)
+        const updateWallet = await this.repository.payTutor(tutordata, fee)
+        if (updateWallet) {
+            return {
+                status: 200,
+                data:"Payment added to Wallet"
+            }
+        } else {
+            return {
+                status: 401,
+                data:"Payment failed"
+            }
+        }
+    }
+
 }
 
 export default TutorUseCase

@@ -49,7 +49,8 @@ const TutorSchema:Schema<ITutor> = new mongoose.Schema({
         type:Boolean
     },
     wallet: {
-        type:Number
+        type: Number,
+        default:0
     },
     review: [
         {

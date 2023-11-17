@@ -79,7 +79,17 @@ class TutorRepository implements TutorRepositoryInterface{
             return tutor.review[existingIndex]
         }
       }
-    
+    async payTutor(tutor: any,fee:number) {
+        const amount = parseInt(tutor.wallet)+fee
+        tutor.wallet = amount
+        const updatedTutor = await tutor.save()
+        if (updatedTutor) {
+            return updatedTutor
+        } else {
+            return null
+        }
+
+    }
 }
 
 export default TutorRepository
