@@ -13,7 +13,8 @@ interface ITutor extends Document{
     image:string,
     isBlocked: Boolean,
     wallet: number,
-    review:object
+    review: object,
+    qualifications:string
 }
 
 const TutorSchema:Schema<ITutor> = new mongoose.Schema({
@@ -43,6 +44,9 @@ const TutorSchema:Schema<ITutor> = new mongoose.Schema({
         type:String 
     },
     image: {
+        type:String
+    },
+    qualifications: {
         type:String
     },
     isBlocked: {

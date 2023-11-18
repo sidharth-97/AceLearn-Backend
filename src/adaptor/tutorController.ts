@@ -22,7 +22,9 @@ class TutorController{
     }
     async signup(req: Request, res: Response) {
         try {
-            const otp =await this.genOtp.generateOtp(4)
+            const otp = await this.genOtp.generateOtp(4)
+            console.log(otp);
+            
             this.sentMail.sendMail(req.body.name,req.body.email,otp)
             const tutor = await this.useCase.signup(req.body)
             req.app.locals.Tutordata = req.body
@@ -43,8 +45,10 @@ class TutorController{
             if (req.body.otp != req.app.locals.otp) {
                 res.status(401).json("otp doesnt match")
             } else {
-                const { subject,rate,bio,fee } = req.body             
-                const tutor = { ...req.app.locals.Tutordata, subject,rate,bio,fee }
+                const { subject,rate,bio,fee,mobile,qualifications } = req.body             
+                const tutor = { ...req.app.locals.Tutordata, subject, rate, bio, fee,mobile,qualifications }
+                console.log(tutor,"checkkkk");
+                
                 const result = await this.useCase.signup2(tutor)
                 res.status(result.status).json(result.data)
             }
