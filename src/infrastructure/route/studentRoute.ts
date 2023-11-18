@@ -16,6 +16,8 @@ import ScheduleUsecase from "../../useCases/sheduleUsecase";
 import scheduleController from "../../adaptor/scheduleController";
 import PaymentRepository from "../repository/paymentRepository";
 import CloudinaryUpload from "../utils/CloudinaryUpload";
+import TutorUseCase from "../../useCases/tutorUseCase";
+import TutorRepository from "../repository/tutorRepository";
 
 const repository = new studentRepository()
 const encrypt = new Encrypt()
@@ -30,10 +32,13 @@ const jobRepository = new JobRepository()
 const jobUseCase = new JobUseCase(jobRepository)
 const Jobcontroller = new JobController(jobUseCase)
 
+const tutorRepository=new TutorRepository()
+const tutorUseCase=new TutorUseCase(tutorRepository,jwt,encrypt)
+
 const scheduleRepository = new ScheduleRepository()
 const paymentRepository=new PaymentRepository()
 const sheduleUsecase = new ScheduleUsecase(scheduleRepository,paymentRepository)
-const schedulecontroller=new scheduleController(sheduleUsecase,use_case)
+const schedulecontroller=new scheduleController(sheduleUsecase,use_case,tutorUseCase)
 
 const studentRouter = express.Router()
 

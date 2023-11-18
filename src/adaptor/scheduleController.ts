@@ -3,6 +3,7 @@ import ScheduleUsecase from "../useCases/sheduleUsecase";
 import StudentUseCase from "../useCases/studentUseCase";
 import session from "express-session";
 import Stripe from "stripe";
+import TutorUseCase from "../useCases/tutorUseCase";
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
@@ -15,10 +16,12 @@ interface MySession {
 }
 class scheduleController {
   private scheduleUsecase: ScheduleUsecase;
-  private studentUsecase:StudentUseCase
-  constructor(scheduleUsecase: ScheduleUsecase,studentUsecase:StudentUseCase) {
+  private studentUsecase: StudentUseCase
+  private tutorUsecase:TutorUseCase
+  constructor(scheduleUsecase: ScheduleUsecase,studentUsecase:StudentUseCase,tutorUsecase:TutorUseCase) {
     this.scheduleUsecase = scheduleUsecase;
-    this.studentUsecase=studentUsecase
+    this.studentUsecase = studentUsecase
+    this.tutorUsecase=tutorUsecase
   }
 
   async scheduleTime(req: Request, res: Response) {
@@ -37,6 +40,16 @@ class scheduleController {
       res.status(schedule.status).json(schedule.data);
     } else {
       res.status(401).json("Failed to update schedule");
+    }
+  }
+
+  async cancelSchedulebyStudent(req: Request, res: Response) {
+    console.log(req.body);
+    
+    const tutorWallet = await this.tutorUsecase.PayTutor(req.body.tutor, req.body.fee)
+    const schedule = await this.scheduleUsecase.changeSchedule(req.body)
+    if (schedule) {
+      res.status(schedule.status).json(schedule.data)
     }
   }
 

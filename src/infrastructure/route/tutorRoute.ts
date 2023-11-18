@@ -35,7 +35,7 @@ const paymentRepository = new PaymentRepository()
 const StudentRepository = new studentRepository()
 const studentUseCase=new StudentUseCase(encrypt,StudentRepository,jwt,)
 const sheduleUsecase=new ScheduleUsecase(scheduleRepository,paymentRepository)
-const schedulecontrol = new scheduleController(sheduleUsecase,studentUseCase)
+const schedulecontrol = new scheduleController(sheduleUsecase,studentUseCase,use_case)
 
 const jobRepository = new JobRepository()
 const jobUseCase = new JobUseCase(jobRepository)
@@ -56,6 +56,7 @@ tutorRouter.get("/alltutors", (req, res) => controller.getAllTutors(req, res))
 //for schedule
 tutorRouter.post('/scheduledate', (req, res) => schedulecontrol.scheduleTime(req, res))
 tutorRouter.post('/changeSchedule', (req, res) => schedulecontrol.cancelSchedulebyTutor(req, res))
+tutorRouter.post("/cancel-booking",(req,res)=>schedulecontrol.cancelSchedulebyStudent(req,res))
 // tutorRouter.post('/booktutor', (req, res) => schedulecontrol.BookTutor(req, res))
 tutorRouter.get('/tutorschedule/:id',(req,res)=>schedulecontrol.TutorSchedule(req,res))
 //for job posting
