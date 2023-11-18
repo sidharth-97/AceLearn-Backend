@@ -47,6 +47,17 @@ class studentRepository implements studentRepositoryInterface{
             return null
         }
     }
+    async walletAmt(student:any,amt:any) {
+        const amount = parseInt(student.wallet) + amt
+        student.wallet = amount
+        const updatedStudent = await student.save()
+        if (updatedStudent) {
+            return updatedStudent
+        } else {
+            return null
+        }
+    }
+
 }
 
 export default studentRepository

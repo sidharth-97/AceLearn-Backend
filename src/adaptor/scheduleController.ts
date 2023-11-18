@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import ScheduleUsecase from "../useCases/sheduleUsecase";
+import StudentUseCase from "../useCases/studentUseCase";
 import session from "express-session";
 import Stripe from "stripe";
 
@@ -14,8 +15,10 @@ interface MySession {
 }
 class scheduleController {
   private scheduleUsecase: ScheduleUsecase;
-  constructor(scheduleUsecase: ScheduleUsecase) {
+  private studentUsecase:StudentUseCase
+  constructor(scheduleUsecase: ScheduleUsecase,studentUsecase:StudentUseCase) {
     this.scheduleUsecase = scheduleUsecase;
+    this.studentUsecase=studentUsecase
   }
 
   async scheduleTime(req: Request, res: Response) {
@@ -26,9 +29,9 @@ class scheduleController {
       res.status(401).json("Failed to add schedule");
     }
   }
-  async changeSchedule(req: Request, res: Response) {
-    console.log(req.body);
-
+  async cancelSchedulebyTutor(req: Request, res: Response) {
+    console.log(req.body,"from cancel schedule");
+    const student=await this.studentUsecase.walletAmt(req.body)
     const schedule = await this.scheduleUsecase.changeSchedule(req.body);
     if (schedule) {
       res.status(schedule.status).json(schedule.data);

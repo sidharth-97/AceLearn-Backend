@@ -157,6 +157,22 @@ class StudentUseCase {
       };
     }
   }
+
+  async walletAmt(data:any) {
+    const student = await this.studentRepository.findById(data.id)
+    const updated = await this.studentRepository.walletAmt(student, data.fee)
+    if (updated) {
+      return {
+        status: 200,
+        data:updated
+      }
+    } else {
+      return {
+        status: 400,
+        data:"Error occured"
+      }
+    }
+  }
 }
 
 export default StudentUseCase;

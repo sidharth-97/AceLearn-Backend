@@ -33,7 +33,7 @@ const Jobcontroller = new JobController(jobUseCase)
 const scheduleRepository = new ScheduleRepository()
 const paymentRepository=new PaymentRepository()
 const sheduleUsecase = new ScheduleUsecase(scheduleRepository,paymentRepository)
-const schedulecontroller=new scheduleController(sheduleUsecase)
+const schedulecontroller=new scheduleController(sheduleUsecase,use_case)
 
 const studentRouter = express.Router()
 
