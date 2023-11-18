@@ -70,20 +70,31 @@ class TutorUseCase{
         }
     }
 
-    async editprofile(tutor: Tutor) {
-        console.log(tutor,"tutuor");
+    async editprofile(tutor:any) {
+        console.log(tutor,"tutuor use case");
         
         const EditTutor = await this.repository.findByEmail(tutor.email)
         if (EditTutor) {
             EditTutor.name = tutor.name
-            EditTutor.mobileNo = tutor.mobileNo
+            EditTutor.mobile = tutor.mobile
             EditTutor.bio= tutor.bio
             EditTutor.fee = tutor.fee
             EditTutor.subject = tutor.subject
             EditTutor.image = tutor.image
             
             if (tutor.password) {
-                EditTutor.password=await this.encrypt.createHash(tutor.password)
+                console.log(EditTutor.password,tutor.oldPassword)
+                
+                let compare = await this.encrypt.compare(tutor.oldPassword,EditTutor.password)
+                if (compare) {
+                    EditTutor.password=await this.encrypt.createHash(tutor.password)
+                } else {
+                    return {
+                        status: 401,
+                        data:"Old password wrong"
+                    }
+                }
+                
             }
             const updatedTutor = await this.repository.save( EditTutor)
             return {

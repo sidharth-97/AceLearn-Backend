@@ -95,12 +95,15 @@ class TutorController{
                 const img = await this.CloudinaryUpload.upload(req.file.path, 'tutor-image');
               
                  url=img.secure_url
+            } else {
+                url=req.body.image
             }
             const data = {
                 email: req.body.email,
                 name:req.body.name,
                 password: req.body.password,
-                mobileNo: req.body.mobile,
+                oldPassword:req.body.oldPassword,
+                mobile: req.body.mobile,
                 subject: req.body.subject,
                 fee: req.body.fee,
                 bio: req.body.bio,

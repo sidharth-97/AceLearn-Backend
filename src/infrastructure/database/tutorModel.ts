@@ -6,7 +6,7 @@ interface ITutor extends Document{
     email: string,
     name:string,
     password: string,
-    mobileNo: string,
+    mobile: string,
     subject: Array<string>,
     fee: string,
     bio: string,
@@ -29,7 +29,7 @@ const TutorSchema:Schema<ITutor> = new mongoose.Schema({
         type: String,
         required:true
     },
-    mobileNo:{
+    mobile:{
         type:String
     },
     subject: {
