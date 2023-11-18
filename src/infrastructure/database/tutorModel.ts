@@ -14,7 +14,8 @@ interface ITutor extends Document{
     isBlocked: Boolean,
     wallet: number,
     review: object,
-    qualifications:string
+    qualifications: string,
+    notifications:Array<object>
 }
 
 const TutorSchema:Schema<ITutor> = new mongoose.Schema({
@@ -56,6 +57,14 @@ const TutorSchema:Schema<ITutor> = new mongoose.Schema({
         type: Number,
         default:0
     },
+    notifications: [
+        {
+            title: String,
+            content: String,
+            type: String,
+            time:String
+        }
+    ],
     review: [
         {
             student: {

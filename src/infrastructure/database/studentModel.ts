@@ -8,7 +8,8 @@ interface IStudents extends Document{
     password: String,
     image:String
     isBlocked: Boolean
-    wallet:Number
+    wallet: Number
+    notifications:Array<object>
 }
 
 const studentSchema:Schema<IStudents> = new mongoose.Schema({
@@ -38,7 +39,15 @@ const studentSchema:Schema<IStudents> = new mongoose.Schema({
     wallet: {
         type: Number,
         default:0
-    }
+    },
+    notifications: [
+        {
+            title: String,
+            content: String,
+            type: String,
+            time:Date
+        }
+    ],
 })
 
 const studentModel = mongoose.model<IStudents>("Student", studentSchema)
