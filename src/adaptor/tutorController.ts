@@ -204,6 +204,15 @@ class TutorController{
             res.status(404).json(error)
         }
     }
+
+    async showNotifications(req: Request, res: Response) {
+        try {
+            const notifications = await this.useCase.showNotifications(req.params.id)
+            res.status(notifications.status).json(notifications.data)
+        } catch (error) {
+            res.status(404).json(error)
+        }
+    }
 }
 
 export default TutorController

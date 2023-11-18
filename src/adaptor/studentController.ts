@@ -164,6 +164,14 @@ class studentController {
       res.status(401).json(error);
     }
   }
+
+  async showNotifications(req: Request, res: Response) {
+    try {
+      const notifications=await this.studentUseCase.showNotifications(req.params.id)
+    } catch (error) {
+      res.status(401).json(error)
+    }
+  }
 }
 
 export default studentController;

@@ -173,6 +173,21 @@ class StudentUseCase {
       }
     }
   }
+
+  async showNotifications(id: string) {
+    const student = await this.studentRepository.findById(id)
+    if (student.notifications) {
+      return {
+        status: 200,
+        data:student.notifications
+      }
+    } else {
+      return {
+        status: 401,
+        data:"No new notifications"
+      }
+    }
+  }
 }
 
 export default StudentUseCase;

@@ -213,6 +213,21 @@ class TutorUseCase{
         }
     }
 
+    async showNotifications(id: string) {
+        const tutor = await this.repository.findById(id)
+        if (tutor.notifications) {
+            return {
+                status: 200,
+                data:tutor.notifications
+            }
+        } else {
+            return {
+                status: 401,
+                data:"No new notifications"
+            }
+        }
+    }
+
 }
 
 export default TutorUseCase

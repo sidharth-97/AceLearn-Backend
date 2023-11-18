@@ -48,6 +48,7 @@ studentRouter.post("/login", (req, res) => controller.login(req, res))
 studentRouter.post("/logout",(req,res)=>controller.logout(req,res))
 studentRouter.post("/edit-profile",verifyToken, ImageUpload.single('image'),(req,res)=>controller.editProfile(req,res))
 studentRouter.get('/student-details/:id', verifyToken, (req, res) => controller.getStudentInfo(req, res))
+studentRouter.get("/notifications/:id",(req,res)=>controller.showNotifications(req,res))
 //job posting
 studentRouter.post("/addJob", (req, res) => Jobcontroller.addJob(req, res))
 studentRouter.get('/student-job-request/:id', (req, res) => Jobcontroller.getJobDetails(req, res))

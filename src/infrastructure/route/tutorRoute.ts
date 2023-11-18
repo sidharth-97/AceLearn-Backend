@@ -50,7 +50,8 @@ tutorRouter.post("/login", (req, res) => controller.login(req, res))
 tutorRouter.post("/logout", (req, res) => controller.logout(req, res))
 tutorRouter.get("/tutor-details/:id",(req, res) => controller.getTutorInfo(req,res))
 tutorRouter.post('/edit-profile', protectTutor, ImageUpload.single('image'), (req, res) => controller.editProfile(req, res))
-tutorRouter.put("/tutor-payment",(req,res)=>controller.addTutorPayment(req,res))
+tutorRouter.put("/tutor-payment", (req, res) => controller.addTutorPayment(req, res))
+tutorRouter.get("notifications/:id",(req,res)=>controller.showNotifications(req,res))
 //for common
 tutorRouter.get("/alltutors", (req, res) => controller.getAllTutors(req, res))
 //for schedule
