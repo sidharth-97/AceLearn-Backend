@@ -186,6 +186,17 @@ class studentController {
       res.status(401).json(error)
     }
   }
+
+  async getConversations(req: Request, res: Response) {
+    try {
+      console.log(req.params.id);
+      
+      const conversations = await this.chatuseCase.getConversations(req.params.id)
+      res.status(conversations.status).json(conversations.data)
+    } catch (error) {
+      res.status(401).json(error)
+    }
+  }
 }
 
 export default studentController;

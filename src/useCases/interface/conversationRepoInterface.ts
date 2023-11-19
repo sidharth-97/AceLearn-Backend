@@ -4,5 +4,6 @@ interface Conversation{
 }
 
 export default interface ConversationRepoInterface{
-    save(conversation:Array<string>):Promise<any>
+    save(conversation: Array<string>): Promise<any>,
+    findByUserId(id:string):Promise<any>
 }

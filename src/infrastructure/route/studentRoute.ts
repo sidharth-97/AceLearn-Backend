@@ -65,6 +65,7 @@ studentRouter.get('/getStudentSchedule/:id', (req, res) => schedulecontroller.fi
 studentRouter.post('/payment', (req, res) => schedulecontroller.payment(req, res))
 studentRouter.post('/webhook',(req,res)=>schedulecontroller.webhook(req,res))
 //chat
-studentRouter.post("/conversation",(req,res)=>controller.newConversation(req,res))
+studentRouter.post("/conversation", (req, res) => controller.newConversation(req, res))
+studentRouter.get("/get-conversations/:id",(req,res)=>controller.getConversations(req,res))
 
 export default studentRouter
