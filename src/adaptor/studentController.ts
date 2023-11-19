@@ -4,21 +4,25 @@ import GenerateOTP from "../infrastructure/utils/GenerateOTP";
 import SentMail from "../infrastructure/utils/sendMail";
 import CloudinaryUpload from "../infrastructure/utils/CloudinaryUpload";
 import fs from "fs";
+import ChatUseCase from "../useCases/chatUseCase";
 
 class studentController {
   private studentUseCase: StudentUseCase;
   private genOtp: GenerateOTP;
   private sentMail: SentMail;
   private CloudinaryUpload: CloudinaryUpload;
+  private chatuseCase:ChatUseCase
   constructor(
     studentUseCase: StudentUseCase,
     genOtp: GenerateOTP,
     sentMail: SentMail,
-    CloudinaryUpload: CloudinaryUpload
+    CloudinaryUpload: CloudinaryUpload,
+    chatuseCase:ChatUseCase
   ) {
     (this.studentUseCase = studentUseCase), (this.genOtp = genOtp);
     this.sentMail = sentMail;
     this.CloudinaryUpload = CloudinaryUpload;
+    this.chatuseCase=chatuseCase
   }
 
   async signup(req: Request, res: Response) {
@@ -168,6 +172,16 @@ class studentController {
   async showNotifications(req: Request, res: Response) {
     try {
       const notifications=await this.studentUseCase.showNotifications(req.params.id)
+    } catch (error) {
+      res.status(401).json(error)
+    }
+  }
+
+  async newConversation(req: Request, res: Response) {
+    try {
+      const members=[req.body.senderId,req.body.receiverId]
+      const conversation = await this.chatuseCase.newConversation(members)
+      res.status(conversation?.status).json(conversation?.data)
     } catch (error) {
       res.status(401).json(error)
     }

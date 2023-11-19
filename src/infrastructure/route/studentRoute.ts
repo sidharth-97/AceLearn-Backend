@@ -18,6 +18,8 @@ import PaymentRepository from "../repository/paymentRepository";
 import CloudinaryUpload from "../utils/CloudinaryUpload";
 import TutorUseCase from "../../useCases/tutorUseCase";
 import TutorRepository from "../repository/tutorRepository";
+import ConversationRepository from "../repository/conversationRepository";
+import ChatUseCase from "../../useCases/chatUseCase";
 
 const repository = new studentRepository()
 const encrypt = new Encrypt()
@@ -25,8 +27,12 @@ const jwt = new jwtToken()
 const generateOtp=new GenerateOTP()
 const use_case = new StudentUseCase(encrypt, repository, jwt)
 const sentMail = new SentMail
-const Cloudinary=new CloudinaryUpload()
-const controller = new studentController(use_case, generateOtp, sentMail,Cloudinary)
+const Cloudinary = new CloudinaryUpload()
+
+const chatRepository = new ConversationRepository()
+const chatUseCase=new ChatUseCase(chatRepository)
+
+const controller = new studentController(use_case, generateOtp, sentMail,Cloudinary,chatUseCase)
 
 const jobRepository = new JobRepository()
 const jobUseCase = new JobUseCase(jobRepository)
@@ -58,5 +64,7 @@ studentRouter.get('/getStudentSchedule/:id', (req, res) => schedulecontroller.fi
 //payment
 studentRouter.post('/payment', (req, res) => schedulecontroller.payment(req, res))
 studentRouter.post('/webhook',(req,res)=>schedulecontroller.webhook(req,res))
+//chat
+studentRouter.post("/conversation",(req,res)=>controller.newConversation(req,res))
 
 export default studentRouter
