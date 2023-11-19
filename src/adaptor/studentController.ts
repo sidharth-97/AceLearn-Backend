@@ -197,6 +197,22 @@ class studentController {
       res.status(401).json(error)
     }
   }
+  async addMessage(req: Request, res: Response) {
+    try {
+      const message = await this.chatuseCase.addMessage(req.body)
+      res.status(message.status).json(message.data)
+    } catch (error) {
+      res.status(401).json(error)
+    }
+  }
+  async getMessages(req: Request, res: Response) {
+    try {
+      const messages = await this.chatuseCase.getMessages(req.params.id)
+      res.status(messages.status).json(messages.data)
+    } catch (error) {
+      res.status(401).json(error)
+    }
+  }
 }
 
 export default studentController;
