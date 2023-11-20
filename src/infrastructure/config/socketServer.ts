@@ -8,9 +8,22 @@ function initializeSocket(server:any) {
     }
         
     )
+
+    interface User {
+        userId: string;
+        socketId: string;
+      }
+      
+      let users: User[] = [];
+    const addUser = (userId:string, socketId:string) => {
+        !users.some(user=>user.userId==userId)&& users.push({userId,socketId})
+    }
+    const removeUser = (socketId:string) => {
+        users=users.filter(user=>user.socketId !=socketId)
+    }
     io.on("connection", (socket) => {
         console.log("Socket connected", socket.id);
-        
+        //Video Call
         socket.on("room:join", (data) => {
             const { tutor, room } = data;
             io.to(room).emit("user:joined", { tutor, id: socket.id });
@@ -55,6 +68,19 @@ function initializeSocket(server:any) {
             console.log(`User ${socket.id} stopped screen share for ${to}`);
             io.to(to).emit('stopScreenShare', { from: socket.id });
           });
+        
+        //Handle chatting
+
+        socket.on("addUser", (userId) => {
+            addUser(userId, socket.id)
+            io.emit("getUsers",users)
+        })
+
+        socket.on("disconnect", () => {
+            console.log("user disconnceted");
+            removeUser(socket.id)
+            io.emit("getUsers",users)
+        })
 
     })
 
