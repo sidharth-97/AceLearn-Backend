@@ -21,6 +21,9 @@ function initializeSocket(server:any) {
     const removeUser = (socketId:string) => {
         users=users.filter(user=>user.socketId !=socketId)
     }
+    const getUser = (userId:string) => {
+        return users.find(user=>user.userId==userId)
+    }
     io.on("connection", (socket) => {
         console.log("Socket connected", socket.id);
         //Video Call
@@ -74,6 +77,15 @@ function initializeSocket(server:any) {
         socket.on("addUser", (userId) => {
             addUser(userId, socket.id)
             io.emit("getUsers",users)
+        })
+
+        socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+            const user = getUser(receiverId)
+            if(user)
+            io.to(user?.socketId).emit("getMessage", {
+                senderId,
+                text
+            })
         })
 
         socket.on("disconnect", () => {
