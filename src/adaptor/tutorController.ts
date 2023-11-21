@@ -5,20 +5,22 @@ import SentMail from "../infrastructure/utils/sendMail"
 import fs from 'fs'
 import CloudinaryUpload from "../infrastructure/utils/CloudinaryUpload"
 import ScheduleUsecase from "../useCases/sheduleUsecase"
-
+import ChatUseCase from "../useCases/chatUseCase"
 
 class TutorController{
     private useCase: TutorUseCase
     private genOtp: GenerateOTP
     private sentMail: SentMail
     private CloudinaryUpload: CloudinaryUpload
-    private scheduleUsecase:ScheduleUsecase
-    constructor(useCase: TutorUseCase,genOtp: GenerateOTP,sentMail:SentMail,CloudinaryUpload:CloudinaryUpload,scheduleUsecase:ScheduleUsecase) {
+    private scheduleUsecase: ScheduleUsecase
+    private chatuseCase:ChatUseCase
+    constructor(useCase: TutorUseCase,genOtp: GenerateOTP,sentMail:SentMail,CloudinaryUpload:CloudinaryUpload,scheduleUsecase:ScheduleUsecase,chatuseCase:ChatUseCase) {
         this.useCase = useCase
         this.genOtp = genOtp
         this.sentMail = sentMail
         this.CloudinaryUpload = CloudinaryUpload
-        this.scheduleUsecase=scheduleUsecase
+        this.scheduleUsecase = scheduleUsecase
+        this.chatuseCase=chatuseCase
     }
     async signup(req: Request, res: Response) {
         try {
@@ -213,6 +215,42 @@ class TutorController{
             res.status(404).json(error)
         }
     }
+    async newConversation(req: Request, res: Response) {
+        try {
+          const members=[req.body.senderId,req.body.receiverId]
+          const conversation = await this.chatuseCase.newConversation(members)
+          res.status(conversation?.status).json(conversation?.data)
+        } catch (error) {
+          res.status(401).json(error)
+        }
+      }
+    
+      async getConversations(req: Request, res: Response) {
+        try {
+          console.log(req.params.id);
+          
+          const conversations = await this.chatuseCase.getConversations(req.params.id)
+          res.status(conversations.status).json(conversations.data)
+        } catch (error) {
+          res.status(401).json(error)
+        }
+      }
+      async addMessage(req: Request, res: Response) {
+        try {
+          const message = await this.chatuseCase.addMessage(req.body)
+          res.status(message.status).json(message.data)
+        } catch (error) {
+          res.status(401).json(error)
+        }
+      }
+      async getMessages(req: Request, res: Response) {
+        try {
+          const messages = await this.chatuseCase.getMessages(req.params.id)
+          res.status(messages.status).json(messages.data)
+        } catch (error) {
+          res.status(401).json(error)
+        }
+      }
 }
 
 export default TutorController

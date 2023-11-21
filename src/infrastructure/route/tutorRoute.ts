@@ -19,6 +19,9 @@ import JobUseCase from "../../useCases/jobUsecase";
 import PaymentRepository from "../repository/paymentRepository";
 import StudentUseCase from "../../useCases/studentUseCase";
 import studentRepository from "../repository/studentRepository";
+import ConversationRepository from "../repository/conversationRepository";
+import MessageRepository from "../repository/messageRepository";
+import ChatUseCase from "../../useCases/chatUseCase";
 
 const repository = new TutorRepository()
 const encrypt = new Encrypt()
@@ -35,12 +38,16 @@ const paymentRepository = new PaymentRepository()
 const StudentRepository = new studentRepository()
 const studentUseCase=new StudentUseCase(encrypt,StudentRepository,jwt,)
 const sheduleUsecase=new ScheduleUsecase(scheduleRepository,paymentRepository)
-const schedulecontrol = new scheduleController(sheduleUsecase,studentUseCase,use_case)
+const schedulecontrol = new scheduleController(sheduleUsecase, studentUseCase, use_case)
+
+const conversationRepository = new ConversationRepository()
+const messageRepository = new MessageRepository()
+const chatuseCase=new ChatUseCase(conversationRepository,messageRepository)
 
 const jobRepository = new JobRepository()
 const jobUseCase = new JobUseCase(jobRepository)
 const Jobcontroller=new JobController(jobUseCase)
-const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary, sheduleUsecase)
+const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary, sheduleUsecase,chatuseCase)
 
 const tutorRouter = express.Router()
 
@@ -66,6 +73,11 @@ tutorRouter.post('/applytutorjob', (req, res) => Jobcontroller.applyJobs(req, re
 //review
 tutorRouter.post("/add-review",(req,res)=>controller.addReview(req,res))
 tutorRouter.get("/get-review/:id", (req, res) => controller.getTutorReview(req, res))
-tutorRouter.get("/old-review/:id",(req,res)=>controller.oldReview(req,res))
+tutorRouter.get("/old-review/:id", (req, res) => controller.oldReview(req, res))
+//chat section
+tutorRouter.post('/conversation', (req, res) => controller.newConversation(req, res))
+tutorRouter.get('/get-conversations/:id', (req, res) => controller.getConversations(req, res))
+tutorRouter.post('/add-message', (req, res) => controller.addMessage(req, res))
+tutorRouter.get("/get-messages/:id",(req,res)=>controller.getMessages(req,res))
 
 export default tutorRouter
