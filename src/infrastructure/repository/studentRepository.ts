@@ -50,6 +50,15 @@ class studentRepository implements studentRepositoryInterface{
     async walletAmt(student:any,amt:any) {
         const amount = parseInt(student.wallet) + amt
         student.wallet = amount
+        console.log(student,"before noti");
+        
+        student.notifications.push({
+            title: "Amount credited",
+            content: `An amount of ${amt} credited to your wallet`,
+            type: "wallet",
+        })
+        console.log(student,"after noti");
+        
         const updatedStudent = await student.save()
         if (updatedStudent) {
             return updatedStudent

@@ -33,8 +33,12 @@ class scheduleController {
     }
   }
   async cancelSchedulebyTutor(req: Request, res: Response) {
-    console.log(req.body,"from cancel schedule");
-    const student=await this.studentUsecase.walletAmt(req.body)
+    console.log(req.body, "from cancel schedule");
+    if (req.body.id) {
+     
+      const student = await this.studentUsecase.walletAmt(req.body)
+    }
+ 
     const schedule = await this.scheduleUsecase.changeSchedule(req.body);
     if (schedule) {
       res.status(schedule.status).json(schedule.data);
@@ -46,7 +50,7 @@ class scheduleController {
   async cancelSchedulebyStudent(req: Request, res: Response) {
     console.log(req.body);
     
-    const tutorWallet = await this.tutorUsecase.PayTutor(req.body.tutor, req.body.fee)
+    const student = await this.studentUsecase.walletAmt(req.body)
     const schedule = await this.scheduleUsecase.changeSchedule(req.body)
     if (schedule) {
       res.status(schedule.status).json(schedule.data)

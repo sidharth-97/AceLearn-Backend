@@ -9,7 +9,7 @@ interface IStudents extends Document{
     image:String
     isBlocked: Boolean
     wallet: Number
-    notifications:Array<object>
+    notifications:any
 }
 
 const studentSchema:Schema<IStudents> = new mongoose.Schema({
@@ -42,12 +42,20 @@ const studentSchema:Schema<IStudents> = new mongoose.Schema({
     },
     notifications: [
         {
-            title: String,
-            content: String,
+          title: {
             type: String,
-            time:Date
-        }
-    ],
+            required: true,
+          },
+          content: {
+            type: String,
+            required: true,
+          },
+          type: {
+            type: String,
+            required: true,
+          },
+        },
+      ], 
 })
 
 const studentModel = mongoose.model<IStudents>("Student", studentSchema)

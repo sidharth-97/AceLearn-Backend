@@ -50,7 +50,7 @@ class TutorUseCase{
         const tutorValid = await this.repository.findByEmail(tutor.email)
         if (tutorValid) {
             if (await this.encrypt.compare(tutor.password, tutorValid.password)) {
-                const token= this.jwt.createJWT(tutorValid.email)
+                const token= this.jwt.createJWT(tutorValid.email,"tutor")
                 return {
                     status: 200,
                     data: tutorValid,

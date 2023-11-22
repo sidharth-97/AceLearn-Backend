@@ -69,7 +69,7 @@ class StudentUseCase {
       }
       if (studentLog) {
         if (await this.Encrypt.compare(student.password, studentLog.password)) {
-          const token = this.JWTToken.createJWT(studentLog._id);
+          const token = this.JWTToken.createJWT(studentLog._id,"student");
           return {
             status: 200,
             data: studentLog,
@@ -161,7 +161,9 @@ class StudentUseCase {
   async walletAmt(data:any) {
     const student = await this.studentRepository.findById(data.id)
     const updated = await this.studentRepository.walletAmt(student, data.fee)
+   
     if (updated) {
+
       return {
         status: 200,
         data:updated

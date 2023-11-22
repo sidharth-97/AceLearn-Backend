@@ -93,7 +93,9 @@ class ScheduleUsecase {
     console.log("boooking succedddddddddddddd");
     
     const schedule = await this.ScheduleRepo.findById(localData.tutor);
-  console.log(schedule);
+    console.log(schedule);
+    console.log(localData,"local data");
+    
   
     if (schedule) {
       const datesToBook = Array.isArray(localData.timing.date) ? localData.timing.date : [localData.timing.date];
@@ -106,6 +108,7 @@ class ScheduleUsecase {
           const timeDateTimestamp = new Date(time.date).getTime();
           return timeDateTimestamp === dataDateTimestamp;
         });
+  console.log(indexToUpdate,"indezs");
   
         if (indexToUpdate !== -1) {
           schedule.timing[indexToUpdate].student = localData.timing.student;
@@ -113,6 +116,7 @@ class ScheduleUsecase {
           updated = true; 
         }
       }
+  console.log(updated,"updated");
   
       if (updated) {
         await this.ScheduleRepo.save(schedule);

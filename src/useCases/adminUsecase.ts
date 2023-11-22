@@ -24,7 +24,7 @@ class adminUseCase{
         const isExisting = await this.adminRepository.findByEmail(admin.email)
         if (isExisting) {
             if (await this.encrypt.compare(admin.password, isExisting.password)) {
-                const token =this.JWT.createJWT(isExisting.email)
+                const token =this.JWT.createJWT(isExisting.email,"admin")
                 return {
                     status: 200,
                     data: isExisting,

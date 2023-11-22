@@ -32,16 +32,18 @@ const Cloudinary = new CloudinaryUpload()
 
 const conversationRepository = new ConversationRepository()
 const messageRepository=new MessageRepository()
-const chatUseCase=new ChatUseCase(conversationRepository,messageRepository)
+const chatUseCase = new ChatUseCase(conversationRepository, messageRepository)
 
-const controller = new studentController(use_case, generateOtp, sentMail,Cloudinary,chatUseCase)
+const tutorRepository=new TutorRepository()
+const tutorUseCase = new TutorUseCase(tutorRepository, jwt, encrypt)
+
+const controller = new studentController(use_case, generateOtp, sentMail,Cloudinary,chatUseCase,tutorUseCase)
 
 const jobRepository = new JobRepository()
 const jobUseCase = new JobUseCase(jobRepository)
 const Jobcontroller = new JobController(jobUseCase)
 
-const tutorRepository=new TutorRepository()
-const tutorUseCase=new TutorUseCase(tutorRepository,jwt,encrypt)
+
 
 const scheduleRepository = new ScheduleRepository()
 const paymentRepository=new PaymentRepository()
@@ -54,14 +56,14 @@ studentRouter.post("/signup", (req, res) => controller.signup(req, res))
 studentRouter.post("/signupfinal", ImageUpload.single('image'),(req, res) => controller.signupStep2(req, res))
 studentRouter.post("/login", (req, res) => controller.login(req, res))
 studentRouter.post("/logout",(req,res)=>controller.logout(req,res))
-studentRouter.post("/edit-profile",verifyToken, ImageUpload.single('image'),(req,res)=>controller.editProfile(req,res))
+studentRouter.put("/edit-profile",verifyToken, ImageUpload.single('image'),(req,res)=>controller.editProfile(req,res))
 studentRouter.get('/student-details/:id', verifyToken, (req, res) => controller.getStudentInfo(req, res))
 studentRouter.get("/notifications/:id",(req,res)=>controller.showNotifications(req,res))
 //job posting
 studentRouter.post("/addJob", (req, res) => Jobcontroller.addJob(req, res))
 studentRouter.get('/student-job-request/:id', (req, res) => Jobcontroller.getJobDetails(req, res))
 //time scheduling
-studentRouter.post('/book-tutor-by-post',(req,res)=>schedulecontroller.bookThroughPost(req,res))
+studentRouter.put('/book-tutor-by-post',(req,res)=>schedulecontroller.bookThroughPost(req,res))
 studentRouter.get('/getStudentSchedule/:id', (req, res) => schedulecontroller.findStudentSchedule(req, res))
 //payment
 studentRouter.post('/payment', (req, res) => schedulecontroller.payment(req, res))
@@ -70,6 +72,7 @@ studentRouter.post('/webhook',(req,res)=>schedulecontroller.webhook(req,res))
 studentRouter.post("/conversation", (req, res) => controller.newConversation(req, res))
 studentRouter.get("/get-conversations/:id", (req, res) => controller.getConversations(req, res))
 studentRouter.post("/add-message", (req, res) => controller.addMessage(req, res))
-studentRouter.get("/get-messages/:id",(req,res)=>controller.getMessages(req,res))
+studentRouter.get("/get-messages/:id", (req, res) => controller.getMessages(req, res))
+studentRouter.get('/getAllUsers/:id',(req,res)=>controller.getAllUsers(req,res))
 
 export default studentRouter

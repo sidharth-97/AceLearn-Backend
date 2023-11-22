@@ -5,24 +5,28 @@ import SentMail from "../infrastructure/utils/sendMail";
 import CloudinaryUpload from "../infrastructure/utils/CloudinaryUpload";
 import fs from "fs";
 import ChatUseCase from "../useCases/chatUseCase";
+import TutorUseCase from "../useCases/tutorUseCase";
 
 class studentController {
   private studentUseCase: StudentUseCase;
   private genOtp: GenerateOTP;
   private sentMail: SentMail;
   private CloudinaryUpload: CloudinaryUpload;
-  private chatuseCase:ChatUseCase
+  private chatuseCase: ChatUseCase;
+  private tutorUseCase: TutorUseCase
   constructor(
     studentUseCase: StudentUseCase,
     genOtp: GenerateOTP,
     sentMail: SentMail,
     CloudinaryUpload: CloudinaryUpload,
-    chatuseCase:ChatUseCase
+    chatuseCase: ChatUseCase,
+    tutorUseCase: TutorUseCase
   ) {
     (this.studentUseCase = studentUseCase), (this.genOtp = genOtp);
     this.sentMail = sentMail;
     this.CloudinaryUpload = CloudinaryUpload;
-    this.chatuseCase=chatuseCase
+    this.chatuseCase = chatuseCase;
+    this.tutorUseCase = tutorUseCase
   }
 
   async signup(req: Request, res: Response) {
@@ -137,7 +141,7 @@ class studentController {
         mobile: req.body.mobile,
         image: url,
       };
-      console.log(formdata,"form data in controller");
+      console.log(formdata, "form data in controller");
       
       const student = await this.studentUseCase.editProfile(formdata);
       if (req?.file) {
@@ -171,7 +175,10 @@ class studentController {
 
   async showNotifications(req: Request, res: Response) {
     try {
-      const notifications=await this.studentUseCase.showNotifications(req.params.id)
+      console.log("notifications");
+      
+      const notifications = await this.studentUseCase.showNotifications(req.params.id)
+      res.status(notifications.status).json(notifications.data)
     } catch (error) {
       res.status(401).json(error)
     }
@@ -179,7 +186,7 @@ class studentController {
 
   async newConversation(req: Request, res: Response) {
     try {
-      const members=[req.body.senderId,req.body.receiverId]
+      const members = [req.body.senderId, req.body.receiverId]
       const conversation = await this.chatuseCase.newConversation(members)
       res.status(conversation?.status).json(conversation?.data)
     } catch (error) {
@@ -209,6 +216,23 @@ class studentController {
     try {
       const messages = await this.chatuseCase.getMessages(req.params.id)
       res.status(messages.status).json(messages.data)
+    } catch (error) {
+      res.status(401).json(error)
+    }
+  }
+
+
+  async getAllUsers(req: Request, res: Response) {
+    try {
+      console.log("getall users");
+      
+      const tutor = await this.tutorUseCase.getTutorData(req.params.id)
+      if (tutor.status != 200) {
+        const student = await this.studentUseCase.getStudentData(req.params.id)
+        res.status(200).json(student.data)
+      } else {
+        res.status(200).json(tutor.data)
+      }
     } catch (error) {
       res.status(401).json(error)
     }
