@@ -188,8 +188,16 @@ class studentController {
   async newConversation(req: Request, res: Response,next:NextFunction) {
     try {
       const members = [req.body.senderId, req.body.receiverId]
-      const conversation = await this.chatuseCase.newConversation(members)
-      res.status(conversation?.status).json(conversation?.data)
+      const existing = await this.chatuseCase.checkExisting(members)
+      console.log(existing,"exisitnggggggg");
+      
+      if (!existing?.length) {
+        console.log("entered");
+        
+        const conversation = await this.chatuseCase.newConversation(members)
+        res.status(conversation?.status).json(conversation?.data)
+      }
+      
     } catch (error) {
       res.status(401).json(error)
     }

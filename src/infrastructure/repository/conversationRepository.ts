@@ -26,6 +26,17 @@ class ConversationRepository implements ConversationRepoInterface {
             return null
         }
   }
+
+  async checkExisting(members: Array<string>) {
+    
+    const conversations = await ConversationModel.find({ members: { $all: [members[0], members[1]] } })
+    
+    if (conversations) {
+      return conversations
+    } else {
+      return null
+    }
+  }
 }
 
 export default ConversationRepository;

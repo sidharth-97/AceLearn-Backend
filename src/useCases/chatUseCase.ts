@@ -25,6 +25,10 @@ class ChatUseCase{
             }
         }
     }
+    async checkExisting(members: Array<string>) {
+        const isExisting = await this.ConversationRepo.checkExisting(members)
+        return isExisting
+    }
     async getConversations(id: string) {
         const conversations = await this.ConversationRepo.findByUserId(id)
         if (conversations) {
