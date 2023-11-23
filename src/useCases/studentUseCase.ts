@@ -97,8 +97,12 @@ class StudentUseCase {
     }
   }
 
-  async editProfile(student: any) {
-    const Editstudent = await this.studentRepository.findByEmail(student.email);
+  async editProfile(student: any, id: string) {
+    console.log(id);
+    
+    const Editstudent = await this.studentRepository.findById(id);
+    console.log(Editstudent,"edit student");
+    
     if (Editstudent) {
       if (student.currentPassword) {
         const isPasswordCorrect = await this.Encrypt.compare(

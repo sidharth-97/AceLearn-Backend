@@ -15,6 +15,8 @@ class TutorRepository implements TutorRepositoryInterface{
      async save(tutor: Tutor): Promise<any> {
          const newTutor = new TutorModel(tutor)
          await newTutor.save()
+         console.log("after save");
+         
          return newTutor
     }
     async findAndUpdate(tutor: Tutor): Promise<any> {

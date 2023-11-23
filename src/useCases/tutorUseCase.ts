@@ -50,7 +50,7 @@ class TutorUseCase{
         const tutorValid = await this.repository.findByEmail(tutor.email)
         if (tutorValid) {
             if (await this.encrypt.compare(tutor.password, tutorValid.password)) {
-                const token= this.jwt.createJWT(tutorValid.email,"tutor")
+                const token= this.jwt.createJWT(tutorValid._id,"tutor")
                 return {
                     status: 200,
                     data: tutorValid,
@@ -70,10 +70,10 @@ class TutorUseCase{
         }
     }
 
-    async editprofile(tutor:any) {
+    async editprofile(tutor:any,id:string) {
         console.log(tutor,"tutuor use case");
         
-        const EditTutor = await this.repository.findByEmail(tutor.email)
+        const EditTutor = await this.repository.findById(id)
         if (EditTutor) {
             EditTutor.name = tutor.name
             EditTutor.mobile = tutor.mobile

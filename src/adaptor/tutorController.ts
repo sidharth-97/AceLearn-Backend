@@ -92,7 +92,7 @@ class TutorController{
     async editProfile(req: Request, res: Response) {
         try {
             console.log("edit tutor");
-            
+            let userId = (req as any)?.user.id
             console.log(req.body);
             let url=''
             if (req.file) {
@@ -130,7 +130,7 @@ class TutorController{
                 console.error("No file to delete");
             }
             
-            const tutor = await this.useCase.editprofile(data)
+            const tutor = await this.useCase.editprofile(data,userId)
             res.status(tutor.status).json(tutor.data)
         } catch (error) {
             res.status(401).json(error)            

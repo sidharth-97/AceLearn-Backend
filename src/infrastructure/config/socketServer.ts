@@ -12,6 +12,7 @@ function initializeSocket(server:any) {
     interface User {
         userId: string;
         socketId: string;
+        id?:string
       }
       
       let users: User[] = [];

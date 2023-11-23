@@ -59,12 +59,20 @@ const TutorSchema:Schema<ITutor> = new mongoose.Schema({
     },
     notifications: [
         {
-            title: String,
-            content: String,
+          title: {
             type: String,
-            time:String
-        }
-    ],
+            required: true,
+          },
+          content: {
+            type: String,
+            required: true,
+          },
+          type: {
+            type: String,
+            required: true,
+          },
+        },
+      ], 
     review: [
         {
             student: {

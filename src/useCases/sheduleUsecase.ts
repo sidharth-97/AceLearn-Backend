@@ -55,7 +55,7 @@ class ScheduleUsecase {
       if (updatedTiming.length !== schedule.timing.length) {
         // Item was removed, update the schedule with the new timing array
         schedule.timing = updatedTiming;
-
+        
         await this.ScheduleRepo.save(schedule);
         return {
           status: 200,

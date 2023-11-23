@@ -11,7 +11,7 @@ class jwtToken implements JWT{
         throw new Error("JWT_KEY is not defined");
   }
    verifyJWT(data: any): any {
-     const decoded = jwt.verify(data, "thisisthesecretkey"); 
+     const decoded = jwt.verify(data,`${process.env.JWT_KEY}`); 
      return decoded
    }
 }

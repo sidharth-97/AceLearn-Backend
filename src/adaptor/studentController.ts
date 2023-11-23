@@ -122,6 +122,7 @@ class studentController {
   }
   async editProfile(req: Request, res: Response) {
     try {
+      let userId = (req as any)?.user.id
       const data = req.body;
       console.log(data, "this is the didofisfjojif");
 
@@ -143,7 +144,7 @@ class studentController {
       };
       console.log(formdata, "form data in controller");
       
-      const student = await this.studentUseCase.editProfile(formdata);
+      const student = await this.studentUseCase.editProfile(formdata,userId);
       if (req?.file) {
         fs.unlink(req.file.path, (err) => {
           if (err) {
