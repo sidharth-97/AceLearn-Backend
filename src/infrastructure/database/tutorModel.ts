@@ -15,7 +15,8 @@ interface ITutor extends Document{
     wallet: number,
     review: object,
     qualifications: string,
-    notifications:Array<object>
+    notifications: Array<object>,
+    rating:number
 }
 
 const TutorSchema:Schema<ITutor> = new mongoose.Schema({
@@ -72,7 +73,10 @@ const TutorSchema:Schema<ITutor> = new mongoose.Schema({
             required: true,
           },
         },
-      ], 
+    ], 
+    rating: {
+        type: Number,
+    },
     review: [
         {
             student: {
@@ -81,6 +85,10 @@ const TutorSchema:Schema<ITutor> = new mongoose.Schema({
             },
             rating:{
                 type:Number
+            },
+            time: {
+                type: Date,
+                default:new Date()
             },
             description: {
                 type:String

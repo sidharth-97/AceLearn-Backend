@@ -63,6 +63,9 @@ class TutorRepository implements TutorRepositoryInterface{
         } else {
           tutor.review[existingIndex] = { ...tutor.review[existingIndex], ...newReview };
         }
+        
+        const totalRating = tutor.review.reduce((sum: number, review: any) => sum + review.rating, 0);
+        tutor.rating = totalRating / tutor.review.length;
       
         await tutor.save();
           
