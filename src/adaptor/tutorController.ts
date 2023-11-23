@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { Request, Response,NextFunction } from "express"
 import TutorUseCase from "../useCases/tutorUseCase"
 import GenerateOTP from "../infrastructure/utils/GenerateOTP"
 import SentMail from "../infrastructure/utils/sendMail"
@@ -22,7 +22,7 @@ class TutorController{
         this.scheduleUsecase = scheduleUsecase
         this.chatuseCase=chatuseCase
     }
-    async signup(req: Request, res: Response) {
+    async signup(req: Request, res: Response,next:NextFunction) {
         try {
             const otp = await this.genOtp.generateOtp(4)
             console.log(otp);
@@ -36,11 +36,11 @@ class TutorController{
            res.status(tutor.status).json(tutor.data)
        } 
        } catch (error) {
-        res.status(401).json(error)
-       }
+        next(error)
+        }
     }
 
-    async signupStep2(req: Request, res: Response) {
+    async signupStep2(req: Request, res: Response,next:NextFunction) {
         try {
             console.log("hreee");
             
@@ -57,13 +57,13 @@ class TutorController{
         } catch (error) {
             console.log("errro");
             
-            res.status(401).json(error)
+            next(error)
         }
     }
 
 
 
-    async login(req: Request, res: Response) {
+    async login(req: Request, res: Response,next:NextFunction) {
         try {
             const tutor = await this.useCase.login(req.body)
             res.cookie('Tutorjwt', tutor.token, {
@@ -74,10 +74,10 @@ class TutorController{
               });
             res.status(tutor.status).json(tutor.data)
         } catch (error) {
-            res.status(401).json(error)
+            next(error)
         }
     }
-    async logout(req: Request, res: Response) {
+    async logout(req: Request, res: Response,next:NextFunction) {
         try {
             res.cookie('Tutorjwt', "", {
                 httpOnly: true,
@@ -85,11 +85,11 @@ class TutorController{
             })
             res.status(200).json("Tutor Logged Out")
         } catch (error) {
-            res.status(401).json(error)
+            next(error)
         }
     }
 
-    async editProfile(req: Request, res: Response) {
+    async editProfile(req: Request, res: Response,next:NextFunction) {
         try {
             console.log("edit tutor");
             let userId = (req as any)?.user.id
@@ -133,11 +133,11 @@ class TutorController{
             const tutor = await this.useCase.editprofile(data,userId)
             res.status(tutor.status).json(tutor.data)
         } catch (error) {
-            res.status(401).json(error)            
+            next(error)            
         }
     }
 
-    async getTutorInfo(req: Request, res: Response) {
+    async getTutorInfo(req: Request, res: Response,next:NextFunction) {
         try {
           
             const tutorId = req.params.id
@@ -149,11 +149,11 @@ class TutorController{
             }
             
         } catch (error) {
-            res.status(401).json(error)            
+            next(error)            
         }
     }
 
-    async getAllTutors(req: Request, res: Response) {
+    async getAllTutors(req: Request, res: Response,next:NextFunction) {
         try {
             const tutor = await this.useCase.getAllTutor()
             if (tutor) {
@@ -163,7 +163,7 @@ class TutorController{
             res.status(404).json(error)
         }
     }
-    async addReview(req: Request, res: Response) {
+    async addReview(req: Request, res: Response,next:NextFunction) {
         try {
             console.log(req.body,"this is from controller");
             
@@ -173,7 +173,7 @@ class TutorController{
             res.status(404).json(error)
         }
     }
-    async getTutorReview(req: Request, res: Response) {
+    async getTutorReview(req: Request, res: Response,next:NextFunction) {
         try {
             console.log("final");
             
@@ -183,7 +183,7 @@ class TutorController{
             res.status(404).json(error)
         }
     }
-    async oldReview(req: Request, res: Response) {
+    async oldReview(req: Request, res: Response,next:NextFunction) {
         try {    
             const token = req.cookies.Studentjwt
             const tutor=req.params.id
@@ -193,7 +193,7 @@ class TutorController{
             res.status(404).json(error)
         }
     }
-    async addTutorPayment(req: Request, res: Response) {
+    async addTutorPayment(req: Request, res: Response,next:NextFunction) {
         try {
             console.log(req.body,"req.body");
             
@@ -207,7 +207,7 @@ class TutorController{
         }
     }
 
-    async showNotifications(req: Request, res: Response) {
+    async showNotifications(req: Request, res: Response,next:NextFunction) {
         try {
             const notifications = await this.useCase.showNotifications(req.params.id)
             res.status(notifications.status).json(notifications.data)
@@ -215,40 +215,40 @@ class TutorController{
             res.status(404).json(error)
         }
     }
-    async newConversation(req: Request, res: Response) {
+    async newConversation(req: Request, res: Response,next:NextFunction) {
         try {
           const members=[req.body.senderId,req.body.receiverId]
           const conversation = await this.chatuseCase.newConversation(members)
           res.status(conversation?.status).json(conversation?.data)
         } catch (error) {
-          res.status(401).json(error)
+          next(error)
         }
       }
     
-      async getConversations(req: Request, res: Response) {
+      async getConversations(req: Request, res: Response,next:NextFunction) {
         try {
           console.log(req.params.id);
           
           const conversations = await this.chatuseCase.getConversations(req.params.id)
           res.status(conversations.status).json(conversations.data)
         } catch (error) {
-          res.status(401).json(error)
+          next(error)
         }
       }
-      async addMessage(req: Request, res: Response) {
+      async addMessage(req: Request, res: Response,next:NextFunction) {
         try {
           const message = await this.chatuseCase.addMessage(req.body)
           res.status(message.status).json(message.data)
         } catch (error) {
-          res.status(401).json(error)
+          next(error)
         }
       }
-      async getMessages(req: Request, res: Response) {
+      async getMessages(req: Request, res: Response,next:NextFunction) {
         try {
           const messages = await this.chatuseCase.getMessages(req.params.id)
           res.status(messages.status).json(messages.data)
         } catch (error) {
-          res.status(401).json(error)
+          next(error)
         }
       }
 }

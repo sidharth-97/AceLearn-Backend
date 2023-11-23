@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import StudentUseCase from "../useCases/studentUseCase";
 import GenerateOTP from "../infrastructure/utils/GenerateOTP";
 import SentMail from "../infrastructure/utils/sendMail";
@@ -29,7 +29,7 @@ class studentController {
     this.tutorUseCase = tutorUseCase
   }
 
-  async signup(req: Request, res: Response) {
+  async signup(req: Request, res: Response,next:NextFunction) {
     try {
       const otp = await this.genOtp.generateOtp(4);
       console.log(otp, "otp");
@@ -46,7 +46,7 @@ class studentController {
     }
   }
 
-  async signupStep2(req: Request, res: Response) {
+  async signupStep2(req: Request, res: Response,next:NextFunction) {
     try {
       console.log(req.body);
       let url = "";
@@ -90,7 +90,7 @@ class studentController {
     }
   }
 
-  async login(req: Request, res: Response) {
+  async login(req: Request, res: Response,next:NextFunction) {
     try {
       console.log("abcd");
 
@@ -109,7 +109,7 @@ class studentController {
       res.status(401).json(error);
     }
   }
-  async logout(req: Request, res: Response) {
+  async logout(req: Request, res: Response,next:NextFunction) {
     try {
       res.cookie("Studentjwt", "", {
         httpOnly: true,
@@ -120,7 +120,7 @@ class studentController {
       res.status(401).json(error);
     }
   }
-  async editProfile(req: Request, res: Response) {
+  async editProfile(req: Request, res: Response,next:NextFunction) {
     try {
       let userId = (req as any)?.user.id
       const data = req.body;
@@ -162,7 +162,7 @@ class studentController {
     }
   }
 
-  async getStudentInfo(req: Request, res: Response) {
+  async getStudentInfo(req: Request, res: Response,next:NextFunction) {
     try {
       const studentId = req.params.id;
       const result = await this.studentUseCase.getStudentData(studentId);
@@ -174,7 +174,7 @@ class studentController {
     }
   }
 
-  async showNotifications(req: Request, res: Response) {
+  async showNotifications(req: Request, res: Response,next:NextFunction) {
     try {
       console.log("notifications");
       
@@ -185,7 +185,7 @@ class studentController {
     }
   }
 
-  async newConversation(req: Request, res: Response) {
+  async newConversation(req: Request, res: Response,next:NextFunction) {
     try {
       const members = [req.body.senderId, req.body.receiverId]
       const conversation = await this.chatuseCase.newConversation(members)
@@ -195,7 +195,7 @@ class studentController {
     }
   }
 
-  async getConversations(req: Request, res: Response) {
+  async getConversations(req: Request, res: Response,next:NextFunction) {
     try {
       console.log(req.params.id);
       
@@ -205,7 +205,7 @@ class studentController {
       res.status(401).json(error)
     }
   }
-  async addMessage(req: Request, res: Response) {
+  async addMessage(req: Request, res: Response,next:NextFunction) {
     try {
       const message = await this.chatuseCase.addMessage(req.body)
       res.status(message.status).json(message.data)
@@ -213,7 +213,7 @@ class studentController {
       res.status(401).json(error)
     }
   }
-  async getMessages(req: Request, res: Response) {
+  async getMessages(req: Request, res: Response,next:NextFunction) {
     try {
       const messages = await this.chatuseCase.getMessages(req.params.id)
       res.status(messages.status).json(messages.data)
@@ -223,7 +223,7 @@ class studentController {
   }
 
 
-  async getAllUsers(req: Request, res: Response) {
+  async getAllUsers(req: Request, res: Response,next:NextFunction) {
     try {
       console.log("getall users");
       

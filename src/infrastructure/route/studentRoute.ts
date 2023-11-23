@@ -52,27 +52,27 @@ const schedulecontroller=new scheduleController(sheduleUsecase,use_case,tutorUse
 
 const studentRouter = express.Router()
 
-studentRouter.post("/signup", (req, res) => controller.signup(req, res))
-studentRouter.post("/signupfinal", ImageUpload.single('image'),(req, res) => controller.signupStep2(req, res))
-studentRouter.post("/login", (req, res) => controller.login(req, res))
-studentRouter.post("/logout",(req,res)=>controller.logout(req,res))
-studentRouter.put("/edit-profile",verifyToken, ImageUpload.single('image'),(req,res)=>controller.editProfile(req,res))
-studentRouter.get('/student-details/:id', verifyToken, (req, res) => controller.getStudentInfo(req, res))
-studentRouter.get("/notifications/:id",(req,res)=>controller.showNotifications(req,res))
+studentRouter.post("/signup", (req, res,next) => controller.signup(req, res,next))
+studentRouter.post("/signupfinal", ImageUpload.single('image'),(req, res,next) => controller.signupStep2(req, res,next))
+studentRouter.post("/login", (req, res,next) => controller.login(req, res,next))
+studentRouter.post("/logout",(req,res,next)=>controller.logout(req,res,next))
+studentRouter.put("/edit-profile",verifyToken, ImageUpload.single('image'),(req,res,next)=>controller.editProfile(req,res,next))
+studentRouter.get('/student-details/:id', verifyToken, (req, res,next) => controller.getStudentInfo(req, res,next))
+studentRouter.get("/notifications/:id",(req,res,next)=>controller.showNotifications(req,res,next))
 //job posting
-studentRouter.post("/addJob", (req, res) => Jobcontroller.addJob(req, res))
-studentRouter.get('/student-job-request/:id', (req, res) => Jobcontroller.getJobDetails(req, res))
+studentRouter.post("/addJob", (req, res,next) => Jobcontroller.addJob(req, res,next))
+studentRouter.get('/student-job-request/:id', (req, res,next) => Jobcontroller.getJobDetails(req, res,next))
 //time scheduling
-studentRouter.put('/book-tutor-by-post',(req,res)=>schedulecontroller.bookThroughPost(req,res))
-studentRouter.get('/getStudentSchedule/:id', (req, res) => schedulecontroller.findStudentSchedule(req, res))
+studentRouter.put('/book-tutor-by-post',(req,res,next)=>schedulecontroller.bookThroughPost(req,res,next))
+studentRouter.get('/getStudentSchedule/:id', (req, res,next) => schedulecontroller.findStudentSchedule(req, res,next))
 //payment
-studentRouter.post('/payment', (req, res) => schedulecontroller.payment(req, res))
-studentRouter.post('/webhook',(req,res)=>schedulecontroller.webhook(req,res))
+studentRouter.post('/payment', (req, res,next) => schedulecontroller.payment(req, res,next))
+studentRouter.post('/webhook',(req,res,next)=>schedulecontroller.webhook(req,res,next))
 //chat
-studentRouter.post("/conversation", (req, res) => controller.newConversation(req, res))
-studentRouter.get("/get-conversations/:id", (req, res) => controller.getConversations(req, res))
-studentRouter.post("/add-message", (req, res) => controller.addMessage(req, res))
-studentRouter.get("/get-messages/:id", (req, res) => controller.getMessages(req, res))
-studentRouter.get('/getAllUsers/:id',(req,res)=>controller.getAllUsers(req,res))
+studentRouter.post("/conversation", (req, res,next) => controller.newConversation(req, res,next))
+studentRouter.get("/get-conversations/:id", (req, res,next) => controller.getConversations(req, res,next))
+studentRouter.post("/add-message", (req, res,next) => controller.addMessage(req, res,next))
+studentRouter.get("/get-messages/:id", (req, res,next) => controller.getMessages(req, res,next))
+studentRouter.get('/getAllUsers/:id',(req,res,next)=>controller.getAllUsers(req,res,next))
 
 export default studentRouter

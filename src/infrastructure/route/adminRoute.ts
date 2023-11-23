@@ -18,15 +18,15 @@ const controller = new adminController(useCases)
 
 const adminRoute=express.Router()
 
-adminRoute.post("/login", (req, res) => controller.login(req, res))
-adminRoute.post("/logout", (req, res) => controller.logout(req, res))
-adminRoute.get("/students", (req, res) => controller.findStudents(req, res))
-adminRoute.get("/tutors", (req, res) => controller.findTutors(req, res))
+adminRoute.post("/login", (req, res,next) => controller.login(req, res,next))
+adminRoute.post("/logout", (req, res,next) => controller.logout(req, res,next))
+adminRoute.get("/students", (req, res,next) => controller.findStudents(req, res,next))
+adminRoute.get("/tutors", (req, res,next) => controller.findTutors(req, res,next))
 
-adminRoute.post("/block-student/:id", (req, res) => controller.blockStudent(req, res))
-adminRoute.post("/block-tutor/:id", (req, res) => controller.blockTutor(req, res))
-adminRoute.post("/add-academic-info", (req, res) => controller.addAcademicInfo(req, res))
-adminRoute.get("/find-academic-details",(req,res)=>controller.AcademicInfo(req,res))
-adminRoute.put("/delete-academic-info",(req,res)=>controller.modifyAcademicInfo(req,res))
+adminRoute.post("/block-student/:id", (req, res,next) => controller.blockStudent(req, res,next))
+adminRoute.post("/block-tutor/:id", (req, res,next) => controller.blockTutor(req, res,next))
+adminRoute.post("/add-academic-info", (req, res,next) => controller.addAcademicInfo(req, res,next))
+adminRoute.get("/find-academic-details",(req,res,next)=>controller.AcademicInfo(req,res,next))
+adminRoute.put("/delete-academic-info",(req,res,next)=>controller.modifyAcademicInfo(req,res,next))
 
 export default adminRoute
