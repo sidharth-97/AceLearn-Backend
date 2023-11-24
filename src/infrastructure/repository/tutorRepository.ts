@@ -35,10 +35,43 @@ class TutorRepository implements TutorRepositoryInterface{
            return null
        }
     }
-    async findAll(): Promise<any> {
-        const AllTutor = await TutorModel.find()
+    async findAll(data:{
+        page:number,
+        limit: number,
+        subject:string,
+        minFee?:number,
+        maxFee?: number,
+        searchQuery?: string,
+        sortValue?:string
+    }): Promise<any> {
+        let query:any = {}
+        if (data.subject && data.subject.length > 0) {
+            let Data=data.subject.split(",")
+            query.subject = { $in: Data };
+        }
+        if (data.searchQuery) {
+            query.$or = [
+                {name:{$regex:data.searchQuery,$options:'i'}}
+            ]
+        }
+        if (data.minFee !== undefined && data.maxFee !== undefined) {
+            query.fee={$gte:data.minFee,$lte:data.maxFee}
+        }
+        console.log(query, "query");
+        
+        const count=await TutorModel.countDocuments(query)
+        let AllTutor = await TutorModel.find(query).skip((data.page - 1) * data.limit).limit(data.limit)
+        
+        if (data.sortValue == "low") {
+            AllTutor=AllTutor.sort((a:any,b:any)=>a.fee-b.fee)
+        } else if (data.sortValue == 'high') {
+            AllTutor=AllTutor.sort((a:any,b:any)=>b.fee-a.fee)
+        } else if (data.sortValue == "rating") {
+            AllTutor=AllTutor.sort((a:any,b:any)=>b.rating-a.fee.rating)
+        }
+        
         if (AllTutor) {
-            return AllTutor
+            return { AllTutor,count }
         } else {
             return null
         }

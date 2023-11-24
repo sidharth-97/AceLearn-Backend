@@ -5,5 +5,11 @@ export default interface TutorRepositoryInterface{
     save(tutor: Tutor): Promise<any>
     findAndUpdate(tutor: Tutor): Promise<any>
     findById(id: string): Promise<any>
-    findAll():Promise<any>
+    findAll(data:{page:number,
+        limit: number,
+        subject:string,
+        minFee:number,
+        maxFee: number,
+        searchQuery: string,
+        sortValue:string} ):Promise<any>
 }

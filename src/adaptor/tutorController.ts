@@ -7,6 +7,16 @@ import CloudinaryUpload from "../infrastructure/utils/CloudinaryUpload"
 import ScheduleUsecase from "../useCases/sheduleUsecase"
 import ChatUseCase from "../useCases/chatUseCase"
 
+interface TutorData {
+    page: number;
+    limit: number;
+    subject: string; 
+    minFee?: number;
+    maxFee?: number;
+    searchQuery?: string;
+    sortValue?: string;
+}
+
 class TutorController{
     private useCase: TutorUseCase
     private genOtp: GenerateOTP
@@ -155,7 +165,20 @@ class TutorController{
 
     async getAllTutors(req: Request, res: Response,next:NextFunction) {
         try {
-            const tutor = await this.useCase.getAllTutor()
+            console.log("all tutors");
+            
+            const data: TutorData = {
+                page: Number(req.query.page) || 1,
+                limit: Number(req.query.limit) || 3,
+                subject: req.query.subject as string,
+                minFee: req.query.minFee ? Number(req.query.minFee) : undefined,
+                maxFee: req.query.maxFee ? Number(req.query.maxFee) : undefined,
+                searchQuery: req.query.search as string,
+                sortValue: req.query.sort as string,
+            }
+            console.log(data);
+            
+            const tutor = await this.useCase.getAllTutor(data)
             if (tutor) {
                 res.status(tutor.status).json(tutor.data)
             }

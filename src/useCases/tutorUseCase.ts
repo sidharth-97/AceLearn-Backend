@@ -123,8 +123,16 @@ class TutorUseCase{
             }
         }
     }
-    async getAllTutor() {
-        const Tutor = await this.repository.findAll()
+    async getAllTutor(data:{
+        page:number,
+        limit: number,
+        subject:string,
+        minFee?:number,
+        maxFee?: number,
+        searchQuery?: string,
+        sortValue?:string
+    }) {
+        const Tutor = await this.repository.findAll(data)
         if (Tutor) {
             return {
                 status: 200,
