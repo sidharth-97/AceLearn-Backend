@@ -37,7 +37,7 @@ const scheduleRepository = new ScheduleRepository()
 const paymentRepository = new PaymentRepository()
 const StudentRepository = new studentRepository()
 const studentUseCase=new StudentUseCase(encrypt,StudentRepository,jwt,)
-const sheduleUsecase=new ScheduleUsecase(scheduleRepository,paymentRepository)
+const sheduleUsecase=new ScheduleUsecase(scheduleRepository,paymentRepository,repository,StudentRepository)
 const schedulecontrol = new scheduleController(sheduleUsecase, studentUseCase, use_case)
 
 const conversationRepository = new ConversationRepository()
