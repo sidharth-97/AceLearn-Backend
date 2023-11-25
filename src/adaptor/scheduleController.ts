@@ -50,7 +50,7 @@ class scheduleController {
     }
     
  
-    const schedule = await this.scheduleUsecase.changeSchedule(req.body);
+    const schedule = await this.scheduleUsecase.cancelScheduleByTutor(req.body);
     if (schedule) {
       res.status(schedule.status).json(schedule.data);
     } else {
@@ -63,7 +63,7 @@ class scheduleController {
       console.log(req.body);
     
       const student = await this.studentUsecase.walletAmt(req.body)
-      const schedule = await this.scheduleUsecase.changeSchedule(req.body)
+      const schedule = await this.scheduleUsecase.cancelSchedule(req.body)
       if (schedule) {
         res.status(schedule.status).json(schedule.data)
       }

@@ -112,7 +112,8 @@ class ScheduleUsecase {
   
         if (indexToUpdate !== -1) {
           schedule.timing[indexToUpdate].student = localData.timing.student;
-          schedule.timing[indexToUpdate].fee=localData.timing.fee
+          schedule.timing[indexToUpdate].fee = localData.timing.fee
+          schedule.timing[indexToUpdate].status="Booked"
           updated = true; 
         }
       }
@@ -155,6 +156,7 @@ class ScheduleUsecase {
       schedule.timing.push({
         date: data.timing.date,
         student: data.timing.student,
+        status:"Booked"
       });
 
       await this.ScheduleRepo.save(schedule);
@@ -191,6 +193,65 @@ class ScheduleUsecase {
       return object.fee
     } else {
       return null
+    }
+  }
+
+  async cancelSchedule(data: { tutor: string, fee: string, id: string, schedule: string, timing: { date: string } }) {
+    console.log("in the cancel schedule");
+    
+    const schedule = await this.ScheduleRepo.findById(data.tutor);
+  
+    if (schedule && schedule.timing && schedule.timing.length > 0) {
+      const updatedTiming = schedule.timing.find((item: any) => item._id == data.schedule);
+  
+      if (updatedTiming) {
+        updatedTiming.status = "Cancelled By Student";
+        await this.ScheduleRepo.save(schedule);
+  
+        return {
+          status: 200,
+          data: "updated",
+        };
+      } else {
+        return {
+          status: 404,
+          data: "Timing not found",
+        };
+      }
+    } else {
+      return {
+        status: 404,
+        data: "Schedule or timing not found",
+      };
+    }
+  }
+  async cancelScheduleByTutor(data: { tutor: string, fee: string, id: string, schedule: string, timing: { date: string } }) {
+    console.log("in the cancel schedule");
+    
+    const schedule = await this.ScheduleRepo.findById(data.tutor);
+  
+    if (schedule && schedule.timing && schedule.timing.length > 0) {
+      const updatedTiming = schedule.timing.find((item: any) => item._id == data.schedule);
+  
+      if (updatedTiming) {
+        updatedTiming.status = "Cancelled By Tutor";
+        await this.ScheduleRepo.save(schedule);
+  
+        return {
+          status: 200,
+          data: "updated",
+        };
+      } else {
+        return {
+          status: 404,
+          data: "Timing not found",
+        };
+      }
+    } else {
+      return {
+        status: 404,
+        data: "Schedule or timing not found",
+      };
     }
   }
   

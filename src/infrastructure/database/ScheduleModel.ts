@@ -16,7 +16,11 @@ const ScheduleSchema = new Schema({
     timing: [{
         fee:Number,
         date: Date,
-        student: Schema.Types.ObjectId
+        student: Schema.Types.ObjectId,
+        status: {
+            type: String,
+            default:"Not booked"
+        }
     }]
 });
 
