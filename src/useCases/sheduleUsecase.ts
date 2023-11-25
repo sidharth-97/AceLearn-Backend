@@ -84,27 +84,25 @@ class ScheduleUsecase {
   }
   }
 
-  async BookTutor(data:any,localData:any) {
+  async PaymentConfirm(data: any) {
     const paymentSuccess = await this.PaymentRepo.PaymentSuccess(data)
     if (!paymentSuccess) {
       console.log("faaaaaaaaaaaaaaaileeeeeeeeee");
       
-      return {
-        status: 401,
-        data: "Payment failed"
-      }
+      return null
     } else {
-      console.log(paymentSuccess, "this is the resutl of redix");
+      return true
     }
-    console.log("boooking succedddddddddddddd");
-    
-    const schedule = await this.ScheduleRepo.findById(localData.tutor);
+  }
+
+  async BookTutor(Data:any){
+    const schedule = await this.ScheduleRepo.findById(Data.tutor);
     console.log(schedule);
-    console.log(localData,"local data");
+    console.log(Data,"local data");
     
   
     if (schedule) {
-      const datesToBook = Array.isArray(localData.timing.date) ? localData.timing.date : [localData.timing.date];
+      const datesToBook = Array.isArray(Data.timing.date) ? Data.timing.date : [Data.timing.date];
   
       let updated = false;
   
@@ -117,8 +115,8 @@ class ScheduleUsecase {
   console.log(indexToUpdate,"indezs");
   
         if (indexToUpdate !== -1) {
-          schedule.timing[indexToUpdate].student = localData.timing.student;
-          schedule.timing[indexToUpdate].fee = localData.timing.fee
+          schedule.timing[indexToUpdate].student = Data.timing.student;
+          schedule.timing[indexToUpdate].fee = Data.timing.fee
           schedule.timing[indexToUpdate].status="Booked"
           updated = true; 
         }

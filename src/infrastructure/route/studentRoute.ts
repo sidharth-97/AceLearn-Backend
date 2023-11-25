@@ -67,7 +67,8 @@ studentRouter.put('/book-tutor-by-post',(req,res,next)=>schedulecontroller.bookT
 studentRouter.get('/getStudentSchedule/:id', (req, res,next) => schedulecontroller.findStudentSchedule(req, res,next))
 //payment
 studentRouter.post('/payment', (req, res,next) => schedulecontroller.payment(req, res,next))
-studentRouter.post('/webhook',(req,res,next)=>schedulecontroller.webhook(req,res,next))
+studentRouter.post('/webhook', (req, res, next) => schedulecontroller.webhook(req, res, next))
+studentRouter.post('/book-tutor-wallet',(req,res,next)=>schedulecontroller.bookWithWallet(req,res,next))
 //chat
 studentRouter.post("/conversation", (req, res,next) => controller.newConversation(req, res,next))
 studentRouter.get("/get-conversations/:id", (req, res,next) => controller.getConversations(req, res,next))

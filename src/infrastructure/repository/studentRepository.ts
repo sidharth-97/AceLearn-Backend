@@ -51,8 +51,8 @@ class studentRepository implements studentRepositoryInterface{
         const amount = parseInt(student.wallet) + amt
         student.wallet = amount
         console.log(student,"before noti");
-        
-        student.notifications.push({
+        if (amt > 0) {
+            student.notifications.push({
             title: "Amount credited",
             content: `An amount of ${amt} credited to your wallet`,
             type: "wallet",
@@ -63,6 +63,20 @@ class studentRepository implements studentRepositoryInterface{
             type: "Credit",
             details:`An amount of ${amt} credited to your wallet`
         })
+        } else {
+            student.notifications.push({
+                title: "Amount debited",
+                content: `An amount of ${-(amt)} has been debited from your wallet`,
+                type: "wallet",
+            })
+            student.walletHistory.push({
+                title: "Payment",
+                amount: amt,
+                type: "Debit",
+                details:`An amount of ${-(amt)} has been debited from your wallet`
+            })
+        }
+        
         console.log(student,"after noti");
         
         const updatedStudent = await student.save()

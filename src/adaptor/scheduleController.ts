@@ -132,16 +132,35 @@ class scheduleController {
    }
   }
 
-  async webhook(request: Request, response: Response,next:NextFunction) {
+async webhook(request: Request, response: Response,next:NextFunction) {
 try {
-  console.log(request, "controller requestrr");
   const localData = request.app.locals.schedule;
-  const bookTuror = await this.scheduleUsecase.BookTutor(request, localData);
-  response.status(200).json(bookTuror?.data);
+  const Payment = await this.scheduleUsecase.PaymentConfirm(request);
+  if (Payment) {
+    const booking = await this.scheduleUsecase.BookTutor(localData)
+    response.status(200).json(booking?.data);
+  } else {
+    response.status(400).json("Booking failed")
+}
 } catch (error) {
   next(error)
 }
   }
+  async bookWithWallet(request: Request, response: Response, next: NextFunction) {
+    try {
+    let data={id: request.body.timing.student, fee:request.body.fees }
+      const payment = await this.studentUsecase.walletAmt(data)
+      if (payment) {
+        const booking = await this.scheduleUsecase.BookTutor(request.body)
+        response.status(200).json(booking?.data)
+      } else {
+        response.status(400).json("Booking failed")
+      }
+  } catch (error) {
+    next(error)
+  }
+}
+
 }
 
 export default scheduleController;
