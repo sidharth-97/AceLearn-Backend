@@ -126,7 +126,12 @@ class TutorRepository implements TutorRepositoryInterface{
             content: `An amount of ${fee} credited to your wallet`,
             type:"wallet"
         })
-
+        tutor.walletHistory.push({
+            title: "Tutor Fee",
+            amount: fee,
+            type: "Credit",
+            details:`An amount of ${fee} credited to your wallet`
+        })
         const updatedTutor = await tutor.save()
         if (updatedTutor) {
             return updatedTutor

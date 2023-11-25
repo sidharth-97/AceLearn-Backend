@@ -57,6 +57,12 @@ class studentRepository implements studentRepositoryInterface{
             content: `An amount of ${amt} credited to your wallet`,
             type: "wallet",
         })
+        student.walletHistory.push({
+            title: "Refund",
+            amount: amt,
+            type: "Credit",
+            details:`An amount of ${amt} credited to your wallet`
+        })
         console.log(student,"after noti");
         
         const updatedStudent = await student.save()
