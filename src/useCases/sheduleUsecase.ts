@@ -1,5 +1,7 @@
 import PaymentRepository from "../infrastructure/repository/paymentRepository";
 import ScheduleRepository from "../infrastructure/repository/scheduleRepository";
+import studentRepository from "../infrastructure/repository/studentRepository";
+import TutorRepository from "../infrastructure/repository/tutorRepository";
 
 interface schedule {
   tutor: string;
@@ -11,10 +13,14 @@ interface schedule {
 
 class ScheduleUsecase {
   private ScheduleRepo: ScheduleRepository;
-  private PaymentRepo:PaymentRepository
-  constructor(ScheduleRepo: ScheduleRepository, PaymentRepo:PaymentRepository) {
+  private PaymentRepo: PaymentRepository
+  private tutorRepo: TutorRepository
+  private studentRepo:studentRepository
+  constructor(ScheduleRepo: ScheduleRepository, PaymentRepo:PaymentRepository,tutorRepo:TutorRepository,studentRepo:studentRepository) {
     this.ScheduleRepo = ScheduleRepo;
-    this.PaymentRepo=PaymentRepo
+    this.PaymentRepo = PaymentRepo
+    this.tutorRepo = tutorRepo
+    this.studentRepo=studentRepo
   }
 
   async scheduleTime(data: schedule) {
@@ -207,7 +213,8 @@ class ScheduleUsecase {
       if (updatedTiming) {
         updatedTiming.status = "Cancelled By Student";
         await this.ScheduleRepo.save(schedule);
-  
+        await this.studentRepo.pushNotifications(data.id, "Class Cancelled", `The class scheduled on ${data.timing.date.toString()} has been cancelled`, "Schedule")
+        await this.tutorRepo.pushNotifications(data.tutor, "Class Cancelled", `The class scheduled on ${data.timing.date.toString()} has been cancelled`, "Schedule")
         return {
           status: 200,
           data: "updated",
@@ -236,7 +243,8 @@ class ScheduleUsecase {
       if (updatedTiming) {
         updatedTiming.status = "Cancelled By Tutor";
         await this.ScheduleRepo.save(schedule);
-  
+        await this.tutorRepo.pushNotifications(data.tutor, "Class Cancelled", `The class scheduled on ${data.timing.date.toString()} has been cancelled`, "Schedule")
+        await this.studentRepo.pushNotifications(data.id, "Class Cancelled", `The class scheduled on ${data.timing.date.toString()} has been cancelled`, "Schedule")
         return {
           status: 200,
           data: "updated",

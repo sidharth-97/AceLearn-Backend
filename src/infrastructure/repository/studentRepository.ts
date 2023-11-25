@@ -66,6 +66,17 @@ class studentRepository implements studentRepositoryInterface{
             return null
         }
     }
+    async pushNotifications(id: string, title:string, content: string, type: string) {
+        const student = await studentModel.findById(id)
+        if (student) {
+            student.notifications.push({
+                title,content,type
+            })
+            return student
+        } else {
+            return null
+        }
+    }
 
 }
 

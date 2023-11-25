@@ -120,6 +120,13 @@ class TutorRepository implements TutorRepositoryInterface{
     async payTutor(tutor: any,fee:number) {
         const amount = parseInt(tutor.wallet)+fee
         tutor.wallet = amount
+
+        tutor.notifications.push({
+            title: "Amount credited",
+            content: `An amount of ${fee} credited to your wallet`,
+            type:"wallet"
+        })
+
         const updatedTutor = await tutor.save()
         if (updatedTutor) {
             return updatedTutor
@@ -128,6 +135,18 @@ class TutorRepository implements TutorRepositoryInterface{
         }
 
     }
+    async pushNotifications(id: string, title: string, content: string, type: string) {
+        const tutor = await TutorModel.findById(id)
+        if (tutor) {
+            tutor.notifications.push({
+                title,content,type
+            })
+            return tutor
+        } else {
+            return null
+        }
+    }
+
 }
 
 export default TutorRepository
