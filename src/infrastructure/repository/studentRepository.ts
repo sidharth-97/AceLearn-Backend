@@ -64,27 +64,46 @@ class studentRepository implements studentRepositoryInterface{
             details:`An amount of ${amt} credited to your wallet`
         })
         } else {
+            
+            
             student.notifications.push({
                 title: "Amount debited",
                 content: `An amount of ${-(amt)} has been debited from your wallet`,
                 type: "wallet",
             })
-            student.walletHistory.push({
+            try {
+                    student.walletHistory.push({
                 title: "Payment",
-                amount: amt,
+                amount: -amt,
+                date:Date.now(),
                 type: "Debit",
                 details:`An amount of ${-(amt)} has been debited from your wallet`
             })
+            } catch (error) {
+                console.log(error);
+                
+            }
+        
+            console.log("in else")
         }
+        console.log("after noti");
         
         console.log(student,"after noti");
         
-        const updatedStudent = await student.save()
-        if (updatedStudent) {
-            return updatedStudent
-        } else {
-            return null
-        }
+        try {
+            const updatedStudent = await student.save();
+            console.log("Student saved successfully:", updatedStudent);
+            if (updatedStudent) {
+              return updatedStudent;
+            } else {
+              console.error("Student save returned null");
+              return null;
+            }
+          } catch (error) {
+            console.error("Error saving student:", error);
+            return null;
+          }
+          
     }
     async pushNotifications(id: string, title:string, content: string, type: string) {
         const student = await studentModel.findById(id)

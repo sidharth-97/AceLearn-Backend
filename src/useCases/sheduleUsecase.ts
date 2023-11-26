@@ -1,3 +1,4 @@
+import Student from "../entities/students";
 import PaymentRepository from "../infrastructure/repository/paymentRepository";
 import ScheduleRepository from "../infrastructure/repository/scheduleRepository";
 import studentRepository from "../infrastructure/repository/studentRepository";
@@ -201,7 +202,7 @@ class ScheduleUsecase {
   }
 
   async cancelSchedule(data: { tutor: string, fee: string, id: string, schedule: string, timing: { date: string } }) {
-    console.log("in the cancel schedule");
+    console.log("in the cancel schedule---------------");
     
     const schedule = await this.ScheduleRepo.findById(data.tutor);
   
@@ -211,8 +212,17 @@ class ScheduleUsecase {
       if (updatedTiming) {
         updatedTiming.status = "Cancelled By Student";
         await this.ScheduleRepo.save(schedule);
-        await this.studentRepo.pushNotifications(data.id, "Class Cancelled", `The class scheduled on ${data.timing.date.toString()} has been cancelled`, "Schedule")
-        await this.tutorRepo.pushNotifications(data.tutor, "Class Cancelled", `The class scheduled on ${data.timing.date.toString()} has been cancelled`, "Schedule")
+        try {
+          const a=await this.studentRepo.pushNotifications(data.id, "Class Cancelled", `The class scheduled on ${new Date(data.timing.date).toDateString()} has been cancelled`, "Schedule")
+          const b = await this.tutorRepo.pushNotifications(data.tutor, "Class Cancelled", `The class scheduled on ${new Date(data.timing.date).toDateString()} has been cancelled`, "Schedule")
+          console.log(a,b,"this is the a and b");
+          await this.studentRepo.save(a as any)
+          await this.tutorRepo.save(b as any)
+        } catch (error) {
+          console.log(error);
+          
+        }
+      
         return {
           status: 200,
           data: "updated",
@@ -241,8 +251,8 @@ class ScheduleUsecase {
       if (updatedTiming) {
         updatedTiming.status = "Cancelled By Tutor";
         await this.ScheduleRepo.save(schedule);
-        await this.tutorRepo.pushNotifications(data.tutor, "Class Cancelled", `The class scheduled on ${data.timing.date.toString()} has been cancelled`, "Schedule")
-        await this.studentRepo.pushNotifications(data.id, "Class Cancelled", `The class scheduled on ${data.timing.date.toString()} has been cancelled`, "Schedule")
+        await this.tutorRepo.pushNotifications(data.tutor, "Class Cancelled", `The class scheduled on ${new Date(data.timing.date).toDateString()} has been cancelled`, "Schedule")
+        await this.studentRepo.pushNotifications(data.id, "Class Cancelled", `The class scheduled on ${new Date(data.timing.date).toDateString()} has been cancelled`, "Schedule")
         return {
           status: 200,
           data: "updated",

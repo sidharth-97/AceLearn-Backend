@@ -10,7 +10,7 @@ interface IStudents extends Document {
   isBlocked: Boolean;
   wallet: Number;
   notifications: any;
-  walletHistory: Array<object>;
+  walletHistory: any;
 }
 
 const studentSchema: Schema<IStudents> = new mongoose.Schema({
@@ -43,11 +43,21 @@ const studentSchema: Schema<IStudents> = new mongoose.Schema({
   },
   walletHistory: [
     {
-      title: String,
-      amount: Number,
-      date: Date,
-      type: String,
-      details: String,
+      title: {
+        type: String,
+      },
+      amount: {
+        type:Number
+      },
+      date: {
+       type: Date
+      } ,
+      type: {
+       type: String
+      },
+      details: {
+        type:String
+      },
     },
   ],
   notifications: [

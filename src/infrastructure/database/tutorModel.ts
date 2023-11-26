@@ -60,11 +60,21 @@ const TutorSchema: Schema<ITutor> = new mongoose.Schema({
   },
   walletHistory: [
     {
-      title: String,
-      amount: Number,
-      date: Date,
-      type: String,
-      details: String,
+      title: {
+        type: String,
+      },
+      amount: {
+        type:Number
+      },
+      date: {
+       type: Date
+      } ,
+      type: {
+       type: String
+      },
+      details: {
+        type:String
+      },
     },
   ],
   notifications: [

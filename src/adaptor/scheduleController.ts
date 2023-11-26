@@ -148,7 +148,9 @@ try {
   }
   async bookWithWallet(request: Request, response: Response, next: NextFunction) {
     try {
-    let data={id: request.body.timing.student, fee:request.body.fees }
+      console.log(request.body,"book with wallet");
+      
+    let data={id: request.body.timing.student, fee:-(request.body.fees) }
       const payment = await this.studentUsecase.walletAmt(data)
       if (payment) {
         const booking = await this.scheduleUsecase.BookTutor(request.body)
