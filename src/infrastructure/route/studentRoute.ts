@@ -54,7 +54,7 @@ const sheduleUsecase = new ScheduleUsecase(scheduleRepository,paymentRepository,
 const schedulecontroller = new scheduleController(sheduleUsecase, use_case, tutorUseCase)
 
 const homeworkHelpRepo = new HomeworkHelpRepository()
-const homeWorkHelpUseCase = new HomeworkHelpUsecase(homeworkHelpRepo)
+const homeWorkHelpUseCase = new HomeworkHelpUsecase(homeworkHelpRepo,tutorRepository)
 const homeworkHelpController=new HomeworkHelpController(homeWorkHelpUseCase,Cloudinary)
 
 const studentRouter = express.Router()

@@ -22,6 +22,9 @@ import studentRepository from "../repository/studentRepository";
 import ConversationRepository from "../repository/conversationRepository";
 import MessageRepository from "../repository/messageRepository";
 import ChatUseCase from "../../useCases/chatUseCase";
+import HomeworkHelpRepository from "../repository/homeworkhelprepository";
+import HomeworkHelpUsecase from "../../useCases/homeWorkHelpUseCase";
+import HomeworkHelpController from "../../adaptor/homeworkhelpController";
 
 const repository = new TutorRepository()
 const encrypt = new Encrypt()
@@ -47,7 +50,11 @@ const chatuseCase=new ChatUseCase(conversationRepository,messageRepository)
 const jobRepository = new JobRepository()
 const jobUseCase = new JobUseCase(jobRepository)
 const Jobcontroller=new JobController(jobUseCase)
-const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary, sheduleUsecase,chatuseCase)
+const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary, sheduleUsecase, chatuseCase)
+
+const homeworkHelpRepo = new HomeworkHelpRepository()
+const homeWorkHelpUseCase = new HomeworkHelpUsecase(homeworkHelpRepo,repository)
+const homeworkHelpController=new HomeworkHelpController(homeWorkHelpUseCase,Cloudinary)
 
 const tutorRouter = express.Router()
 
@@ -78,6 +85,9 @@ tutorRouter.get("/old-review/:id", (req, res,next) => controller.oldReview(req, 
 tutorRouter.post('/conversation', (req, res,next) => controller.newConversation(req, res,next))
 tutorRouter.get('/get-conversations/:id', (req, res,next) => controller.getConversations(req, res,next))
 tutorRouter.post('/add-message', (req, res,next) => controller.addMessage(req, res,next))
-tutorRouter.get("/get-messages/:id",(req,res,next)=>controller.getMessages(req,res,next))
+tutorRouter.get("/get-messages/:id", (req, res, next) => controller.getMessages(req, res, next))
+//homework help 
+tutorRouter.post("/submit-solution", protectTutor, ImageUpload.single('image'), (req, res, next) => homeworkHelpController.postSolution(req, res, next))
+tutorRouter.get("/show-unsolved",(protectTutor),(req,res,next)=>homeworkHelpController.showUnsolved(req,res,next))
 
 export default tutorRouter
