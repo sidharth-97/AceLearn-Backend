@@ -21,6 +21,9 @@ import TutorRepository from "../repository/tutorRepository";
 import ConversationRepository from "../repository/conversationRepository";
 import ChatUseCase from "../../useCases/chatUseCase";
 import MessageRepository from "../repository/messageRepository";
+import HomeworkHelpRepository from "../repository/homeworkhelprepository";
+import HomeworkHelpUsecase from "../../useCases/homeWorkHelpUseCase";
+import HomeworkHelpController from "../../adaptor/homeworkhelpController";
 
 const repository = new studentRepository()
 const encrypt = new Encrypt()
@@ -48,7 +51,11 @@ const Jobcontroller = new JobController(jobUseCase)
 const scheduleRepository = new ScheduleRepository()
 const paymentRepository=new PaymentRepository()
 const sheduleUsecase = new ScheduleUsecase(scheduleRepository,paymentRepository,tutorRepository,repository)
-const schedulecontroller=new scheduleController(sheduleUsecase,use_case,tutorUseCase)
+const schedulecontroller = new scheduleController(sheduleUsecase, use_case, tutorUseCase)
+
+const homeworkHelpRepo = new HomeworkHelpRepository()
+const homeWorkHelpUseCase = new HomeworkHelpUsecase(homeworkHelpRepo)
+const homeworkHelpController=new HomeworkHelpController(homeWorkHelpUseCase,Cloudinary)
 
 const studentRouter = express.Router()
 
@@ -74,6 +81,9 @@ studentRouter.post("/conversation", (req, res,next) => controller.newConversatio
 studentRouter.get("/get-conversations/:id", (req, res,next) => controller.getConversations(req, res,next))
 studentRouter.post("/add-message", (req, res,next) => controller.addMessage(req, res,next))
 studentRouter.get("/get-messages/:id", (req, res,next) => controller.getMessages(req, res,next))
-studentRouter.get('/getAllUsers/:id',(req,res,next)=>controller.getAllUsers(req,res,next))
+studentRouter.get('/getAllUsers/:id', (req, res, next) => controller.getAllUsers(req, res, next))
+//homework help controller
+studentRouter.post("/add-questions",ImageUpload.single('image'),(req, res, next) => homeworkHelpController.addQuestions(req, res, next))
+studentRouter.get("/get-student-questions",(verifyToken),(req,res,next)=>homeworkHelpController.studentQuestions(req,res,next))
 
 export default studentRouter
