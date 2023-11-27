@@ -1,4 +1,3 @@
-import e from "express"
 import jobRepositoryInterface from "../../useCases/interface/jobRepositoryInterface"
 import { JobModel } from "../database/jobModel"
 
