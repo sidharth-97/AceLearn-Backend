@@ -159,6 +159,22 @@ class adminUseCase{
             }
         }
     }
+    async userCounts(){
+        const count = await this.adminRepository.countUsers()
+        console.log(count);
+        
+        if (count) {
+            return {
+                status: 200,
+                data:count
+            }
+        } else {
+            return {
+                status: 400,
+                data:"No data available"
+            }
+        }
+    }
 }
 
 export default adminUseCase

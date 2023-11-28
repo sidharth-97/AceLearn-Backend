@@ -65,7 +65,6 @@ class adminRepository implements adminRepositoryInterface{
     async saveSubject(doc: any, data: any) {
         try {
             if (!doc) {
-                // If the document doesn't exist, create a new one
                 doc = new AcademicInfoModel();
             }
     
@@ -79,7 +78,7 @@ class adminRepository implements adminRepositoryInterface{
             return news;
         } catch (error) {
             console.error(error);
-            throw error; // Re-throw the error to handle it in the calling function
+            throw error; 
         }
     }
 
@@ -99,6 +98,35 @@ class adminRepository implements adminRepositoryInterface{
         return updated;
     }
     
+     async countUsers(): Promise<any> {
+         const studentCount = await studentModel.countDocuments()
+         const tutorCount = await TutorModel.countDocuments()
+         const studentPremium = await studentModel.find({ premium: true })
+         const tutorPremium = await TutorModel.find({ premium: true })
+         const premiumCount = studentPremium.length + tutorPremium.length
+         const tutors = await TutorModel.find({});
+
+         // Ensure subjects is an array field in TutorModel and contains valid subject values
+         const groupBySubjects = (tutors: any[]) => {
+           const subjectCounts = tutors.reduce((result, tutor) => {
+             tutor.subject.forEach((subject: string | number) => {
+               result[subject] = (result[subject] || 0) + 1;
+             });
+             return result;
+           }, {});
+     
+           return subjectCounts;
+         };
+     
+         // Call the function
+         const subjectsAndCounts = groupBySubjects(tutors);
+         console.log(subjectsAndCounts);
+         
+         const data = {
+             studentCount,tutorCount,premiumCount,subjectsAndCounts
+         }
+         return data
+    }
 }
 
 export default adminRepository

@@ -98,6 +98,16 @@ class adminController{
         }
     }
 
+    async userCount(req: Request, res: Response, next: NextFunction) {
+        try {
+            console.log("racheced");
+            
+            const counts = await this.use_case.userCounts()
+            res.status(counts.status).json(counts.data)
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 export default adminController

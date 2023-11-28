@@ -11,6 +11,7 @@ interface IStudents extends Document {
   wallet: Number;
   notifications: any;
   walletHistory: any;
+  premium:boolean
 }
 
 const studentSchema: Schema<IStudents> = new mongoose.Schema({
@@ -36,6 +37,10 @@ const studentSchema: Schema<IStudents> = new mongoose.Schema({
   },
   image: {
     type: String,
+  },
+  premium: {
+    type: Boolean,
+    default:false
   },
   wallet: {
     type: Number,
