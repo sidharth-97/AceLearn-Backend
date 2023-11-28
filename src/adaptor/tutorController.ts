@@ -273,7 +273,17 @@ class TutorController{
         } catch (error) {
           next(error)
         }
-      }
+    }
+    
+    async getTutorSales(req: Request, res: Response, next: NextFunction) {
+        try {
+            let userId = (req as any)?.user.id
+            const schedules = await this.scheduleUsecase.TutorSales(userId)
+            res.status(schedules.status).json(schedules.data)
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 export default TutorController

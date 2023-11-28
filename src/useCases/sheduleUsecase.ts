@@ -270,6 +270,21 @@ class ScheduleUsecase {
       };
     }
   }
+
+  async TutorSales(id: string) {
+    const salesData = await this.ScheduleRepo.tutorSales(id)
+    if (salesData) {
+      return {
+        status: 200,
+        data:salesData
+      }
+    } else {
+      return {
+        status: 400,
+        data:"No data available"
+      }
+    }
+  }
   
 }
 

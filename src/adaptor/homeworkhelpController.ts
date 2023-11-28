@@ -18,7 +18,9 @@ class HomeworkHelpController{
                 const img = await this.CloudinaryUpload.upload(req.file.path, "Questions")
                 url=img.secure_url
             }
-            req.body.image=url
+            let userId = (req as any)?.user.id
+            req.body.image = url
+            req.body.student=userId
             const question = await this.homeworkhelpUsecase.addQuestions(req.body)
             res.status(question.status).json(question.data)
         } catch (error) {

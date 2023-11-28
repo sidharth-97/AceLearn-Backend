@@ -83,7 +83,7 @@ studentRouter.post("/add-message", (req, res,next) => controller.addMessage(req,
 studentRouter.get("/get-messages/:id", (req, res,next) => controller.getMessages(req, res,next))
 studentRouter.get('/getAllUsers/:id', (req, res, next) => controller.getAllUsers(req, res, next))
 //homework help controller
-studentRouter.post("/add-questions",ImageUpload.single('image'),(req, res, next) => homeworkHelpController.addQuestions(req, res, next))
+studentRouter.post("/add-questions",(verifyToken),ImageUpload.single('image'),(req, res, next) => homeworkHelpController.addQuestions(req, res, next))
 studentRouter.get("/get-student-questions",(verifyToken),(req,res,next)=>homeworkHelpController.studentQuestions(req,res,next))
 
 export default studentRouter

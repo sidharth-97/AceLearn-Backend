@@ -125,7 +125,7 @@ class ScheduleRepository implements ScheduleInterface {
         },
         {
           $lookup: {
-            from: "tutors", // The name of the Tutor collection
+            from: "tutors",
             let: { tutorId: "$tutor" },
             pipeline: [
               {
@@ -135,8 +135,7 @@ class ScheduleRepository implements ScheduleInterface {
               },
               {
                 $project: {
-                  password: 0, // Excluding the password field in the tutorDetails array
-                  // You can include fields that you need by setting them to 1
+                  password: 0,
                 },
               },
             ],
@@ -145,8 +144,7 @@ class ScheduleRepository implements ScheduleInterface {
         },
         {
           $project: {
-            password: 0, // Excluding the password field in the ScheduleModel
-            // You can include fields that you need by setting them to 1
+            password: 0,
           },
         },
       ]);
@@ -155,10 +153,47 @@ class ScheduleRepository implements ScheduleInterface {
       return schedules;
     } catch (error) {
       console.log(error);
-      // Handle error or throw it further for handling at a higher level
       throw error;
     }
   }
+  async tutorSales(id: string) {
+    const currentDate = new Date();
+  
+    const sales = await ScheduleModel.aggregate([
+      {
+        $match: {
+          "timing.status": "booked",
+          "timing.date": { $lt: currentDate },
+        },
+      },
+      {
+        $unwind: "$timing",
+      },
+      {
+        $match: {
+          "timing.status": "booked",
+          "timing.date": { $lt: currentDate },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            month: { $month: { date: "$timing.date", timezone: "UTC" } },
+            year: { $year: { date: "$timing.date", timezone: "UTC" } },
+          },
+          totalFee: { $sum: "$timing.fee" },
+        },
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1 },
+      },
+    ]);
+  
+    return sales;
+  }
+  
+  
+
 }
 
 export default ScheduleRepository;
