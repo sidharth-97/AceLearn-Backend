@@ -246,6 +246,44 @@ class studentController {
       res.status(401).json(error)
     }
   }
-}
+  async forgotPasswordStep1(req: Request, res: Response, next: NextFunction) {
+    try {
+      const otp = await this.genOtp.generateOtp(4);
+      this.sentMail.sendMail(req.body.username, req.body.email, otp);
 
+      const student = await this.studentUseCase.forgotPasswordStep1(req.body.email)
+      req.app.locals.otp = otp;
+      console.log(req.app.locals.otp,"from step one");
+    res.status(student.status).json(student.data)
+    } catch (error) {
+      next(error)
+    }
+  }
+  async forgotPasswordStep2(req: Request, res: Response, next: NextFunction) {
+    try {
+      if (req.body.otp != req.app.locals.otp) {
+        console.log(req.body.otp);
+        console.log(req.app.locals.otp);
+        
+        
+        res.status(401).json("OTP doesnt match");
+      } else {
+        res.status(200).json("Otp verification success")
+      }
+     
+    } catch (error) {
+      next(error)
+    }
+  }
+  
+  async forgetPasswordStep3(req: Request, res: Response, next: NextFunction){
+    try {
+      const student = await this.studentUseCase.forgotPasswordStep3(req.body)
+      res.status(student.status).json(student.data)
+    } catch (error) {
+      next(error)
+    }
+  }
+  
+}
 export default studentController;

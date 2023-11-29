@@ -46,7 +46,7 @@ class StudentUseCase {
       email: student.email,
       password: newPassword,
       mobile: student.mobile,
-      image:student.image
+      image: student.image
     };
     await this.studentRepository.save(newStudent);
     return {
@@ -69,7 +69,7 @@ class StudentUseCase {
       }
       if (studentLog) {
         if (await this.Encrypt.compare(student.password, studentLog.password)) {
-          const token = this.JWTToken.createJWT(studentLog._id,"student");
+          const token = this.JWTToken.createJWT(studentLog._id, "student");
           return {
             status: 200,
             data: studentLog,
@@ -101,7 +101,7 @@ class StudentUseCase {
     console.log(id);
     
     const Editstudent = await this.studentRepository.findById(id);
-    console.log(Editstudent,"edit student");
+    console.log(Editstudent, "edit student");
     
     if (Editstudent) {
       if (student.currentPassword) {
@@ -162,7 +162,7 @@ class StudentUseCase {
     }
   }
 
-  async walletAmt(data:any) {
+  async walletAmt(data: any) {
     const student = await this.studentRepository.findById(data.id)
     const updated = await this.studentRepository.walletAmt(student, data.fee)
    
@@ -170,12 +170,12 @@ class StudentUseCase {
 
       return {
         status: 200,
-        data:updated
+        data: updated
       }
     } else {
       return {
         status: 400,
-        data:"Error occured"
+        data: "Error occured"
       }
     }
   }
@@ -185,15 +185,57 @@ class StudentUseCase {
     if (student.notifications) {
       return {
         status: 200,
-        data:student.notifications
+        data: student.notifications
       }
     } else {
       return {
         status: 401,
-        data:"No new notifications"
+        data: "No new notifications"
       }
     }
   }
+
+  async forgotPasswordStep1(email: string) {
+    console.log("forgot password");
+    
+    const student = await this.studentRepository.findByEmail(email)
+    if (student) {
+      return {
+        status: 200,
+        data: "Student exists"
+      }
+    } else {
+      return {
+        status: 401,
+        data: "Not exists"
+      }
+    }
+  }
+
+
+  async forgotPasswordStep3(data: any) {
+    const student = await this.studentRepository.findByEmail(data.email)
+    if (student) {
+      student.password = await this.Encrypt.createHash(data.password)
+      await this.studentRepository.save(student)
+      return {
+        status: 200,
+        data:"Password change success"
+      }
+    } else {
+      return {
+        status: 401,
+        data:"Something went wrong"
+      }
+    }
+ }
+  
+  
+//   async forgetPasswordStep3(data: any) {
+//     const student = await this.studentRepository.findByEmail(data.email)
+
+//   }
+  
 }
 
 export default StudentUseCase;
