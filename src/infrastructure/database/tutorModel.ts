@@ -17,7 +17,8 @@ interface ITutor extends Document {
   notifications: Array<object>;
   walletHistory: Array<object>;
   rating: number;
-  premium:boolean
+  premium: boolean;
+  reports:number
 }
 
 const TutorSchema: Schema<ITutor> = new mongoose.Schema({
@@ -98,6 +99,10 @@ const TutorSchema: Schema<ITutor> = new mongoose.Schema({
       },
     },
   ],
+  reports: {
+    type: Number,
+    default:0
+  },
   rating: {
     type: Number,
   },

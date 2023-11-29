@@ -71,7 +71,8 @@ studentRouter.post("/addJob", (req, res,next) => Jobcontroller.addJob(req, res,n
 studentRouter.get('/student-job-request/:id', (req, res,next) => Jobcontroller.getJobDetails(req, res,next))
 //time scheduling
 studentRouter.put('/book-tutor-by-post',(req,res,next)=>schedulecontroller.bookThroughPost(req,res,next))
-studentRouter.get('/getStudentSchedule/:id', (req, res,next) => schedulecontroller.findStudentSchedule(req, res,next))
+studentRouter.get('/getStudentSchedule/:id', (req, res, next) => schedulecontroller.findStudentSchedule(req, res, next))
+studentRouter.get("/student-timeline",verifyToken,(req,res,next)=>schedulecontroller.studentTimeline(req,res,next))
 //payment
 studentRouter.post('/payment', (req, res,next) => schedulecontroller.payment(req, res,next))
 studentRouter.post('/webhook', (req, res, next) => schedulecontroller.webhook(req, res, next))

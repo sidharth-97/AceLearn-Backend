@@ -161,7 +161,19 @@ try {
   } catch (error) {
     next(error)
   }
-}
+  }
+  
+  async studentTimeline(req: Request, res: Response, next: NextFunction) {
+    console.log("reached tiemlineeee");
+    
+    try {
+      let userId = (req as any)?.user.id
+      const timeline = await this.scheduleUsecase.studentTimeline(userId)
+      res.status(timeline.status).json(timeline.data)
+    } catch (error) {
+      next(error)
+    }
+  }
 
 }
 

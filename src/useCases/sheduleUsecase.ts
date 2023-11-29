@@ -286,6 +286,21 @@ class ScheduleUsecase {
     }
   }
   
+  async studentTimeline(id:string){
+    const timeline = await this.ScheduleRepo.studentTimeline(id)
+    if (timeline) {
+      return {
+        status: 200,
+        data:timeline
+      }
+    } else {
+      return {
+        status: 400,
+        data:"No data available"
+      }
+    }
+    }
+  
 }
 
 export default ScheduleUsecase;
