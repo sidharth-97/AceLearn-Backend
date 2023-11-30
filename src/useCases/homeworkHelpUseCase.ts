@@ -66,10 +66,13 @@ class HomeworkHelpUsecase{
             console.log(questions," -------------------------");
             
             if (questions) {
+                
                 function getRandomNumber(max:number) {
                     return Math.floor(Math.random() * max);
                 }
                 const randomNumber = getRandomNumber(questions.length);
+                console.log(randomNumber,"random number");
+                
                 return {
                     status: 200,
                     data:questions[randomNumber]

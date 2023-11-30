@@ -5,5 +5,6 @@ export default interface Student{
     email: string,
     mobile?: string,
     password: string,
-    image:string
+    image: string,
+    premium?:boolean
 }

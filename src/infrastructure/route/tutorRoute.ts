@@ -32,14 +32,14 @@ const jwt = new jwtToken()
 const generateOtp = new GenerateOTP()
 const sendMail = new SentMail()
 const Cloudinary=new CloudinaryUpload()
-const use_case = new TutorUseCase(repository, jwt, encrypt)
+const paymentRepository = new PaymentRepository()
+const use_case = new TutorUseCase(repository, jwt, encrypt,paymentRepository)
 
 
 
 const scheduleRepository = new ScheduleRepository()
-const paymentRepository = new PaymentRepository()
 const StudentRepository = new studentRepository()
-const studentUseCase=new StudentUseCase(encrypt,StudentRepository,jwt,)
+const studentUseCase=new StudentUseCase(encrypt,StudentRepository,jwt,paymentRepository)
 const sheduleUsecase=new ScheduleUsecase(scheduleRepository,paymentRepository,repository,StudentRepository)
 const schedulecontrol = new scheduleController(sheduleUsecase, studentUseCase, use_case)
 
@@ -65,7 +65,8 @@ tutorRouter.post("/logout", (req, res,next) => controller.logout(req, res,next))
 tutorRouter.get("/tutor-details/:id",(req, res,next) => controller.getTutorInfo(req,res,next))
 tutorRouter.put('/edit-profile', protectTutor, ImageUpload.single('image'), (req, res,next) => controller.editProfile(req, res,next))
 tutorRouter.put("/tutor-payment", (req, res,next) => controller.addTutorPayment(req, res,next))
-tutorRouter.get("/notifications/:id",(req,res,next)=>controller.showNotifications(req,res,next))
+tutorRouter.get("/notifications/:id", (req, res, next) => controller.showNotifications(req, res, next))
+tutorRouter.post("/buy-tutor-premium",(req,res,next)=>controller.buyPremium(req,res,next))
 //for common
 tutorRouter.get("/alltutors", (req, res,next) => controller.getAllTutors(req, res,next))
 //for schedule

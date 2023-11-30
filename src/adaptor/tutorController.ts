@@ -284,6 +284,17 @@ class TutorController{
             next(error)
         }
     }
+
+    async buyPremium(req: Request, res: Response, next: NextFunction) {
+        try {
+            let userId = (req as any)?.user._id
+            req.body.id = userId
+            const response = await this.useCase.buyPremium(req.body)
+            res.status(response.status).json(response.data)
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 export default TutorController

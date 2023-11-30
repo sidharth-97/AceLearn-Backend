@@ -175,6 +175,37 @@ class adminUseCase{
             }
         }
     }
+    async showPremiumPrice() {
+        const price = await this.adminRepository.showPremium()
+        if (price) {
+            return {
+                status: 200,
+                data:price
+            }
+        } else {
+            return {
+                status: 401,
+                data:"No data available"
+            }
+        }
+    }
+
+    async setpremiumPrice(data:any) {
+        const doc=await this.adminRepository.showPremium()
+        const price = await this.adminRepository.setPremium(doc, data)
+        if (price) {
+            return {
+                status: 200,
+                data:price
+            }
+        } else {
+            return {
+                status: 400,
+                data:"Failed"
+            }
+        }
+        
+    }
 }
 
 export default adminUseCase

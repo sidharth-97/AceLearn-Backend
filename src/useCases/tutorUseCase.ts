@@ -1,16 +1,19 @@
 import Tutor from "../entities/tutors";
 import Encrypt from "../infrastructure/passwordRepository/hashpassword";
+import PaymentRepository from "../infrastructure/repository/paymentRepository";
 import TutorRepository from "../infrastructure/repository/tutorRepository";
 import JWT from "./interface/jwtInterface";
 
 class TutorUseCase{
     private repository: TutorRepository
     private jwt: JWT
-    private encrypt:Encrypt
-    constructor(repository: TutorRepository, jwt: JWT,encrypt:Encrypt) {
+    private encrypt: Encrypt
+    private PaymentRepo:PaymentRepository
+    constructor(repository: TutorRepository, jwt: JWT,encrypt:Encrypt,PaymentRepo:PaymentRepository) {
         this.jwt = jwt
         this.repository = repository
-        this.encrypt=encrypt
+        this.encrypt = encrypt
+        this.PaymentRepo=PaymentRepo
     }
     async signup(tutor: Tutor) {
         console.log("here");
@@ -232,6 +235,31 @@ class TutorUseCase{
             return {
                 status: 401,
                 data:"No new notifications"
+            }
+        }
+    }
+
+    async buyPremium(data: any) {
+        const payment = await this.PaymentRepo.ConfirmPayment(data)
+        const tutor = await this.repository.findById(data.id)
+        if (payment && tutor) {
+            tutor.premium = true
+            const newTutor = await this.repository.save(tutor)
+            if (newTutor) {
+                return {
+                  status: 200,
+                  data:payment
+                }
+              } else {
+                return {
+                  status: 200,
+                  data:"Failed"
+                }
+              }
+        } else {
+            return {
+                status: 400,
+                data:"Failed"
             }
         }
     }

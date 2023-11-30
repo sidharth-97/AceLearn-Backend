@@ -108,6 +108,27 @@ class adminController{
             next(error)
         }
     }
+
+    
+    async showPremiumPrice(req: Request, res: Response, next: NextFunction) {
+        try {
+            console.log("show premium price");
+            
+            const price = await this.use_case.showPremiumPrice()
+            res.status(price.status).json(price.data)
+        } catch (error) {
+            next(error)
+        }
+    }
+    
+    async setPremium(req: Request, res: Response, next: NextFunction) {
+        try {
+            const price = await this.use_case.setpremiumPrice(req.body)
+            res.status(price.status).json(price.data)
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 export default adminController

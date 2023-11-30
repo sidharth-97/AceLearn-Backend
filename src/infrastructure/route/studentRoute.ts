@@ -28,8 +28,9 @@ import HomeworkHelpController from "../../adaptor/homeworkhelpController";
 const repository = new studentRepository()
 const encrypt = new Encrypt()
 const jwt = new jwtToken()
-const generateOtp=new GenerateOTP()
-const use_case = new StudentUseCase(encrypt, repository, jwt)
+const generateOtp = new GenerateOTP()
+const paymentRepository=new PaymentRepository()
+const use_case = new StudentUseCase(encrypt, repository, jwt,paymentRepository)
 const sentMail = new SentMail
 const Cloudinary = new CloudinaryUpload()
 
@@ -38,7 +39,7 @@ const messageRepository=new MessageRepository()
 const chatUseCase = new ChatUseCase(conversationRepository, messageRepository)
 
 const tutorRepository=new TutorRepository()
-const tutorUseCase = new TutorUseCase(tutorRepository, jwt, encrypt)
+const tutorUseCase = new TutorUseCase(tutorRepository, jwt, encrypt,paymentRepository)
 
 const controller = new studentController(use_case, generateOtp, sentMail,Cloudinary,chatUseCase,tutorUseCase)
 
@@ -49,7 +50,7 @@ const Jobcontroller = new JobController(jobUseCase)
 
 
 const scheduleRepository = new ScheduleRepository()
-const paymentRepository=new PaymentRepository()
+
 const sheduleUsecase = new ScheduleUsecase(scheduleRepository,paymentRepository,tutorRepository,repository)
 const schedulecontroller = new scheduleController(sheduleUsecase, use_case, tutorUseCase)
 
@@ -68,7 +69,8 @@ studentRouter.get('/student-details/:id', verifyToken, (req, res,next) => contro
 studentRouter.get("/notifications/:id", (req, res, next) => controller.showNotifications(req, res, next))
 studentRouter.post("/forget-password-step-1", (req, res, next) => controller.forgotPasswordStep1(req, res, next))
 studentRouter.post("/forget-password-step-2", (req, res, next) => controller.forgotPasswordStep2(req, res, next))
-studentRouter.post("/forget-password-final",(req,res,next)=>controller.forgetPasswordStep3(req,res,next))
+studentRouter.post("/forget-password-final", (req, res, next) => controller.forgetPasswordStep3(req, res, next))
+studentRouter.post("/buy-student-premium",verifyToken,(req,res,next)=>controller.buyPremium(req,res,next))
 //job posting
 studentRouter.post("/addJob", (req, res,next) => Jobcontroller.addJob(req, res,next))
 studentRouter.get('/student-job-request/:id', (req, res,next) => Jobcontroller.getJobDetails(req, res,next))

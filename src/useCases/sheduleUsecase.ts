@@ -89,7 +89,6 @@ class ScheduleUsecase {
     const paymentSuccess = await this.PaymentRepo.PaymentSuccess(data)
     if (!paymentSuccess) {
       console.log("faaaaaaaaaaaaaaaileeeeeeeeee");
-      
       return null
     } else {
       return true

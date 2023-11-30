@@ -1,20 +1,25 @@
 import Student from "../entities/students";
 import Encrypt from "../infrastructure/passwordRepository/hashpassword";
 import jwtToken from "../infrastructure/passwordRepository/jwt";
+import PaymentRepository from "../infrastructure/repository/paymentRepository";
 import studentRepository from "../infrastructure/repository/studentRepository";
+import * as schedule from 'node-schedule';
 
 class StudentUseCase {
   private Encrypt: Encrypt;
   private studentRepository: studentRepository;
   private JWTToken: jwtToken;
+  private PaymentRepo:PaymentRepository
   constructor(
     Encrypt: Encrypt,
     studentRepository: studentRepository,
-    JWTToken: jwtToken
+    JWTToken: jwtToken,
+    PaymentRepo:PaymentRepository
   ) {
     (this.Encrypt = Encrypt),
       (this.studentRepository = studentRepository),
       (this.JWTToken = JWTToken);
+    this.PaymentRepo=PaymentRepo
   }
 
   async signup(student: Student) {
@@ -230,6 +235,46 @@ class StudentUseCase {
     }
  }
   
+
+
+ // ...
+ 
+ async buyPremium(data: any) {
+   console.log(data, "from buy premium");
+ 
+   const payment = await this.PaymentRepo.ConfirmPayment(data);
+   const student = await this.studentRepository.findById(data.id);
+ 
+   if (payment && student) {
+     student.premium = true;
+ 
+     const newStudent = await this.studentRepository.save(student);
+ 
+     if (newStudent) {
+       schedule.scheduleJob('premiumExpiry', new Date(Date.now() + 28 * 24 * 60 * 60 * 1000), async () => {
+         student.premium = false;
+         await this.studentRepository.save(student);
+         console.log(`Premium status set to false for student ID ${student.id}`);
+       });
+ 
+       return {
+         status: 200,
+         data: payment,
+       };
+     } else {
+       return {
+         status: 200,
+         data: "Failed",
+       };
+     }
+   } else {
+     return {
+       status: 400,
+       data: "Failed",
+     };
+   }
+ }
+ 
   
 //   async forgetPasswordStep3(data: any) {
 //     const student = await this.studentRepository.findByEmail(data.email)

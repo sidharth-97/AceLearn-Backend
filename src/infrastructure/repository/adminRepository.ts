@@ -3,6 +3,7 @@ import AdminModel from "../database/adminModel";
 import { studentModel } from "../database/studentModel";
 import { TutorModel } from "../database/tutorModel";
 import AcademicInfoModel from "../database/AcademicInfoModel";
+import { PremiumModel } from "../database/PremiumModel";
 
 
 class adminRepository implements adminRepositoryInterface{
@@ -127,6 +128,35 @@ class adminRepository implements adminRepositoryInterface{
          }
          return data
     }
+
+    async setPremium(doc: any, data: any) {
+        try {
+            if (!doc) {
+                doc = new PremiumModel();
+            }
+    
+         
+                doc.student=data.student
+       
+                doc.tutor=data.tutor
+      
+    
+            const save = await doc.save();
+            return save;
+        } catch (error) {
+            console.error(error);
+            throw error; 
+        }
+    }
+    async showPremium() {
+        const premium = await PremiumModel.findOne()
+        if (premium) {
+            return premium
+        } else {
+            return null
+        }
+    }
+
 }
 
 export default adminRepository
