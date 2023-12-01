@@ -19,6 +19,28 @@ class MessageRepository implements MessageRepoInterface{
             return null
         }
     }
+    async getLastMessages():Promise<any>{
+        try {
+          const lastMessages = await MessageModel.aggregate([
+            {
+              $sort: { createdAt: -1 }, // Sort messages in descending order by createdAt
+            },
+            {
+              $group: {
+                _id: "$conversationId",
+                lastMessage: { $first: "$$ROOT" }, // Select the first message in each group (latest)
+              },
+            },
+            {
+              $replaceRoot: { newRoot: "$lastMessage" }, // Replace the root with the selected message
+            },
+          ]);
+      
+          return lastMessages;
+        } catch (error) {
+          console.error("Error fetching last messages:", error);
+        }
+      };
 }
 
 export default MessageRepository

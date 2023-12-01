@@ -31,10 +31,17 @@ class ChatUseCase{
     }
     async getConversations(id: string) {
         const conversations = await this.ConversationRepo.findByUserId(id)
+        console.log(conversations,"conversations=================");
+        const message = await this.MessageRepo.getLastMessages()
+        console.log(message,"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        const data = {
+            conv: conversations,
+            messages: message, // You might want to include the messages in your data object
+          };
         if (conversations) {
             return {
                 status: 200,
-                data:conversations
+                data:data
             }
         } else {
             return {

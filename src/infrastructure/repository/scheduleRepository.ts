@@ -192,34 +192,27 @@ class ScheduleRepository implements ScheduleInterface {
     return sales;
   }
    async studentTimeline(id: string): Promise<any> {
-     const result = await ScheduleModel.aggregate([
+    const result = await ScheduleModel.aggregate([
       {
-        $match: {
-          'timing.status': 'booked'
-        }
-      },
-      {
-        $unwind: '$timing'
+        $unwind: '$timing',
       },
       {
         $match: {
-          'timing.status': 'booked' 
-        }
+          'timing.status': 'booked',
+        },
       },
       {
         $group: {
           _id: '$timing.date',
-          totalClasses: { $sum: 1 }
-        }
+          totalClasses: { $sum: 1 },
+        },
       },
       {
-        $sort: { totalClasses: -1 }
+        $sort: { totalClasses: -1 },
       },
-      {
-        $limit: 1
-      }
-     ])
-     console.log(result);
+    ]);
+    
+     console.log(result,"result of the aggregation");
      if (result) {
        return result
      } else {
