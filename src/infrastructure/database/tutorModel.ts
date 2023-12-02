@@ -73,8 +73,9 @@ const TutorSchema: Schema<ITutor> = new mongoose.Schema({
         type:Number
       },
       date: {
-       type: Date
-      } ,
+        type: Date,
+        default: new Date(),
+      },
       type: {
        type: String
       },
@@ -96,6 +97,9 @@ const TutorSchema: Schema<ITutor> = new mongoose.Schema({
       type: {
         type: String,
         required: true,
+      },  time: {
+        type: Date,
+        default: new Date(),
       },
     },
   ],
