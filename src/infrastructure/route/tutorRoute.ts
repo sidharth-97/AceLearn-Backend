@@ -86,7 +86,7 @@ tutorRouter.get("/old-review/:id", (req, res,next) => controller.oldReview(req, 
 //chat section
 tutorRouter.post('/conversation', (req, res,next) => controller.newConversation(req, res,next))
 tutorRouter.get('/get-conversations/:id', (req, res,next) => controller.getConversations(req, res,next))
-tutorRouter.post('/add-message', (req, res,next) => controller.addMessage(req, res,next))
+tutorRouter.post('/add-message',ImageUpload.single('image'), (req, res,next) => controller.addMessage(req, res,next))
 tutorRouter.get("/get-messages/:id", (req, res, next) => controller.getMessages(req, res, next))
 //homework help 
 tutorRouter.post("/submit-solution", protectTutor, ImageUpload.single('image'), (req, res, next) => homeworkHelpController.postSolution(req, res, next))

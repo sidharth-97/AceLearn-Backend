@@ -80,12 +80,12 @@ function initializeSocket(server:any) {
             io.emit("getUsers",users)
         })
 
-        socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+        socket.on("sendMessage", ({ senderId, receiverId, text,image }) => {
             const user = getUser(receiverId)
             if(user)
             io.to(user?.socketId).emit("getMessage", {
                 senderId,
-                text
+                text,image
             })
         })
 

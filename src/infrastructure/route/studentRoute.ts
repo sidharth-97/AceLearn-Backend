@@ -85,7 +85,7 @@ studentRouter.post('/book-tutor-wallet',(req,res,next)=>schedulecontroller.bookW
 //chat
 studentRouter.post("/conversation", (req, res,next) => controller.newConversation(req, res,next))
 studentRouter.get("/get-conversations/:id", (req, res,next) => controller.getConversations(req, res,next))
-studentRouter.post("/add-message", (req, res,next) => controller.addMessage(req, res,next))
+studentRouter.post("/add-message",ImageUpload.single('image'), (req, res,next) => controller.addMessage(req, res,next))
 studentRouter.get("/get-messages/:id", (req, res,next) => controller.getMessages(req, res,next))
 studentRouter.get('/getAllUsers/:id', (req, res, next) => controller.getAllUsers(req, res, next))
 //homework help controller

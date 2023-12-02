@@ -259,8 +259,21 @@ class TutorController{
         }
       }
       async addMessage(req: Request, res: Response,next:NextFunction) {
-        try {
-          const message = await this.chatuseCase.addMessage(req.body)
+          try {
+            console.log(req.body,"addmessage///////////////////////////////");
+            let url = "";
+            if (req.file) {
+              const img = await this.CloudinaryUpload.upload(
+                req.file.path,
+                "chat-image"
+              );
+              url = img.secure_url;
+            }
+            const data = {
+              ...req.body,
+              image: url,
+            };
+          const message = await this.chatuseCase.addMessage(data)
           res.status(message.status).json(message.data)
         } catch (error) {
           next(error)

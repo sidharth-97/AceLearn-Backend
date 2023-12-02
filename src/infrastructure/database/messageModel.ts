@@ -3,7 +3,8 @@ import mongoose, { Document, Schema } from "mongoose";
 interface Message extends Document {
     conversationId: string,
     sender: string,
-    text:string
+    text: string,
+    image:string
 }
 
 const MessageSchema = new Schema<Message>({
@@ -16,6 +17,9 @@ const MessageSchema = new Schema<Message>({
     text: {
         type:String
     },
+    image: {
+        type:String
+    }
 
 }, { timestamps: true });
 
