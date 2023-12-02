@@ -42,7 +42,7 @@ class studentController {
 
       res.status(student.status).json(student.data);
     } catch (error) {
-      res.status(401).json(error);
+      next(error);
     }
   }
 
@@ -86,7 +86,7 @@ class studentController {
 
       res.status(result.status).json(result.data);
     } catch (error) {
-      res.status(401).json(error);
+      next(error);
     }
   }
 
@@ -106,7 +106,7 @@ class studentController {
         res.status(student?.status).json(student.data);
       }
     } catch (error) {
-      res.status(401).json(error);
+      next(error);
     }
   }
   async logout(req: Request, res: Response,next:NextFunction) {
@@ -117,7 +117,7 @@ class studentController {
       });
       res.status(200).json("Student Logged Out");
     } catch (error) {
-      res.status(401).json(error);
+      next(error);
     }
   }
   async editProfile(req: Request, res: Response,next:NextFunction) {
@@ -158,7 +158,7 @@ class studentController {
       }
       res.status(student.status).json(student.data);
     } catch (error) {
-      res.status(401).json(error);
+      next(error);
     }
   }
 
@@ -170,7 +170,7 @@ class studentController {
         res.status(result.status).json(result.data);
       }
     } catch (error) {
-      res.status(401).json(error);
+      next(error);
     }
   }
 
@@ -181,7 +181,7 @@ class studentController {
       const notifications = await this.studentUseCase.showNotifications(req.params.id)
       res.status(notifications.status).json(notifications.data)
     } catch (error) {
-      res.status(401).json(error)
+      next(error)
     }
   }
 
@@ -199,7 +199,7 @@ class studentController {
       }
       
     } catch (error) {
-      res.status(401).json(error)
+      next(error)
     }
   }
 
@@ -210,15 +210,28 @@ class studentController {
       const conversations = await this.chatuseCase.getConversations(req.params.id)
       res.status(conversations.status).json(conversations.data)
     } catch (error) {
-      res.status(401).json(error)
+      next(error)
     }
   }
   async addMessage(req: Request, res: Response,next:NextFunction) {
     try {
-      const message = await this.chatuseCase.addMessage(req.body)
+      console.log(req.body,"addmessage///////////////////////////////");
+      let url = "";
+      if (req.file) {
+        const img = await this.CloudinaryUpload.upload(
+          req.file.path,
+          "chat-image"
+        );
+        url = img.secure_url;
+      }
+      const data = {
+        ...req.body,
+        image: url,
+      };
+      const message = await this.chatuseCase.addMessage(data)
       res.status(message.status).json(message.data)
     } catch (error) {
-      res.status(401).json(error)
+      next(error)
     }
   }
   async getMessages(req: Request, res: Response,next:NextFunction) {
@@ -226,7 +239,7 @@ class studentController {
       const messages = await this.chatuseCase.getMessages(req.params.id)
       res.status(messages.status).json(messages.data)
     } catch (error) {
-      res.status(401).json(error)
+      next(error)
     }
   }
 
@@ -243,7 +256,7 @@ class studentController {
         res.status(200).json(tutor.data)
       }
     } catch (error) {
-      res.status(401).json(error)
+      next(error)
     }
   }
   async forgotPasswordStep1(req: Request, res: Response, next: NextFunction) {
