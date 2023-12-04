@@ -4,12 +4,18 @@ import StudentUseCase from "../useCases/studentUseCase";
 import session from "express-session";
 import Stripe from "stripe";
 import TutorUseCase from "../useCases/tutorUseCase";
+import { sendNotification } from "../infrastructure/utils/sendNotifications";
+import * as schedule from 'node-schedule';
+
+
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
 if (!stripeSecretKey) {
   throw new Error("Stripe secret key is not defined");
 }
+
+const jobMap = new Map<string, schedule.Job>();
 
 interface MySession {
   schedule?: any; // Define the structure of the 'schedule' property
@@ -52,6 +58,15 @@ class scheduleController {
  
     const schedule = await this.scheduleUsecase.cancelScheduleByTutor(req.body);
     if (schedule) {
+      const jobNameToCancel = req.body.tutor+req.body.timing.date
+const jobToCancel = jobMap.get(jobNameToCancel);
+
+if (jobToCancel) {
+  jobToCancel.cancel();
+  console.log(`Job '${jobNameToCancel}' canceled successfully.`);
+} else {
+  console.warn(`Job '${jobNameToCancel}' not found.`);
+}
       res.status(schedule.status).json(schedule.data);
     } else {
       res.status(401).json("Failed to update schedule");
@@ -65,6 +80,15 @@ class scheduleController {
       const student = await this.studentUsecase.walletAmt(req.body)
       const schedule = await this.scheduleUsecase.cancelSchedule(req.body)
       if (schedule) {
+        const jobNameToCancel = req.body.tutor+req.body.timing.date
+        const jobToCancel = jobMap.get(jobNameToCancel);
+        
+        if (jobToCancel) {
+          jobToCancel.cancel();
+          console.log(`Job '${jobNameToCancel}' canceled successfully.`);
+        } else {
+          console.warn(`Job '${jobNameToCancel}' not found.`);
+        }
         res.status(schedule.status).json(schedule.data)
       }
     }
@@ -138,6 +162,17 @@ try {
   const Payment = await this.scheduleUsecase.PaymentConfirm(request);
   if (Payment) {
     const booking = await this.scheduleUsecase.BookTutor(localData)
+    const student = await this.studentUsecase.getStudentData(request.body.timing.student)
+    const tutor = await this.tutorUsecase.getTutorData(request.body.tutor)
+    request.body.timing.date.forEach((date:Date) => {
+      const jobName = date + tutor.data._id
+      const notificationDate = new Date(date.getTime() - 30 * 60 * 1000);
+    const job=schedule.scheduleJob(notificationDate, () => {
+        sendNotification(student.data.token);
+        sendNotification(tutor.data.token);
+      });
+      jobMap.set(jobName, job);
+    });
     response.status(200).json(booking?.data);
   } else {
     response.status(400).json("Booking failed")
@@ -146,6 +181,7 @@ try {
   next(error)
 }
   }
+
   async bookWithWallet(request: Request, response: Response, next: NextFunction) {
     try {
       console.log(request.body,"book with wallet");
@@ -153,7 +189,18 @@ try {
     let data={id: request.body.timing.student, fee:-(request.body.fees) }
       const payment = await this.studentUsecase.walletAmt(data)
       if (payment) {
+        const student = await this.studentUsecase.getStudentData(request.body.timing.student)
+        const tutor=await this.tutorUsecase.getTutorData(request.body.tutor)
         const booking = await this.scheduleUsecase.BookTutor(request.body)
+        request.body.timing.date.forEach((date:Date) => {
+          const jobName = date + tutor.data._id
+          const notificationDate = new Date(date.getTime() - 30 * 60 * 1000);
+        const job=schedule.scheduleJob(notificationDate, () => {
+            sendNotification(student.data.token);
+            sendNotification(tutor.data.token);
+          });
+          jobMap.set(jobName, job);
+        });
         response.status(200).json(booking?.data)
       } else {
         response.status(400).json("Booking failed")

@@ -13,6 +13,7 @@ import errorHandler from "../middlewares/ErrorHandler";
 
 export const createServer = () => {
   try {
+  
     const app = express();
     app.use(express.json());
     app.use(bodyParser.raw({ type: "application/json" }));
@@ -32,6 +33,7 @@ export const createServer = () => {
     app.use(errorHandler)
     const server = http.createServer(app);
     initializeSocket(server);
+   
     return server;
   } catch (error) {
     console.log(error);

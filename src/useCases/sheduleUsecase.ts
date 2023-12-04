@@ -122,7 +122,8 @@ class ScheduleUsecase {
           try {
             const a=await this.studentRepo.pushNotifications(Data.timing.student, "Class Booked", `New class scheduled on ${new Date( dataDateTimestamp).toDateString()}`, "Schedule")
             const b = await this.tutorRepo.pushNotifications(Data.tutor, "Class Booked", `New class scheduled on ${new Date( dataDateTimestamp).toDateString()}`, "Schedule")
-            console.log(a,b,"this is the a and b");
+            console.log(a, b, "this is the a and b");
+            
             await this.studentRepo.save(a as any)
             await this.tutorRepo.save(b as any)
           } catch (error) {

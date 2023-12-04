@@ -62,10 +62,11 @@ class StudentUseCase {
 
   async login(student: Student) {
     try {
+      console.log(student,"+++++++++++++++++++++++++++++++++++");
+      
       const studentLog = await this.studentRepository.findByEmail(
         student.email
       );
-      console.log(studentLog);
       if (studentLog.isBlocked) {
         return {
           status: 403,
@@ -73,7 +74,10 @@ class StudentUseCase {
         };
       }
       if (studentLog) {
+
         if (await this.Encrypt.compare(student.password, studentLog.password)) {
+          studentLog.token = student.FCMToken
+          await this.studentRepository.save(studentLog)
           const token = this.JWTToken.createJWT(studentLog._id, "student");
           return {
             status: 200,

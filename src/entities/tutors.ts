@@ -7,5 +7,6 @@ export default interface Tutor{
     subject: Array<string>,
     fee: string
     image:string
-    bio:string
+    bio: string,
+    FCMToken?:string
 }
