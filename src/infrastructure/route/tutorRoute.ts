@@ -66,7 +66,10 @@ tutorRouter.get("/tutor-details/:id",(req, res,next) => controller.getTutorInfo(
 tutorRouter.put('/edit-profile', protectTutor, ImageUpload.single('image'), (req, res,next) => controller.editProfile(req, res,next))
 tutorRouter.put("/tutor-payment", (req, res,next) => controller.addTutorPayment(req, res,next))
 tutorRouter.get("/notifications/:id", (req, res, next) => controller.showNotifications(req, res, next))
-tutorRouter.post("/buy-tutor-premium",(req,res,next)=>controller.buyPremium(req,res,next))
+tutorRouter.post("/buy-tutor-premium", (req, res, next) => controller.buyPremium(req, res, next))
+tutorRouter.post("/forget-password-step-1", (req, res, next) => controller.forgotPasswordStep1(req, res, next))
+tutorRouter.post("/forget-password-step-2", (req, res, next) => controller.forgotPasswordStep2(req, res, next))
+tutorRouter.post("/forget-password-final", (req, res, next) => controller.forgetPasswordStep3(req, res, next))
 //for common
 tutorRouter.get("/alltutors", (req, res,next) => controller.getAllTutors(req, res,next))
 //for schedule

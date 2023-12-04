@@ -32,20 +32,37 @@ class HomeworkHelpRepository implements homeworkHelpRepoInterface{
              return null
          }
     }
-    async findAll(subjects: string[]): Promise<any> {
-        console.log(subjects);
-        
-        const questions = await QuestionsModel.aggregate([
-          {
-            $match: {
-              "subject": { $in: subjects },
-              "tutor": { $exists: false}
-            }
-          }
-        ]);
-        return questions;
-      }
-      
+    async findAll(subjects: string[], tutorId: string): Promise<any> {
+        console.log(tutorId,"99999");
+    
+        try {
+            const questions = await QuestionsModel.aggregate([
+                {
+                    $match: {
+                        "subject": { $in: subjects },
+                        $expr: { $lte: [{ $size: { $ifNull: ["$solution", []] } }, 2] }
+                    }
+                },
+                {
+                    $addFields: {
+                        isTutorAssigned: { $in: [tutorId, "$tutor"] }
+                    }
+                },
+                {
+                    $match: {
+                        isTutorAssigned: true
+                    }
+                }
+            ]);
+    
+            console.log(questions, "ques");
+    
+            return questions;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+         
 }
 
 export default HomeworkHelpRepository

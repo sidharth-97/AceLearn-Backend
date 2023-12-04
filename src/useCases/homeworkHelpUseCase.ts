@@ -40,14 +40,17 @@ class HomeworkHelpUsecase{
     async postSolution(data: any) {
         const question = await this.homeworkrepository.findById(data.id)
         if (question) {
-            question.tutor = data.tutorId
-            question.solution = {
+            question.tutor.push(data.tutorId)
+            question.solution.push({
                 text: data.text,
-                image:data.image
-            }
+                image: data.image,
+                tutor:data.tutorId
+            })
         }
         const saved = await this.homeworkrepository.save(question)
         if (saved) {
+            await this.tutorRepo.payTutor(data.tutorId, 50)
+            await this.tutorRepo.pushNotifications(data.tutorId, "Question Solved", `Your submittion of the qustion is successfull`, "Question")
             return {
                 status: 200,
                 data:question
@@ -61,8 +64,10 @@ class HomeworkHelpUsecase{
     }
     async showUnsolved(id: string) {
         const tutor = await this.tutorRepo.findById(id)
+        console.log("**************************");
+        
         if (tutor) {
-            const questions = await this.homeworkrepository.findAll(tutor.subject)
+            const questions = await this.homeworkrepository.findAll(tutor.subject,id)
             console.log(questions," -------------------------");
             
             if (questions) {

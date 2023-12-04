@@ -6,8 +6,8 @@ interface Questions extends Document {
   date: Date;
   image: string;
   description: string;
-  tutor: string;
   solution: any;
+  tutor:string[]
 }
 
 const QuestionsSchema = new Schema<Questions>({
@@ -28,9 +28,10 @@ const QuestionsSchema = new Schema<Questions>({
     type: String,
   },
   tutor: {
-    type: String,
+    type: [String],
   },
-  solution: {
+  solution: [
+    {
     text: {
       type: String,
     },
@@ -38,6 +39,7 @@ const QuestionsSchema = new Schema<Questions>({
       type: String,
     },
   },
+  ] 
 });
 
 const QuestionsModel = mongoose.model<Questions>("Questions", QuestionsSchema);

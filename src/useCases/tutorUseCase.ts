@@ -263,6 +263,40 @@ class TutorUseCase{
             }
         }
     }
+    async forgotPasswordStep1(email: string) {
+        console.log("forgot password");
+        
+        const tutor = await this.repository.findByEmail(email)
+        if (tutor) {
+          return {
+            status: 200,
+            data: "tutor exists"
+          }
+        } else {
+          return {
+            status: 401,
+            data: "Not exists"
+          }
+        }
+      }
+    
+    
+      async forgotPasswordStep3(data: any) {
+        const tutor = await this.repository.findByEmail(data.email)
+        if (tutor) {
+          tutor.password = await this.encrypt.createHash(data.password)
+          await this.repository.save(tutor)
+          return {
+            status: 200,
+            data:"Password change success"
+          }
+        } else {
+          return {
+            status: 401,
+            data:"Something went wrong"
+          }
+        }
+     }
 
 }
 
