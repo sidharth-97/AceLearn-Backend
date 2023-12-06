@@ -7,5 +7,5 @@ import { connectDB } from "./src/infrastructure/config/connectDB";
 const app = createServer()
 
 connectDB().then(() => {
-    app?.listen(3001,()=>"Connected to port")
+    app?.listen(3000,()=>"Connected to port")
 })
