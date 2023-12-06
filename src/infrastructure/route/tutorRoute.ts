@@ -23,7 +23,7 @@ import ConversationRepository from "../repository/conversationRepository";
 import MessageRepository from "../repository/messageRepository";
 import ChatUseCase from "../../useCases/chatUseCase";
 import HomeworkHelpRepository from "../repository/homeworkhelprepository";
-import HomeworkHelpUsecase from "../../useCases/homeWorkHelpUseCase";
+import HomeworkHelpUsecase from "../../useCases/homeworkHelpUseCase";
 import HomeworkHelpController from "../../adaptor/homeworkhelpController";
 
 const repository = new TutorRepository()

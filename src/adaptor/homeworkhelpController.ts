@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import HomeworkHelpUsecase from "../useCases/homeWorkHelpUseCase";
+import HomeworkHelpUsecase from "../useCases/homeworkHelpUseCase";
 import { NextFunction } from "express";
 import CloudinaryUpload from "../infrastructure/utils/CloudinaryUpload";
 

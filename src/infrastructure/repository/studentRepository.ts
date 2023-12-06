@@ -50,6 +50,7 @@ class studentRepository implements studentRepositoryInterface{
     async walletAmt(student:any,amt:any) {
         const amount = parseInt(student.wallet) + amt
         student.wallet = amount
+        if(student.wallet<=0)return null
         console.log(student,"before noti");
         if (amt > 0) {
             student.notifications.push({

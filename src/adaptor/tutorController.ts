@@ -198,7 +198,6 @@ class TutorController{
     }
     async getTutorReview(req: Request, res: Response,next:NextFunction) {
         try {
-            console.log("final");
             
             const reviews = await this.useCase.getTutorReview(req.params.id)
             res.status(reviews.status).json(reviews.data)

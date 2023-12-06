@@ -42,7 +42,6 @@ console.log(token,"here it is");
       return res.status(401).json({ message: 'Invalid role' });
     }
   
-    console.log("final");
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Invalid token' });

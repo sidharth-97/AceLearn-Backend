@@ -22,7 +22,7 @@ import ConversationRepository from "../repository/conversationRepository";
 import ChatUseCase from "../../useCases/chatUseCase";
 import MessageRepository from "../repository/messageRepository";
 import HomeworkHelpRepository from "../repository/homeworkhelprepository";
-import HomeworkHelpUsecase from "../../useCases/homeWorkHelpUseCase";
+import HomeworkHelpUsecase from "../../useCases/homeworkHelpUseCase";
 import HomeworkHelpController from "../../adaptor/homeworkhelpController";
 
 const repository = new studentRepository()
