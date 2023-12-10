@@ -76,7 +76,8 @@ tutorRouter.get("/alltutors", (req, res,next) => controller.getAllTutors(req, re
 tutorRouter.post('/scheduledate', (req, res,next) => schedulecontrol.scheduleTime(req, res,next))
 tutorRouter.post('/changeSchedule', (req, res,next) => schedulecontrol.cancelSchedulebyTutor(req, res,next))
 tutorRouter.post("/cancel-booking", (req, res, next) => schedulecontrol.cancelSchedulebyStudent(req, res, next))
-tutorRouter.get("/tutor-sales",protectTutor,(req,res,next)=>controller.getTutorSales(req,res,next))
+tutorRouter.get("/tutor-sales", protectTutor, (req, res, next) => controller.getTutorSales(req, res, next))
+tutorRouter.get("/tutor-avilable/:id",(req,res,next)=>schedulecontrol.tutorAvailable(req,res,next))
 // tutorRouter.post('/booktutor', (req, res) => schedulecontrol.BookTutor(req, res))
 tutorRouter.get('/tutorschedule/:id',(req,res,next)=>schedulecontrol.TutorSchedule(req,res,next))
 //for job posting

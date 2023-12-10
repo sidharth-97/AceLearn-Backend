@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import ScheduleInterface from "../../useCases/interface/scheduleRepositoryInterface";
-import { Schedule, ScheduleModel } from "../database/ScheduleModel";
+import { ScheduleModel } from "../database/ScheduleModel";
+import { ObjectId } from "mongodb";
 
 interface schedule {
   tutor: string;
@@ -220,7 +221,22 @@ class ScheduleRepository implements ScheduleInterface {
      }
      
   }
-  
+
+  async tutorAvailable(id: string) {
+    console.log(id,"id");
+    
+    const schedule = await ScheduleModel.findOne({tutor:id})
+    const available=schedule?.timing.find((item:any)=>item.status=="Not booked")
+    if (available) {
+      console.log(available,"here");
+      
+      return available
+    } else {
+      return null
+  }
+ 
+    
+  }
 
 }
 

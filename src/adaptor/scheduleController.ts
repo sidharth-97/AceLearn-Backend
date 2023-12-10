@@ -222,6 +222,15 @@ try {
     }
   }
 
+  async tutorAvailable(req: Request, res: Response, next: NextFunction) {
+    try {
+      const tutorAvailable = await this.scheduleUsecase.tutorAvailable(req.params.id)
+      res.status(tutorAvailable.status).json(tutorAvailable.data)
+    } catch (error) {
+      next(error)
+    }
+  }
+
 }
 
 export default scheduleController;

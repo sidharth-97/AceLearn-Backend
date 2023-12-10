@@ -309,7 +309,22 @@ class ScheduleUsecase {
         data:"No data available"
       }
     }
+  }
+  
+  async tutorAvailable(id: string) {
+    const schedule = await this.ScheduleRepo.tutorAvailable(id)
+    if (schedule) {
+      return {
+        status: 200,
+      data:schedule
+      }
+    } else {
+      return {
+        status: 404,
+        data:"Not available"
+      }
     }
+  }
   
 }
 

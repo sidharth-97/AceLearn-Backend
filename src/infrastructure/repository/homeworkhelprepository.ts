@@ -50,7 +50,7 @@ class HomeworkHelpRepository implements homeworkHelpRepoInterface{
                 },
                 {
                     $match: {
-                        isTutorAssigned: true
+                        isTutorAssigned: false
                     }
                 }
             ]);

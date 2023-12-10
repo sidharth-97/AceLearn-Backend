@@ -19,7 +19,7 @@ export const createServer = () => {
     app.use(bodyParser.raw({ type: "application/json" }));
     app.use(
       session({
-        secret: "your-secret-key", // Change this to a secure random string
+        secret: "your-secret-key",
         resave: false,
         saveUninitialized: true,
       })
