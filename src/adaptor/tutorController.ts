@@ -6,6 +6,7 @@ import fs from 'fs'
 import CloudinaryUpload from "../infrastructure/utils/CloudinaryUpload"
 import ScheduleUsecase from "../useCases/sheduleUsecase"
 import ChatUseCase from "../useCases/chatUseCase"
+import LiveClassUsecase from "../useCases/liveClassUsecase"
 
 interface TutorData {
     page: number;
@@ -23,14 +24,16 @@ class TutorController{
     private sentMail: SentMail
     private CloudinaryUpload: CloudinaryUpload
     private scheduleUsecase: ScheduleUsecase
-    private chatuseCase:ChatUseCase
-    constructor(useCase: TutorUseCase,genOtp: GenerateOTP,sentMail:SentMail,CloudinaryUpload:CloudinaryUpload,scheduleUsecase:ScheduleUsecase,chatuseCase:ChatUseCase) {
+    private chatuseCase: ChatUseCase
+    private liveClassUsecase:LiveClassUsecase
+    constructor(useCase: TutorUseCase,genOtp: GenerateOTP,sentMail:SentMail,CloudinaryUpload:CloudinaryUpload,scheduleUsecase:ScheduleUsecase,chatuseCase:ChatUseCase,liveClassUsecase:LiveClassUsecase) {
         this.useCase = useCase
         this.genOtp = genOtp
         this.sentMail = sentMail
         this.CloudinaryUpload = CloudinaryUpload
         this.scheduleUsecase = scheduleUsecase
-        this.chatuseCase=chatuseCase
+        this.chatuseCase = chatuseCase
+        this.liveClassUsecase=liveClassUsecase
     }
     async signup(req: Request, res: Response,next:NextFunction) {
         try {
@@ -344,7 +347,15 @@ class TutorController{
         } catch (error) {
           next(error)
         }
-      }
+    }
+    
+    async createLiveClass(req: Request, res: Response, next: NextFunction) {
+        try {
+            const classes=await this.liveClassUsecase.createLiveClass(req.body)
+        } catch (error) {
+            next(error)
+        }
+    }
 
 }
 

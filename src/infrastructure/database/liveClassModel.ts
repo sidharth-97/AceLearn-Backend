@@ -9,7 +9,7 @@ interface liveClassInterface extends Document{
     subject: string,
     topic: string,
     description: string,
-    students:string[]
+    students?:string[]
 }
 
 const liveClassSchema: Schema<liveClassInterface> = new mongoose.Schema({
@@ -44,4 +44,4 @@ const liveClassSchema: Schema<liveClassInterface> = new mongoose.Schema({
 
 const liveClassModel = mongoose.model<liveClassInterface>("LiveClass", liveClassSchema);
 
-export {liveClassModel}
+export {liveClassModel,liveClassInterface}

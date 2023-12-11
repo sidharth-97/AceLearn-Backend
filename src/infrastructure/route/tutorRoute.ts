@@ -25,6 +25,8 @@ import ChatUseCase from "../../useCases/chatUseCase";
 import HomeworkHelpRepository from "../repository/homeworkhelprepository";
 import HomeworkHelpUsecase from "../../useCases/homeworkHelpUseCase";
 import HomeworkHelpController from "../../adaptor/homeworkhelpController";
+import LiveClassUsecase from "../../useCases/liveClassUsecase";
+import LiveClassRepository from "../repository/liveClassRepository";
 
 const repository = new TutorRepository()
 const encrypt = new Encrypt()
@@ -49,8 +51,10 @@ const chatuseCase=new ChatUseCase(conversationRepository,messageRepository)
 
 const jobRepository = new JobRepository()
 const jobUseCase = new JobUseCase(jobRepository)
-const Jobcontroller=new JobController(jobUseCase)
-const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary, sheduleUsecase, chatuseCase)
+const Jobcontroller = new JobController(jobUseCase)
+const liveClassRepo=new LiveClassRepository()
+const liveClass=new LiveClassUsecase(liveClassRepo)
+const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary, sheduleUsecase, chatuseCase,liveClass)
 
 const homeworkHelpRepo = new HomeworkHelpRepository()
 const homeWorkHelpUseCase = new HomeworkHelpUsecase(homeworkHelpRepo,repository)
@@ -94,6 +98,8 @@ tutorRouter.post('/add-message',ImageUpload.single('image'), (req, res,next) => 
 tutorRouter.get("/get-messages/:id", (req, res, next) => controller.getMessages(req, res, next))
 //homework help 
 tutorRouter.post("/submit-solution", protectTutor, ImageUpload.single('image'), (req, res, next) => homeworkHelpController.postSolution(req, res, next))
-tutorRouter.get("/show-unsolved",(protectTutor),(req,res,next)=>homeworkHelpController.showUnsolved(req,res,next))
+tutorRouter.get("/show-unsolved", (protectTutor), (req, res, next) => homeworkHelpController.showUnsolved(req, res, next))
+//live class
+tutorRouter.post("/schedule-live-class",(req,res,next)=>controller.createLiveClass(req,res,next))
 
 export default tutorRouter
