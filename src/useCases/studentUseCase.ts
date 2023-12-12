@@ -4,6 +4,7 @@ import jwtToken from "../infrastructure/passwordRepository/jwt";
 import PaymentRepository from "../infrastructure/repository/paymentRepository";
 import studentRepository from "../infrastructure/repository/studentRepository";
 import * as schedule from 'node-schedule';
+import { sendNotification } from "../infrastructure/utils/sendNotifications";
 
 class StudentUseCase {
   private Encrypt: Encrypt;
@@ -61,9 +62,7 @@ class StudentUseCase {
   }
 
   async login(student: Student) {
-    try {
-      console.log(student,"+++++++++++++++++++++++++++++++++++");
-      
+    try {      
       const studentLog = await this.studentRepository.findByEmail(
         student.email
       );
@@ -76,7 +75,7 @@ class StudentUseCase {
       if (studentLog) {
 
         if (await this.Encrypt.compare(student.password, studentLog.password)) {
-          studentLog.token = student.FCMToken
+          studentLog.token = student.FCMToken          
           await this.studentRepository.save(studentLog)
           const token = this.JWTToken.createJWT(studentLog._id, "student");
           return {
@@ -239,9 +238,6 @@ class StudentUseCase {
     }
  }
   
-
-
- // ...
  
  async buyPremium(data: any) {
    console.log(data, "from buy premium");
@@ -278,12 +274,6 @@ class StudentUseCase {
      };
    }
  }
- 
-  
-//   async forgetPasswordStep3(data: any) {
-//     const student = await this.studentRepository.findByEmail(data.email)
-
-//   }
   
 }
 

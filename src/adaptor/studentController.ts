@@ -6,6 +6,8 @@ import CloudinaryUpload from "../infrastructure/utils/CloudinaryUpload";
 import fs from "fs";
 import ChatUseCase from "../useCases/chatUseCase";
 import TutorUseCase from "../useCases/tutorUseCase";
+import LiveClassUsecase from "../useCases/liveClassUsecase";
+
 
 class studentController {
   private studentUseCase: StudentUseCase;
@@ -14,19 +16,22 @@ class studentController {
   private CloudinaryUpload: CloudinaryUpload;
   private chatuseCase: ChatUseCase;
   private tutorUseCase: TutorUseCase
+  private liveClassUsecase:LiveClassUsecase
   constructor(
     studentUseCase: StudentUseCase,
     genOtp: GenerateOTP,
     sentMail: SentMail,
     CloudinaryUpload: CloudinaryUpload,
     chatuseCase: ChatUseCase,
-    tutorUseCase: TutorUseCase
+    tutorUseCase: TutorUseCase,
+    liveClassUsecase:LiveClassUsecase
   ) {
     (this.studentUseCase = studentUseCase), (this.genOtp = genOtp);
     this.sentMail = sentMail;
     this.CloudinaryUpload = CloudinaryUpload;
     this.chatuseCase = chatuseCase;
     this.tutorUseCase = tutorUseCase
+    this.liveClassUsecase=liveClassUsecase
   }
 
   async signup(req: Request, res: Response,next:NextFunction) {
@@ -308,7 +313,24 @@ class studentController {
       next(error)
     }
   }
-  
+
+  async getAllLiveClass(req: Request, res: Response, next: NextFunction) {
+    try {
+        const classes = await this.liveClassUsecase.listAllClass()
+        res.status(classes.status).json(classes.data)
+    } catch (error) {
+        next(error)
+    }
+  }
+
+  async registerLiveClass(req: Request, res: Response, next: NextFunction) {
+    try {
+      const classes = await this.liveClassUsecase.registerLiveclass(req.body)
+      res.status(classes?.status).json(classes.data)
+    } catch (error) {
+      next(error)
+    }
+  } 
 }
 
 export default studentController;

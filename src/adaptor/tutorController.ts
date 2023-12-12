@@ -302,7 +302,7 @@ class TutorController{
 
     async buyPremium(req: Request, res: Response, next: NextFunction) {
         try {
-            let userId = (req as any)?.user._id
+            let userId = (req as any)?.user.id
             req.body.id = userId
             const response = await this.useCase.buyPremium(req.body)
             res.status(response.status).json(response.data)
@@ -350,8 +350,15 @@ class TutorController{
     }
     
     async createLiveClass(req: Request, res: Response, next: NextFunction) {
+        
+        
         try {
-            const classes=await this.liveClassUsecase.createLiveClass(req.body)
+            let userId = (req as any)?.user.id
+            console.log(userId,"got userid");
+            
+            req.body.tutor = userId
+            const classes = await this.liveClassUsecase.createLiveClass(req.body)
+            res.status(classes.status).json(classes.data)
         } catch (error) {
             next(error)
         }

@@ -13,7 +13,6 @@ interface User {
 
 export const verifyToken = async(req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.Studentjwt
-console.log(token,"here it is");
 
   if (!token) {
     return res.status(401).json({ message: 'Access denied. No token provided.' });
@@ -32,7 +31,6 @@ console.log(token,"here it is");
     const id: string = (req as any)?.user?.id;
     const repository = new studentRepository();
     const user = await repository.findById(id);
-    console.log(user);
   
     if (user.isBlocked) {
       return res.status(401).json({ message: 'Admin blocked' });
@@ -51,6 +49,8 @@ console.log(token,"here it is");
 
 export const protectTutor = async(req: Request, res: Response, next: NextFunction)=>{
   const token = req.cookies.Tutorjwt
+  console.log(token,"from protect turor");
+  
   if (!token) {
     return res.status(401).json({message:"AccessDenied"})
   }

@@ -12,13 +12,33 @@ class LiveClassRepository implements liveClassRepoInterface{
     }
 
     async save(data: any): Promise<any> {
-        const liveClass = new liveClassModel(data)
+        try {
+           const liveClass = new liveClassModel(data)
         const save = await liveClass.save()
         if (save) {
             return save
         } else {
             return null
+        } 
+        } catch (error) {
+            console.log(error);
+            
         }
+        
+    }
+    async find(): Promise<any> {
+       try {
+         const classes = await liveClassModel.find({}).populate("tutor")
+       if (classes) {
+           return classes
+       } else {
+           return null
+       }
+       } catch (error) {
+        console.log(error);
+        
+       }
+      
     }
 }
 

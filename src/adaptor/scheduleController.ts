@@ -15,7 +15,7 @@ if (!stripeSecretKey) {
   throw new Error("Stripe secret key is not defined");
 }
 
-const jobMap = new Map<string, schedule.Job>();
+export const jobMap = new Map<string, schedule.Job>();
 
 interface MySession {
   schedule?: any; // Define the structure of the 'schedule' property

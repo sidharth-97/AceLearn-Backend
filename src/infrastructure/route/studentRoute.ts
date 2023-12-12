@@ -24,6 +24,8 @@ import MessageRepository from "../repository/messageRepository";
 import HomeworkHelpRepository from "../repository/homeworkhelprepository";
 import HomeworkHelpUsecase from "../../useCases/homeworkHelpUseCase";
 import HomeworkHelpController from "../../adaptor/homeworkhelpController";
+import LiveClassRepository from "../repository/liveClassRepository";
+import LiveClassUsecase from "../../useCases/liveClassUsecase";
 
 const repository = new studentRepository()
 const encrypt = new Encrypt()
@@ -39,9 +41,12 @@ const messageRepository=new MessageRepository()
 const chatUseCase = new ChatUseCase(conversationRepository, messageRepository)
 
 const tutorRepository=new TutorRepository()
-const tutorUseCase = new TutorUseCase(tutorRepository, jwt, encrypt,paymentRepository)
+const tutorUseCase = new TutorUseCase(tutorRepository, jwt, encrypt, paymentRepository)
 
-const controller = new studentController(use_case, generateOtp, sentMail,Cloudinary,chatUseCase,tutorUseCase)
+const liveClassRepository = new LiveClassRepository()
+const liveClassUsecase=new LiveClassUsecase(liveClassRepository,paymentRepository,repository)
+
+const controller = new studentController(use_case, generateOtp, sentMail,Cloudinary,chatUseCase,tutorUseCase,liveClassUsecase)
 
 const jobRepository = new JobRepository()
 const jobUseCase = new JobUseCase(jobRepository)
@@ -90,6 +95,9 @@ studentRouter.get("/get-messages/:id", (req, res,next) => controller.getMessages
 studentRouter.get('/getAllUsers/:id', (req, res, next) => controller.getAllUsers(req, res, next))
 //homework help controller
 studentRouter.post("/add-questions",(verifyToken),ImageUpload.single('image'),(req, res, next) => homeworkHelpController.addQuestions(req, res, next))
-studentRouter.get("/get-student-questions",(verifyToken),(req,res,next)=>homeworkHelpController.studentQuestions(req,res,next))
+studentRouter.get("/get-student-questions", (verifyToken), (req, res, next) => homeworkHelpController.studentQuestions(req, res, next))
+// live class
+studentRouter.get("/list-live-class",(req,res,next)=>controller.getAllLiveClass(req,res,next))
+studentRouter.post("/register-liveclass",(req,res,next)=>controller.registerLiveClass(req,res,next))
 
 export default studentRouter

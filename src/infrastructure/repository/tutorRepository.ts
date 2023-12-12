@@ -12,12 +12,18 @@ class TutorRepository implements TutorRepositoryInterface{
        }
     }
 
-     async save(tutor: Tutor): Promise<any> {
-         const newTutor = new TutorModel(tutor)
+    async save(tutor: Tutor): Promise<any> {
+         try {
+              const newTutor = new TutorModel(tutor)
          await newTutor.save()
          console.log("after save");
          
          return newTutor
+         } catch (error) {
+            console.log(error);
+            
+         }
+       
     }
     async findAndUpdate(tutor: Tutor): Promise<any> {
         if (tutor._id) {

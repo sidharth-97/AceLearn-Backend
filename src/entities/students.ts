@@ -7,5 +7,6 @@ export default interface Student{
     mobile?: string,
     password: string,
     image: string,
-    premium?:boolean
+    premium?: boolean,
+    token?:string
 }

@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema, ObjectId } from "mongoose"
 
 interface liveClassInterface extends Document{
-    tutor: string,
+    tutor: ObjectId,
     date: Date,
     status: string,
     duration: string,
@@ -14,7 +14,8 @@ interface liveClassInterface extends Document{
 
 const liveClassSchema: Schema<liveClassInterface> = new mongoose.Schema({
     tutor: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref:"Tutor"
     },
     date: {
         type: Date

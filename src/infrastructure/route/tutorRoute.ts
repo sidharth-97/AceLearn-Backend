@@ -53,7 +53,7 @@ const jobRepository = new JobRepository()
 const jobUseCase = new JobUseCase(jobRepository)
 const Jobcontroller = new JobController(jobUseCase)
 const liveClassRepo=new LiveClassRepository()
-const liveClass=new LiveClassUsecase(liveClassRepo)
+const liveClass=new LiveClassUsecase(liveClassRepo,paymentRepository,StudentRepository)
 const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary, sheduleUsecase, chatuseCase,liveClass)
 
 const homeworkHelpRepo = new HomeworkHelpRepository()
@@ -100,6 +100,6 @@ tutorRouter.get("/get-messages/:id", (req, res, next) => controller.getMessages(
 tutorRouter.post("/submit-solution", protectTutor, ImageUpload.single('image'), (req, res, next) => homeworkHelpController.postSolution(req, res, next))
 tutorRouter.get("/show-unsolved", (protectTutor), (req, res, next) => homeworkHelpController.showUnsolved(req, res, next))
 //live class
-tutorRouter.post("/schedule-live-class",(req,res,next)=>controller.createLiveClass(req,res,next))
+tutorRouter.post("/schedule-live-class",protectTutor, (req, res, next) => controller.createLiveClass(req, res, next))
 
 export default tutorRouter
