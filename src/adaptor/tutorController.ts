@@ -363,6 +363,25 @@ class TutorController{
             next(error)
         }
     }
+    async liveclassSchedule(req: Request, res: Response, next: NextFunction) {
+        try {
+            let userId = (req as any)?.user.id
+            const classes = await this.liveClassUsecase.liveClassSchedule(userId)
+            res.status(classes.status).json(classes.data)
+        } catch (error) {
+            next(error)
+        }
+    }
+    async liveClassCancel(req: Request, res: Response, next: NextFunction) {
+        try {
+            console.log("reached cancel ++++++++")
+            
+            const classes = await this.liveClassUsecase.cancelLiveClass(req.params.id)
+            res.status(classes.status).json(classes.data)
+        } catch (error) {
+            next(error)
+        }
+    }
 
 }
 

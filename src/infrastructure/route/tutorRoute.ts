@@ -100,6 +100,8 @@ tutorRouter.get("/get-messages/:id", (req, res, next) => controller.getMessages(
 tutorRouter.post("/submit-solution", protectTutor, ImageUpload.single('image'), (req, res, next) => homeworkHelpController.postSolution(req, res, next))
 tutorRouter.get("/show-unsolved", (protectTutor), (req, res, next) => homeworkHelpController.showUnsolved(req, res, next))
 //live class
-tutorRouter.post("/schedule-live-class",protectTutor, (req, res, next) => controller.createLiveClass(req, res, next))
+tutorRouter.post("/schedule-live-class", protectTutor, (req, res, next) => controller.createLiveClass(req, res, next))
+tutorRouter.get("/show-liveclass-schedule",protectTutor,(req,res,next)=>controller.liveclassSchedule(req,res,next))
+tutorRouter.post("/cancel-liveclass/:id",(req,res,next)=>controller.liveClassCancel(req,res,next))
 
 export default tutorRouter

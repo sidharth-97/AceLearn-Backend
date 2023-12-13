@@ -40,6 +40,17 @@ class LiveClassRepository implements liveClassRepoInterface{
        }
       
     }
+    async findByTutor(id: string): Promise<any> {
+        const classes = await liveClassModel.find({ tutor: id })
+        if (classes) {
+            return classes
+        } else {
+            return null
+        }
+    }
+    async deleteClass(id: string): Promise<any> {
+  await liveClassModel.deleteOne({_id:id})
+    }
 }
 
 export default LiveClassRepository

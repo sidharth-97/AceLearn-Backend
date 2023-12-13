@@ -107,6 +107,42 @@ class LiveClassUsecase {
       };
     }
   }
+  async liveClassSchedule(userId: string) {
+    const classes = await this.liveClassRepo.findByTutor(userId)
+    if (classes) {
+      return {
+        status: 200,
+        data: classes
+      }
+    } else {
+      return {
+        status: 404,
+        data: "No class found"
+      }
+    }
+  }
+  async cancelLiveClass(id:string) {
+    try {
+      const liveClass = await this.liveClassRepo.findById(id)
+      if (liveClass?.students) {
+          for (let i in liveClass.students) {
+        if (parseInt(liveClass.fee) > 0) await this.studentRepo.walletAmt(i, liveClass.fee)
+      
+        await this.studentRepo.pushNotifications(i, "Live class cancelled", "Your live class has been cancelled by tutor", "schedule",)
+      }
+      }
+    
+      await this.liveClassRepo.deleteClass(id)
+    
+    
+    } catch(error) {
+    console.log(error);
+      
+  }  return {
+        status: 200,
+        data: "Cancelled"
+      }
+}
 }
 
 export default LiveClassUsecase;
