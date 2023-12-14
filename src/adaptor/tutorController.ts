@@ -210,9 +210,9 @@ class TutorController{
     }
     async oldReview(req: Request, res: Response,next:NextFunction) {
         try {    
-            const token = req.cookies.Studentjwt
+            let userId = (req as any)?.user.id
             const tutor=req.params.id
-            const response = await this.useCase.oldReview({tutor:tutor,student:token})
+            const response = await this.useCase.oldReview({tutor:tutor,student:userId})
             res.status(response?.status).json(response?.data)
         } catch (error) {
             res.status(404).json(error)

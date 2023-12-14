@@ -7,7 +7,7 @@ import TutorRepository from "../repository/tutorRepository";
 import express from "express";
 import GenerateOTP from "../utils/GenerateOTP";
 import SentMail from "../utils/sendMail";
-import { protectTutor } from "../middlewares/authMiddleware";
+import { protectTutor, verifyToken } from "../middlewares/authMiddleware";
 import { ImageUpload } from "../config/multer";
 import CloudinaryUpload from "../utils/CloudinaryUpload";
 import scheduleController from "../../adaptor/scheduleController";
@@ -90,7 +90,7 @@ tutorRouter.post('/applytutorjob', (req, res,next) => Jobcontroller.applyJobs(re
 //review
 tutorRouter.post("/add-review",(req,res,next)=>controller.addReview(req,res,next))
 tutorRouter.get("/get-review/:id", (req, res,next) => controller.getTutorReview(req, res,next))
-tutorRouter.get("/old-review/:id", (req, res,next) => controller.oldReview(req, res,next))
+tutorRouter.get("/old-review/:id",(verifyToken), (req, res,next) => controller.oldReview(req, res,next))
 //chat section
 tutorRouter.post('/conversation', (req, res,next) => controller.newConversation(req, res,next))
 tutorRouter.get('/get-conversations/:id', (req, res,next) => controller.getConversations(req, res,next))
