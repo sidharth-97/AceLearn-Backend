@@ -25,8 +25,8 @@ class PaymentRepository {
         },
       ],
       mode: "payment",
-      success_url: "http://localhost:5173/success",
-      cancel_url: "http://localhost:5173/failed",
+      success_url: "https://acelearn.vercel.app/success",
+      cancel_url: "https://acelearn.vercel.app/failed",
     });
 
     return session;

@@ -6,6 +6,13 @@ function initializeSocket(server:any) {
             origin:"http://localhost:5173"
         }
     }
+//     const io = new Server(server, {
+//         cors: {
+//    origin: "https://acelearn.vercel.app",
+//    methods: ["GET", "POST"],
+//    credentials: true,
+//  },
+//    }
         
     )
 

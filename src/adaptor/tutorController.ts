@@ -60,8 +60,8 @@ class TutorController{
             if (req.body.otp != req.app.locals.otp) {
                 res.status(401).json("otp doesnt match")
             } else {
-                const { subject,rate,bio,fee,mobile,qualifications } = req.body             
-                const tutor = { ...req.app.locals.Tutordata, subject, rate, bio, fee,mobile,qualifications }
+                const { subjects,bio,fee} = req.body             
+                const tutor = { ...req.app.locals.Tutordata, subject:subjects, bio, fee,mobile:"" }
                 console.log(tutor,"checkkkk");
                 
                 const result = await this.useCase.signup2(tutor)

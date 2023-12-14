@@ -21,7 +21,7 @@ class TutorUseCase{
         const isExisting = await this.repository.findByEmail(tutor.email)
         if (isExisting) {
             return {
-                status: 200,
+                status: 404,
                 data:"Tutor already exists"
             }
 
