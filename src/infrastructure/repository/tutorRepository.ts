@@ -91,7 +91,7 @@ class TutorRepository implements TutorRepositoryInterface{
         console.log(newReview, "new review");
       
         const existingIndex = tutor.review.findIndex(
-          (item: any) => item.student == data.student
+          (item: any) => item.student._id == data.student
         );
       
         console.log(existingIndex, "existing index");
@@ -104,8 +104,13 @@ class TutorRepository implements TutorRepositoryInterface{
         
         const totalRating = tutor.review.reduce((sum: number, review: any) => sum + review.rating, 0);
         tutor.rating = totalRating / tutor.review.length;
-      
+      try {
         await tutor.save();
+      } catch (error) {
+        console.log(error);
+        
+      }
+        
           
         return tutor;
       }
@@ -115,7 +120,9 @@ class TutorRepository implements TutorRepositoryInterface{
         console.log(student,"2");
         
         
-        const existingIndex = tutor.review.findIndex((item: any) => item.student == student )
+        const existingIndex = tutor.review.findIndex((item: any) => item.student._id == student)
+        console.log(existingIndex,"this is the existing index");
+        
         if (existingIndex == -1) {
             return null
         } else {

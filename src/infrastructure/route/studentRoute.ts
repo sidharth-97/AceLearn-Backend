@@ -77,16 +77,16 @@ studentRouter.post("/forget-password-step-2", (req, res, next) => controller.for
 studentRouter.post("/forget-password-final", (req, res, next) => controller.forgetPasswordStep3(req, res, next))
 studentRouter.post("/buy-student-premium",verifyToken,(req,res,next)=>controller.buyPremium(req,res,next))
 //job posting
-studentRouter.post("/addJob", (req, res,next) => Jobcontroller.addJob(req, res,next))
+studentRouter.post("/addJob", verifyToken,(req, res,next) => Jobcontroller.addJob(req, res,next))
 studentRouter.get('/student-job-request/:id', (req, res,next) => Jobcontroller.getJobDetails(req, res,next))
 //time scheduling
-studentRouter.put('/book-tutor-by-post',(req,res,next)=>schedulecontroller.bookThroughPost(req,res,next))
+studentRouter.put('/book-tutor-by-post',verifyToken,(req,res,next)=>schedulecontroller.bookThroughPost(req,res,next))
 studentRouter.get('/getStudentSchedule/:id', (req, res, next) => schedulecontroller.findStudentSchedule(req, res, next))
 studentRouter.get("/student-timeline",verifyToken,(req,res,next)=>schedulecontroller.studentTimeline(req,res,next))
 //payment
 studentRouter.post('/payment', (req, res,next) => schedulecontroller.payment(req, res,next))
 studentRouter.post('/webhook', (req, res, next) => schedulecontroller.webhook(req, res, next))
-studentRouter.post('/book-tutor-wallet',(req,res,next)=>schedulecontroller.bookWithWallet(req,res,next))
+studentRouter.post('/book-tutor-wallet',verifyToken,(req,res,next)=>schedulecontroller.bookWithWallet(req,res,next))
 //chat
 studentRouter.post("/conversation", (req, res,next) => controller.newConversation(req, res,next))
 studentRouter.get("/get-conversations/:id", (req, res,next) => controller.getConversations(req, res,next))

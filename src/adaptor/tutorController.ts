@@ -210,18 +210,21 @@ class TutorController{
     }
     async oldReview(req: Request, res: Response,next:NextFunction) {
         try {    
+            console.log("reached old review");
+            
             let userId = (req as any)?.user.id
-            const tutor=req.params.id
+            const tutor = req.params.id
+            console.log(tutor,"tutor",userId,"user");
+            
             const response = await this.useCase.oldReview({tutor:tutor,student:userId})
             res.status(response?.status).json(response?.data)
         } catch (error) {
-            res.status(404).json(error)
+            next(error)
         }
     }
     async addTutorPayment(req: Request, res: Response,next:NextFunction) {
         try {
             console.log(req.body,"req.body");
-            
             const fees = await this.scheduleUsecase.getTutorfee(req.body.tutor, req.body.id)
             console.log(fees,"fees");
             

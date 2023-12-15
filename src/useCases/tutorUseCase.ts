@@ -184,12 +184,10 @@ class TutorUseCase{
     }
 
     async oldReview(data: { tutor: string, student: string }) {
-        const decoded = this.jwt.verifyJWT(data.student)
-        console.log(decoded,"this is the decoded data");
         
         const tutor = await this.repository.findById(data.tutor)
         if (tutor) {
-            const oldReview = await this.repository.oldReview(tutor, decoded.id)
+            const oldReview = await this.repository.oldReview(tutor,data.student)
             if (oldReview) {
                 return {
                     status: 200,

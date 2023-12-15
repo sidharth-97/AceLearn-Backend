@@ -199,7 +199,7 @@ class ScheduleRepository implements ScheduleInterface {
       },
       {
         $match: {
-          'timing.status': 'booked',
+          'timing.status': { $in: ['booked', 'Booked'] },
         },
       },
       {
