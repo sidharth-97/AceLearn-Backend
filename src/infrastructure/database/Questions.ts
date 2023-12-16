@@ -7,7 +7,8 @@ interface Questions extends Document {
   image: string;
   description: string;
   solution: any;
-  tutor:string[]
+  tutor: string[]
+  views:string[]
 }
 
 const QuestionsSchema = new Schema<Questions>({
@@ -29,6 +30,9 @@ const QuestionsSchema = new Schema<Questions>({
   },
   tutor: {
     type: [String],
+  },
+  views: {
+    type: [String]
   },
   solution: [
     {

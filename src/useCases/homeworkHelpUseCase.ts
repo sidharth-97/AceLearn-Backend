@@ -77,7 +77,19 @@ class HomeworkHelpUsecase{
                 }
                 const randomNumber = getRandomNumber(questions.length);
                 console.log(randomNumber,"random number");
+                if (!questions[randomNumber].views) {
+                    questions[randomNumber].views = [];
+                  }
+                questions[randomNumber].views.push(id)
+                console.log(questions[randomNumber],"this is th document");
                 
+                try {
+                        await this.homeworkrepository.save(questions[randomNumber])
+                } catch (error) {
+                    console.log(error);
+                    
+                }
+            
                 return {
                     status: 200,
                     data:questions[randomNumber]

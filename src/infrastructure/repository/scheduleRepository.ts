@@ -163,7 +163,7 @@ class ScheduleRepository implements ScheduleInterface {
     const sales = await ScheduleModel.aggregate([
       {
         $match: {
-          "timing.status": "booked",
+          "timing.status":{$in: ["Booked","booked"]},
           "timing.date": { $lt: currentDate },
         },
       },

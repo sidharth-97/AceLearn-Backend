@@ -123,7 +123,7 @@ class TutorController{
                 password: req.body.password,
                 oldPassword:req.body.oldPassword,
                 mobile: req.body.mobile,
-                subject: req.body.subject,
+                subject: JSON.parse(req.body.subject),
                 fee: req.body.fee,
                 bio: req.body.bio,
                 image:url,
