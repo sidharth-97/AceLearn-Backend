@@ -170,8 +170,8 @@ async webhook(request: Request, response: Response,next:NextFunction) {
       const jobName = date + tutor.data._id
       const notificationDate = new Date(date.getTime() - 30 * 60 * 1000);
     const job=schedule.scheduleJob(notificationDate, () => {
-        sendNotification(student.data.token);
-        sendNotification(tutor.data.token);
+        sendNotification(student.data.token,"Class will start in an hour","Reminder");
+        sendNotification(tutor.data.token,"Class will start in an hour","Reminder");
       });
       jobMap.set(jobName, job);
     });
@@ -198,8 +198,8 @@ async webhook(request: Request, response: Response,next:NextFunction) {
           const jobName = date + tutor.data._id
           const notificationDate = new Date(date.getTime() - 30 * 60 * 1000);
         const job=schedule.scheduleJob(notificationDate, () => {
-            sendNotification(student.data.token);
-            sendNotification(tutor.data.token);
+            sendNotification(student.data.token,"Class will start in an hour","Reminder");
+            sendNotification(tutor.data.token,"Class will start in an hour","Reminder");
           });
           jobMap.set(jobName, job);
         });

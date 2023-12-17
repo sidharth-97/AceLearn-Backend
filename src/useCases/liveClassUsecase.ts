@@ -72,7 +72,7 @@ class LiveClassUsecase {
             const jobName = Date.now().toString();
 
             const job = schedule.scheduleJob(notificationDate, async () => {
-              await sendNotification(student?.token);
+              await sendNotification(student?.token,"Class will start in an hour","Reminder");
             });
 
             jobMap.set(jobName, job);

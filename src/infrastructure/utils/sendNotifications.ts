@@ -5,11 +5,11 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-export const sendNotification = async (token:string) => {
+export const sendNotification = async (token:string,messages:string,title:string) => {
     const message = {
         notification: {
-          title: 'Reminder',
-          body: `Your class will start in an hour`,
+          title: title,
+          body: messages,
           // imageUrl:"https://res.cloudinary.com/dne4av79d/image/upload/v1701683433/chat-image/cvnnnakxfpen1srgwl2g.png"
         },
         data: {

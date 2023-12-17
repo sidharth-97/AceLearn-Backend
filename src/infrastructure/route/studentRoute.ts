@@ -38,9 +38,9 @@ const Cloudinary = new CloudinaryUpload()
 
 const conversationRepository = new ConversationRepository()
 const messageRepository=new MessageRepository()
-const chatUseCase = new ChatUseCase(conversationRepository, messageRepository)
-
 const tutorRepository=new TutorRepository()
+const chatUseCase = new ChatUseCase(conversationRepository, messageRepository,repository,tutorRepository)
+
 const tutorUseCase = new TutorUseCase(tutorRepository, jwt, encrypt, paymentRepository)
 
 const liveClassRepository = new LiveClassRepository()

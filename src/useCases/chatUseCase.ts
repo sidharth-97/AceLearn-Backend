@@ -1,13 +1,20 @@
 import ConversationRepository from "../infrastructure/repository/conversationRepository";
 import { Conversation } from "../infrastructure/database/conversationModel";
 import MessageRepository from "../infrastructure/repository/messageRepository";
+import studentRepository from "../infrastructure/repository/studentRepository";
+import { sendNotification } from "../infrastructure/utils/sendNotifications";
+import TutorRepository from "../infrastructure/repository/tutorRepository";
 
 class ChatUseCase{
     private ConversationRepo: ConversationRepository;
-    private MessageRepo:MessageRepository
-    constructor(ConversationRepo: ConversationRepository,MessageRepo:MessageRepository) {
+    private MessageRepo: MessageRepository
+    private studentRepo: studentRepository
+    private tutorRepo:TutorRepository
+    constructor(ConversationRepo: ConversationRepository,MessageRepo:MessageRepository,studentRepo:studentRepository,tutorRepo:TutorRepository) {
         this.ConversationRepo = ConversationRepo
-        this.MessageRepo=MessageRepo
+        this.MessageRepo = MessageRepo
+        this.studentRepo = studentRepo
+        this.tutorRepo=tutorRepo
     }
     async newConversation(members: Array<string>) {
         console.log(members);
@@ -51,6 +58,26 @@ class ChatUseCase{
         }
     }
     async addMessage(data: { conversationId: string, sender: string, text: string }) {
+        console.log("add message");
+        
+       try {
+        const conversation = await this.ConversationRepo.findByUserId(data.sender)
+        console.log(conversation,"conv");
+        
+        console.log("Conversation:", conversation);
+console.log("Sender:", data.sender);
+const receiverId = conversation[0].members.find((id: string) => id !== data.sender);
+console.log("ReceiverId:", receiverId);
+
+        
+           const user = await this.studentRepo.findById(receiverId)
+           const tutor=await this.tutorRepo.findById(receiverId)
+        console.log(user);
+        await sendNotification(user.token??tutor.token,data.text,"New message")
+       } catch (error) {
+        console.log(error);
+        
+       }
         const message = await this.MessageRepo.save(data)
         if (message) {
             return {

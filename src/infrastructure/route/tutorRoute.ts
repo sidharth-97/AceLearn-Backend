@@ -47,7 +47,7 @@ const schedulecontrol = new scheduleController(sheduleUsecase, studentUseCase, u
 
 const conversationRepository = new ConversationRepository()
 const messageRepository = new MessageRepository()
-const chatuseCase=new ChatUseCase(conversationRepository,messageRepository)
+const chatuseCase=new ChatUseCase(conversationRepository,messageRepository,StudentRepository,repository)
 
 const jobRepository = new JobRepository()
 const jobUseCase = new JobUseCase(jobRepository)
