@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import JobUseCase from "../useCases/jobUsecase";
 import { NextFunction } from "express-serve-static-core";
+import ScheduleUsecase from "../useCases/sheduleUsecase";
 
 class JobController {
   private jobUseCase: JobUseCase;
-  constructor(jobUseCase: JobUseCase) {
+  private scheduleUsecase:ScheduleUsecase
+  constructor(jobUseCase: JobUseCase,scheduleUsecase:ScheduleUsecase) {
     this.jobUseCase = jobUseCase;
+    this.scheduleUsecase=scheduleUsecase
   }
 
   async addJob(req: Request, res: Response, next: NextFunction) {
@@ -41,6 +44,23 @@ class JobController {
       next(error);
     }
   }
+  async jobComplete(req: Request, res: Response, next: NextFunction) {
+    try {
+      let userId = (req as any)?.user.id
+      req.app.locals.schedule = req.body;
+      const payment = await this.scheduleUsecase.Payment(req.body);
+      if (payment) {
+        const job = await this.jobUseCase.jobComplete(userId)
+        res.status(job.status).json(payment.data)
+      }
+        res.status(400).json("failed")
+
+   
+  } catch (error) {
+    next(error)
+  }
+}
+
 }
 
 export default JobController;

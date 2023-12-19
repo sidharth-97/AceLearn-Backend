@@ -5,6 +5,7 @@ interface Job extends Document {
   subject: string;
   timeRange: string;
   class: string;
+  status:string
   requests: {
     tutor: ObjectId;
     fee: string;
@@ -27,11 +28,15 @@ const JobSchema = new Schema<Job>(
     class: {
       type: String,
     },
+    status: {
+      type: String,
+      default:"Pending"
+    },
     requests: [
       {
         tutor: {
             type: Schema.Types.ObjectId,
-            ref: "Tutor", // Reference the Tutor model
+            ref: "Tutor",
           },
         fee: String,
         date: Date,

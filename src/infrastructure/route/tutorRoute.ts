@@ -51,7 +51,7 @@ const chatuseCase=new ChatUseCase(conversationRepository,messageRepository,Stude
 
 const jobRepository = new JobRepository()
 const jobUseCase = new JobUseCase(jobRepository)
-const Jobcontroller = new JobController(jobUseCase)
+const Jobcontroller = new JobController(jobUseCase,sheduleUsecase)
 const liveClassRepo=new LiveClassRepository()
 const liveClass=new LiveClassUsecase(liveClassRepo,paymentRepository,StudentRepository)
 const controller = new TutorController(use_case, generateOtp, sendMail, Cloudinary, sheduleUsecase, chatuseCase,liveClass)

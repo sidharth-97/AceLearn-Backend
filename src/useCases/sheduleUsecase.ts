@@ -320,7 +320,7 @@ class ScheduleUsecase {
       }
     } else {
       return {
-        status: 404,
+        status: 200,
         data:"Not available"
       }
     }

@@ -48,9 +48,6 @@ const liveClassUsecase=new LiveClassUsecase(liveClassRepository,paymentRepositor
 
 const controller = new studentController(use_case, generateOtp, sentMail,Cloudinary,chatUseCase,tutorUseCase,liveClassUsecase)
 
-const jobRepository = new JobRepository()
-const jobUseCase = new JobUseCase(jobRepository)
-const Jobcontroller = new JobController(jobUseCase)
 
 
 
@@ -59,6 +56,9 @@ const scheduleRepository = new ScheduleRepository()
 const sheduleUsecase = new ScheduleUsecase(scheduleRepository,paymentRepository,tutorRepository,repository)
 const schedulecontroller = new scheduleController(sheduleUsecase, use_case, tutorUseCase)
 
+const jobRepository = new JobRepository()
+const jobUseCase = new JobUseCase(jobRepository)
+const Jobcontroller = new JobController(jobUseCase,sheduleUsecase)
 const homeworkHelpRepo = new HomeworkHelpRepository()
 const homeWorkHelpUseCase = new HomeworkHelpUsecase(homeworkHelpRepo,tutorRepository)
 const homeworkHelpController=new HomeworkHelpController(homeWorkHelpUseCase,Cloudinary)
@@ -78,7 +78,8 @@ studentRouter.post("/forget-password-final", (req, res, next) => controller.forg
 studentRouter.post("/buy-student-premium",verifyToken,(req,res,next)=>controller.buyPremium(req,res,next))
 //job posting
 studentRouter.post("/addJob", verifyToken,(req, res,next) => Jobcontroller.addJob(req, res,next))
-studentRouter.get('/student-job-request/:id', (req, res,next) => Jobcontroller.getJobDetails(req, res,next))
+studentRouter.get('/student-job-request/:id', (req, res, next) => Jobcontroller.getJobDetails(req, res, next))
+studentRouter.put("/job-complete", verifyToken, (req, res, next) => Jobcontroller.jobComplete(req, res, next))
 //time scheduling
 studentRouter.put('/book-tutor-by-post',verifyToken,(req,res,next)=>schedulecontroller.bookThroughPost(req,res,next))
 studentRouter.get('/getStudentSchedule/:id', (req, res, next) => schedulecontroller.findStudentSchedule(req, res, next))

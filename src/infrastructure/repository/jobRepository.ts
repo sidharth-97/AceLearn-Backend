@@ -48,6 +48,20 @@ class JobRepository implements jobRepositoryInterface{
             
         }
     }
+    async deleteById(jobId: string): Promise<any> {
+        try {
+            const result = await JobModel.deleteOne({ _id: jobId });
+            if (result.deletedCount === 1) {
+                return { success: true };
+            } else {
+                return { success: false, message: 'Document not found' };
+            }
+        } catch (error) {
+            console.error(error);
+            return { success: false, message: 'Error deleting document' };
+        }
+    }
+    
 }
 
 

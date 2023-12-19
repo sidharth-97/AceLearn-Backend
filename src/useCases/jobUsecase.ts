@@ -69,6 +69,24 @@ class JobUseCase{
             data:job
         }
     }
+    async jobComplete(id: string) {
+        const job = await this.jobrepository.findByStdId(id)
+        if (job) {
+            job.status = "Complete"
+            await this.jobrepository.save(job)
+            await this.jobrepository.deleteById(job._id)
+            return {
+                status: 200,
+                data:job
+            }
+        }else{
+            return {
+                status: 404,
+                data:"Not found"
+            }
+        }
+    }
+
 
 }
 
