@@ -1,20 +1,20 @@
 import { Server } from "socket.io";
 
-function initializeSocket(server:any) {
-    const io = new Server(server, {
-        cors: {
-            origin:"http://localhost:5173"
-        }
-    }
-//     const io = new Server(server, {
-//         cors: {
-//    origin: "https://acelearn.vercel.app",
-//    methods: ["GET", "POST"],
-//    credentials: true,
-//  },
-//    }
-        
-    )
+function initializeSocket(server: any) {
+  
+    const io = process.env.NODE_ENV !== "development"
+  ? new Server(server, {
+      cors: {
+        origin: "https://acelearn.vercel.app",
+        methods: ["GET", "POST"],
+        credentials: true,
+      },
+    })
+  : new Server(server, {
+      cors: {
+        origin: "http://localhost:5173",
+      },
+    });
 
     interface User {
         userId: string;

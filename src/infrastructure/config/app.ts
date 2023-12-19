@@ -25,7 +25,7 @@ export const createServer = () => {
       })
     );
     // app.use(passport,initialise())
-    app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+    app.use(cors({ origin:process.env.WEBSITE, credentials: true }));
     app.use(cookieParser());
     app.options("*", cors());
     app.use("/api/students", studentRouter);
