@@ -20,8 +20,6 @@ git clone https://github.com/your/repo.git
 
 2. Navigate to the project directory
 
-cd private-tutor-backend
-
 3. Install dependencies:
 
 npm install
@@ -29,6 +27,8 @@ npm install
 4. Set up environment variables:
 
 Create a '.env' file in the root of your project and configure the necessary environment variables, such as database connection details, authentication secrets, and other relevant settings.
+
+MONGO_URI,JWT_KEY,NODE_ENV,MAILPASS,CLIENT_SECRET,CLIENT_ID,CLOUDINARY_NAME,CLOUDINARY_KEY,CLOUDINARY_SECRET,STRIPE_SECRET_KEY,STRIPE_PUBLIC_KEY,WEBSITE
 
 5. Start the server:
 npm start
