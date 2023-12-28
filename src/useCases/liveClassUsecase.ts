@@ -24,10 +24,19 @@ class LiveClassUsecase {
     console.log(save, "save is here");
 
     if (save) {
-      return {
-        status: 200,
-        data: save,
-      };
+      const deletionDate = new Date(save.date.getTime() + 60 * 60 * 1000);
+        const jobName = `deleteLiveClass_${save._id}`;
+
+        const deletionJob = schedule.scheduleJob(deletionDate, async () => {
+          await this.liveClassRepo.deleteClass(save._id);
+          jobMap.delete(jobName);
+        });
+        jobMap.set(jobName, deletionJob);
+
+        return {
+          status: 200,
+          data: { ...save, deletionScheduled: true },
+        };
     } else {
       return {
         status: 401,

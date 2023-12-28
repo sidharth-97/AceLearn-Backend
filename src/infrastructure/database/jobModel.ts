@@ -5,7 +5,8 @@ interface Job extends Document {
   subject: string;
   timeRange: string;
   class: string;
-  status:string
+  status: string
+  description:string,
   requests: {
     tutor: ObjectId;
     fee: string;
@@ -27,6 +28,9 @@ const JobSchema = new Schema<Job>(
     },
     class: {
       type: String,
+    },
+    description: {
+      type:String,
     },
     status: {
       type: String,
