@@ -74,7 +74,11 @@ class LiveClassUsecase {
 
           if (save) {
             const student = await this.studentRepo.findById(data.student);
-
+            
+            const payment = await this.paymentRepo.ConfirmPayment({
+        
+              fees:classes.fee
+             })
             const notificationDate = new Date(
               classes.date.getTime() - 30 * 60 * 1000
             );
@@ -88,7 +92,7 @@ class LiveClassUsecase {
 
             return {
               status: 200,
-              data: { ...save, notificationScheduled: true },
+              data:payment,
             };
           } else {
             return {
