@@ -205,7 +205,7 @@ async webhook(request: Request, response: Response,next:NextFunction) {
         });
         response.status(200).json(booking?.data)
       } else {
-        response.status(400).json("Booking failed")
+        response.status(400).json("Not enough wallet balance")
       }
   } catch (error) {
     next(error)

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import ScheduleInterface from "../../useCases/interface/scheduleRepositoryInterface";
 import { ScheduleModel } from "../database/ScheduleModel";
 import { ObjectId } from "mongodb";
@@ -162,11 +162,11 @@ class ScheduleRepository implements ScheduleInterface {
   
     const sales = await ScheduleModel.aggregate([
       {
-        $match: {
-          "timing.status":{$in: ["Booked","booked"]},
-          "timing.date": { $lt: currentDate },
+  $match: {
+          "tutor":new Types.ObjectId(id),
         },
       },
+      
       {
         $unwind: "$timing",
       },
@@ -199,7 +199,16 @@ class ScheduleRepository implements ScheduleInterface {
       },
       {
         $match: {
-          'timing.status': { $in: ['booked', 'Booked'] },
+          $and: [
+            { 'timing.status': { $in: ['booked', 'Booked'] } },
+            {'timing.student':new Types.ObjectId(id)},
+            {
+              $expr: {
+                $eq: [{ $year: '$timing.date' }, new Date().getFullYear()],
+              },
+            },
+            // { 'timing.student': id }, // Replace 'yourStudentId' with the actual student ID
+          ],
         },
       },
       {
@@ -212,6 +221,7 @@ class ScheduleRepository implements ScheduleInterface {
         $sort: { totalClasses: -1 },
       },
     ]);
+    
     
      console.log(result,"result of the aggregation");
      if (result) {
