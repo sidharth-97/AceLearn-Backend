@@ -16,7 +16,7 @@ These instructions will help you set up and run the backend of the Private Tutor
 
 1. Clone the repository:
 
-git clone https://github.com/your/repo.git
+git clone https://github.com/sidharth-97/AceLearn-Backend.git
 
 2. Navigate to the project directory
 
