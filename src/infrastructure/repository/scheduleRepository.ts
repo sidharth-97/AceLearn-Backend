@@ -236,7 +236,7 @@ class ScheduleRepository implements ScheduleInterface {
     console.log(id,"id");
     
     const schedule = await ScheduleModel.findOne({tutor:id})
-    const available=schedule?.timing.find((item:any)=>item.status=="Not booked")
+    const available=schedule?.timing.find((item:any)=>item.status=="Not booked"&&new Date(item.date).getTime() > new Date().getTime())
     if (available) {
       console.log(available,"here");
       
